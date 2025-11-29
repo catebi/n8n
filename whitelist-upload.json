@@ -1,0 +1,183 @@
+{
+  "updatedAt": "2025-11-27T11:37:35.000Z",
+  "createdAt": "2025-11-26T14:03:54.170Z",
+  "id": "4rjLmGBxGAsrsxFS",
+  "name": "Whitelist upload",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1d37b298-c462-49f7-b1e2-bce96510ed02",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appfcG1rrMV3dCwHq",
+          "mode": "list",
+          "cachedResultName": "sterilization_test",
+          "cachedResultUrl": "https://airtable.com/appfcG1rrMV3dCwHq"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbld9FAvWbN5mJrQN",
+          "mode": "list",
+          "cachedResultName": "Whitelist",
+          "cachedResultUrl": "https://airtable.com/appfcG1rrMV3dCwHq/tbld9FAvWbN5mJrQN"
+        },
+        "options": {
+          "fields": [
+            "user_id",
+            "username"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "43d7e16d-9e00-4d86-ae8a-b364c4123334",
+      "name": "Search records",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "btX5TKY3tFhz5XFA",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "GrE2DGG1g20sylSA",
+          "mode": "list",
+          "cachedResultName": "Telegram whitelist",
+          "cachedResultUrl": "/projects/jnu5GnxkoXUPZEif/datatables/GrE2DGG1g20sylSA"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "user_id": "={{ $json.user_id }}",
+            "username": "={{ $json.username }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "user_id",
+              "displayName": "user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "username",
+              "displayName": "username",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "recordId",
+              "displayName": "recordId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "recordCreatedAt",
+              "displayName": "recordCreatedAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "optimizeBulk": false
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        624,
+        0
+      ],
+      "id": "0ecacd49-61a2-42d5-ab28-5fa93f9fbd45",
+      "name": "Insert row"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Search records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records": {
+      "main": [
+        [
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert row": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "0f7cacd2-c203-4fc9-a8da-1d50e5d4aa6b",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-11-26T14:03:54.178Z",
+      "createdAt": "2025-11-26T14:03:54.178Z",
+      "role": "workflow:owner",
+      "workflowId": "4rjLmGBxGAsrsxFS",
+      "projectId": "jnu5GnxkoXUPZEif"
+    }
+  ],
+  "tags": []
+}
