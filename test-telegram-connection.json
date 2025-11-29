@@ -1,0 +1,76 @@
+{
+  "updatedAt": "2025-11-24T11:08:42.000Z",
+  "createdAt": "2025-10-08T16:23:48.232Z",
+  "id": "ipuToTTN5iTdCOlo",
+  "name": "test telegram connection",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "febf69b0-8f2e-4ef3-850c-8bf420ba3e75",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "chatId": "113754494",
+        "text": "пупупу",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "c078fba4-43d2-4ab1-afe2-4343caee33c4",
+      "name": "Send a text message",
+      "webhookId": "cfc2b0b4-2e83-4f97-9275-49694e0308fd",
+      "credentials": {
+        "telegramApi": {
+          "id": "0tdvD2EOBq94TGZP",
+          "name": "FipDiagnostics bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "f977083b-971f-4958-829d-97143737bb11",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-10-08T16:23:48.243Z",
+      "createdAt": "2025-10-08T16:23:48.243Z",
+      "role": "workflow:owner",
+      "workflowId": "ipuToTTN5iTdCOlo",
+      "projectId": "jnu5GnxkoXUPZEif"
+    }
+  ],
+  "tags": []
+}
