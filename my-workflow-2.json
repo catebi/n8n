@@ -1,0 +1,52 @@
+{
+  "updatedAt": "2025-11-25T08:30:11.000Z",
+  "createdAt": "2025-09-28T19:26:41.326Z",
+  "id": "Q8FmvVkpxO1rjPdI",
+  "name": "My workflow 2",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            },
+            {
+              "field": "hours",
+              "triggerAtMinute": 30
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "49775a9e-d635-4819-8cfc-57f90b6d028b",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "435236c6-ead4-4119-844d-9c00ad3b4f79",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-09-28T19:26:41.340Z",
+      "createdAt": "2025-09-28T19:26:41.340Z",
+      "role": "workflow:owner",
+      "workflowId": "Q8FmvVkpxO1rjPdI",
+      "projectId": "jnu5GnxkoXUPZEif"
+    }
+  ],
+  "tags": []
+}
