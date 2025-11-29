@@ -1,0 +1,159 @@
+{
+  "updatedAt": "2025-11-28T11:27:26.000Z",
+  "createdAt": "2025-09-28T15:16:12.101Z",
+  "id": "AwLuEu613JUuE8ue",
+  "name": "Sterilization request flow",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "new-sterilisation-form",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6720ab9b-34cc-4545-9d27-69f1ed83137c",
+      "name": "Webhook",
+      "webhookId": "495b2d91-75ff-4272-99a8-45f1cee920bf"
+    },
+    {
+      "parameters": {
+        "chatId": "-1001938190303",
+        "text": "=Пришла новая анкета!\nЗаявитель:ница: {{ $('Webhook').item.json.body.fields.requestor_name }}, язык {{ $('Webhook').item.json.body.fields.language.name }}\n{{ $('Webhook').item.json.body.fields.requestor_contact }}\nБеременность: {{ $('Webhook').item.json.body.fields.is_pregnant.name }}",
+        "additionalFields": {
+          "message_thread_id": 2231
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "393be757-f80a-40b6-bc5f-3da4c6916ef0",
+      "name": "Send a text message",
+      "webhookId": "ef4a3edc-2aaa-495d-8dc0-de1d1c77e8ac",
+      "credentials": {
+        "telegramApi": {
+          "id": "tcX20TpSwtOgHBGq",
+          "name": "Peredast"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "94021197-e253-4dbd-9e92-9b0415960dca",
+              "leftValue": "={{ ['Да', 'Yes', 'დიახ', 'Not sure', 'Нет уверенности', 'არ ვარ დარწმუნებული'] }}",
+              "rightValue": "={{ $json.body.fields.is_pregnant.name }}",
+              "operator": {
+                "type": "array",
+                "operation": "contains",
+                "rightType": "any"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "b21ef596-5a76-4eeb-bbc8-480c80437246",
+      "name": "If (maybe) pregnant"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If (maybe) pregnant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If (maybe) pregnant": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Tbilisi",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "saveExecutionProgress": true,
+    "errorWorkflow": "uxiU7FOABx5M1moL",
+    "timeSavedPerExecution": 2
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "dc25b68e-a146-47af-abae-5d8ef1ef8c9e",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-09-28T15:16:12.110Z",
+      "createdAt": "2025-09-28T15:16:12.110Z",
+      "role": "workflow:owner",
+      "workflowId": "AwLuEu613JUuE8ue",
+      "projectId": "jnu5GnxkoXUPZEif"
+    }
+  ],
+  "tags": [
+    {
+      "updatedAt": "2025-11-25T04:52:01.067Z",
+      "createdAt": "2025-11-25T04:52:01.067Z",
+      "id": "BQEudI1tbEaTUl0F",
+      "name": "catebi"
+    },
+    {
+      "updatedAt": "2025-11-25T04:52:06.198Z",
+      "createdAt": "2025-11-25T04:52:06.198Z",
+      "id": "Qu6VjlYKDvK0D4RZ",
+      "name": "telegram"
+    },
+    {
+      "updatedAt": "2025-11-25T04:51:56.814Z",
+      "createdAt": "2025-11-25T04:51:56.814Z",
+      "id": "VDaQmkD6X9ARfPb6",
+      "name": "sterilization"
+    },
+    {
+      "updatedAt": "2025-09-29T05:28:22.545Z",
+      "createdAt": "2025-09-29T05:28:22.545Z",
+      "id": "gq9w16CUS8ZXAS1z",
+      "name": "airtable"
+    }
+  ]
+}
