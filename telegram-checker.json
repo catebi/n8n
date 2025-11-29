@@ -1,0 +1,54 @@
+{
+  "updatedAt": "2025-11-25T08:33:40.000Z",
+  "createdAt": "2025-11-25T08:32:53.812Z",
+  "id": "cBmBYZdErUpvcQ7P",
+  "name": "telegram checker",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e96cfacd-732d-4ec2-85bf-01af83bcce2a",
+      "name": "Telegram Trigger",
+      "webhookId": "14fb8272-c48b-452a-8972-ef17620538d9",
+      "credentials": {
+        "telegramApi": {
+          "id": "tcX20TpSwtOgHBGq",
+          "name": "Peredast"
+        }
+      }
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "dc5bcae8-068a-4089-b876-43fecc1012fe",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-11-25T08:32:53.834Z",
+      "createdAt": "2025-11-25T08:32:53.834Z",
+      "role": "workflow:owner",
+      "workflowId": "cBmBYZdErUpvcQ7P",
+      "projectId": "jnu5GnxkoXUPZEif"
+    }
+  ],
+  "tags": []
+}
