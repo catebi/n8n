@@ -1,0 +1,430 @@
+{
+  "updatedAt": "2025-11-26T18:05:19.000Z",
+  "createdAt": "2025-11-26T11:55:06.627Z",
+  "id": "Fz2p6EfzGYN1htmh",
+  "name": "Spambot-dev",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {
+          "chatIds": "-1001247053710, -1002113323185, -1001999193889"
+        }
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -240,
+        384
+      ],
+      "id": "bc406eb6-349e-4d7f-b295-858feb98f53e",
+      "name": "Telegram Trigger",
+      "webhookId": "978a936c-8fc1-4c28-bb3e-2d69702da145",
+      "credentials": {
+        "telegramApi": {
+          "id": "tcX20TpSwtOgHBGq",
+          "name": "Peredast"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputText": "={{ $('Telegram Trigger').item.json.message.text ?? $('Telegram Trigger').item.json.message.caption ?? \"default\"}}",
+        "categories": {
+          "categories": [
+            {
+              "category": "job description (excluding animal-related)",
+              "description": "text offering and promoting a job"
+            },
+            {
+              "category": "ticket sales offer (excluding animal-themed)",
+              "description": "text about selling tickets to an event"
+            },
+            {
+              "category": "other",
+              "description": "any text that is not about a job or selling something"
+            },
+            {
+              "category": "pet-related"
+            }
+          ]
+        },
+        "options": {
+          "systemPromptTemplate": "Please classify the text provided by the user into one of the following categories: {categories}. If the text says anything at all about animals or pets, put it into \"pet-related\" category. Use the provided formatting instructions below. Don't explain, and only output the json.",
+          "enableAutoFixing": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1.1,
+      "position": [
+        432,
+        616
+      ],
+      "id": "a0cce2c5-2d43-425f-8111-3eb75b07bef1",
+      "name": "Text Classifier",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-flash-lite-latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        504,
+        904
+      ],
+      "id": "1356d6c8-9be5-495a-b3d6-af20205ba10e",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "82kFMSuErz4YBXNW",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "-1001938190303",
+        "text": "=Чат {{ $('Telegram Trigger').item.json.message.chat.title }}\n\nУдалён спам от {{ $('Telegram Trigger').item.json.message.from.first_name }} {{ $('Telegram Trigger').item.json.message.from.last_name }}, юзернейм {{ $('Telegram Trigger').item.json.message.from.username }} (id {{ $('Telegram Trigger').item.json.message.from.id }})\n\nТекст сообщения:\n{{ $('Telegram Trigger').item.json.message.text }}",
+        "additionalFields": {
+          "message_thread_id": 382975
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        784,
+        596
+      ],
+      "id": "7ac1e20a-34cf-431b-b926-5d26561e728d",
+      "name": "Send a text message",
+      "webhookId": "4d94c551-eecf-40a7-ab49-a2ac815b613d",
+      "credentials": {
+        "telegramApi": {
+          "id": "tcX20TpSwtOgHBGq",
+          "name": "Peredast"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "deleteMessage",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "messageId": "={{ $('Telegram Trigger').item.json.message.message_id }}"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1008,
+        788
+      ],
+      "id": "ec1ff01c-51b0-46d0-bc3c-c40ac1e31dbb",
+      "name": "Delete a chat message",
+      "webhookId": "684d0175-5b57-41be-856d-5e6dd53da1aa",
+      "credentials": {
+        "telegramApi": {
+          "id": "tcX20TpSwtOgHBGq",
+          "name": "Peredast"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        784,
+        788
+      ],
+      "id": "5b852a27-a957-4a39-ae2b-43bbc7c3bcbd",
+      "name": "Wait",
+      "webhookId": "43d7ca97-8413-4831-be54-e11f0fc83f3f"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "GrE2DGG1g20sylSA",
+          "mode": "list",
+          "cachedResultName": "Telegram whitelist",
+          "cachedResultUrl": "/projects/jnu5GnxkoXUPZEif/datatables/GrE2DGG1g20sylSA"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "user_id",
+              "keyValue": "={{ $json.message.from.id }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        504
+      ],
+      "id": "c7dee15b-a9b5-4d6d-aeaf-94a548136a7d",
+      "name": "Load whitelist",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "bdcca430-ea36-4926-af23-9565a445e99a",
+              "leftValue": "={{ $json }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        456
+      ],
+      "id": "d625c2c7-623f-49f7-a354-384d17d7e72f",
+      "name": "If account in whitelist"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "dca8fac4-22b8-45b1-95de-ce4c70b8d15a",
+              "leftValue": "={{ $json.message.text }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "35df3718-6777-4b66-8edd-21f53616b5d6",
+              "leftValue": "={{ $json.message.caption }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -16,
+        240
+      ],
+      "id": "dd59638d-c363-453e-844f-10882448cb67",
+      "name": "If message contains text"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        784,
+        360
+      ],
+      "id": "5f3d9965-2562-41ca-b866-8f88b08b88fa",
+      "name": "No Operation, do nothing"
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "If message contains text",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Load whitelist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Classifier": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Delete a chat message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load whitelist": {
+      "main": [
+        [
+          {
+            "node": "If account in whitelist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If account in whitelist": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Text Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If message contains text": {
+      "main": [
+        [
+          {
+            "node": "If account in whitelist",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Tbilisi",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "errorWorkflow": "uxiU7FOABx5M1moL",
+    "saveExecutionProgress": true
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "912c776e-5cec-41a0-aa60-1b437a218aa7",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-11-26T11:55:06.640Z",
+      "createdAt": "2025-11-26T11:55:06.640Z",
+      "role": "workflow:owner",
+      "workflowId": "Fz2p6EfzGYN1htmh",
+      "projectId": "jnu5GnxkoXUPZEif"
+    }
+  ],
+  "tags": [
+    {
+      "updatedAt": "2025-11-26T11:55:03.344Z",
+      "createdAt": "2025-11-26T11:55:03.344Z",
+      "id": "n96s6oqP9nNQuAzZ",
+      "name": "dev"
+    }
+  ]
+}
