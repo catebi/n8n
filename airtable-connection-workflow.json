@@ -1,0 +1,162 @@
+{
+  "updatedAt": "2025-09-29T05:33:03.000Z",
+  "createdAt": "2025-09-28T19:02:38.475Z",
+  "id": "Rwx7Mj1xwZbuaYeV",
+  "name": "Airtable Connection Workflow",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2693351c-e15b-433e-8666-97532573a34b",
+              "leftValue": "={{$json[\"challenge\"]}}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "1b54355b-964e-4a2c-b709-c225666071c2",
+      "name": "Check Challenge"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=={{$json[\"challenge\"]}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        624,
+        -240
+      ],
+      "id": "2e6c865e-7d03-44f1-93d4-4688b7d34f97",
+      "name": "Respond to Webhook -- Challenge"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"ok\": true}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        624,
+        96
+      ],
+      "id": "a469a408-89cf-4eef-a25a-3c7a8315a9a5",
+      "name": "Respond to Webhook -- OK"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "airtable/base-events",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        144,
+        0
+      ],
+      "id": "f8ce5bd2-df67-4f67-89ee-83871156a9c8",
+      "name": "Webhook",
+      "webhookId": "3ee4dc91-8db8-4eb9-90b3-7360305783f9"
+    }
+  ],
+  "connections": {
+    "Check Challenge": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook -- Challenge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook -- OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Check Challenge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "name": "First item",
+          "code": 1
+        }
+      },
+      {
+        "json": {
+          "name": "Second item",
+          "code": 2
+        }
+      }
+    ]
+  },
+  "versionId": "3f60818b-23f2-409f-958f-d60bdd4c2127",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-09-28T19:02:38.502Z",
+      "createdAt": "2025-09-28T19:02:38.502Z",
+      "role": "workflow:owner",
+      "workflowId": "Rwx7Mj1xwZbuaYeV",
+      "projectId": "jnu5GnxkoXUPZEif"
+    }
+  ],
+  "tags": [
+    {
+      "updatedAt": "2025-09-29T05:28:22.545Z",
+      "createdAt": "2025-09-29T05:28:22.545Z",
+      "id": "gq9w16CUS8ZXAS1z",
+      "name": "airtable"
+    }
+  ]
+}
