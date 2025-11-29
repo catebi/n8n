@@ -1,0 +1,75 @@
+{
+  "updatedAt": "2025-11-26T04:58:41.069Z",
+  "createdAt": "2025-11-26T04:58:41.069Z",
+  "id": "lVrde0zFUPZuQNLt",
+  "name": "My workflow 3",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e1331414-f51a-4392-ac90-4586e6789161",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "chatId": "-1001938190303"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "8634edf0-bbe4-4ae6-a750-d4f9beae0765",
+      "name": "Get a chat",
+      "webhookId": "050a6972-8d7c-4919-9274-517d9c729fb1",
+      "credentials": {
+        "telegramApi": {
+          "id": "tcX20TpSwtOgHBGq",
+          "name": "Peredast"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get a chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "6323100f-9313-4217-ab8b-d55a6245d8a9",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-11-26T04:58:41.075Z",
+      "createdAt": "2025-11-26T04:58:41.075Z",
+      "role": "workflow:owner",
+      "workflowId": "lVrde0zFUPZuQNLt",
+      "projectId": "jnu5GnxkoXUPZEif"
+    }
+  ],
+  "tags": []
+}
