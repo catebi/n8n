@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-11-28T11:27:26.000Z",
+  "updatedAt": "2025-11-29T13:32:08.000Z",
   "createdAt": "2025-09-28T15:16:12.101Z",
   "id": "AwLuEu613JUuE8ue",
   "name": "Sterilization request flow",
@@ -25,7 +25,7 @@
     {
       "parameters": {
         "chatId": "-1001938190303",
-        "text": "=Пришла новая анкета!\nЗаявитель:ница: {{ $('Webhook').item.json.body.fields.requestor_name }}, язык {{ $('Webhook').item.json.body.fields.language.name }}\n{{ $('Webhook').item.json.body.fields.requestor_contact }}\nБеременность: {{ $('Webhook').item.json.body.fields.is_pregnant.name }}",
+        "text": "=Пришла новая анкета!\nЗаявитель:ница: {{ $('Webhook').item.json.body.fields.requestor_name }}, язык {{ $('Webhook').item.json.body.fields.language.name }}\n{{ $('Webhook').item.json.body.fields.requestor_contact }}\nБеременность: {{ $('Webhook').item.json.body.fields.is_pregnant.name }}\nНужна ли передержка: {{ $('Webhook').item.json.body.fields['🏠 needs_foster_care'].name }}",
         "additionalFields": {
           "message_thread_id": 2231
         }
@@ -119,7 +119,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "dc25b68e-a146-47af-abae-5d8ef1ef8c9e",
+  "versionId": "4f5303b4-61eb-4be7-ad0f-bf9f89a6dbf2",
   "triggerCount": 1,
   "shared": [
     {
