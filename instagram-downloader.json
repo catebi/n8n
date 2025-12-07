@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-11-28T11:27:15.000Z",
+  "updatedAt": "2025-12-07T14:13:35.000Z",
   "createdAt": "2025-11-25T08:06:45.871Z",
   "id": "UDxhsnvTD0I8eqAW",
   "name": "Instagram downloader",
@@ -26,8 +26,8 @@
       "webhookId": "7b5bd26a-fb4a-4ef6-b4c6-750102b75b35",
       "credentials": {
         "telegramApi": {
-          "id": "tcX20TpSwtOgHBGq",
-          "name": "Peredast"
+          "id": "lCVLzUZFTFDGdi2H",
+          "name": "PeredastTest"
         }
       }
     },
@@ -269,74 +269,9 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {
-    "Telegram Trigger": [
-      {
-        "json": {
-          "update_id": 833012313,
-          "message": {
-            "message_id": 451176,
-            "from": {
-              "id": 113754494,
-              "is_bot": false,
-              "first_name": "Sasha",
-              "last_name": "Ershova",
-              "username": "religofsil",
-              "language_code": "en",
-              "is_premium": true
-            },
-            "chat": {
-              "id": -1001938190303,
-              "title": "CATEBI. Рабочий чат",
-              "is_forum": true,
-              "type": "supergroup"
-            },
-            "date": 1764058110,
-            "message_thread_id": 382975,
-            "reply_to_message": {
-              "message_id": 382975,
-              "from": {
-                "id": 113754494,
-                "is_bot": false,
-                "first_name": "Sasha",
-                "last_name": "Ershova",
-                "username": "religofsil",
-                "language_code": "en",
-                "is_premium": true
-              },
-              "chat": {
-                "id": -1001938190303,
-                "title": "CATEBI. Рабочий чат",
-                "is_forum": true,
-                "type": "supergroup"
-              },
-              "date": 1756963443,
-              "message_thread_id": 382975,
-              "forum_topic_created": {
-                "name": "Передачки",
-                "icon_color": 13338331,
-                "icon_custom_emoji_id": "5429579952024471102"
-              },
-              "is_topic_message": true
-            },
-            "text": "смарите какая штука!! https://www.instagram.com/p/DQqutEzCPLg/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
-            "entities": [
-              {
-                "offset": 0,
-                "length": 94,
-                "type": "url"
-              }
-            ],
-            "link_preview_options": {
-              "is_disabled": true
-            },
-            "is_topic_message": true
-          }
-        }
-      }
-    ]
-  },
-  "versionId": "bccba731-b534-4f34-a205-99644f6f5e7e",
+  "pinData": {},
+  "versionId": "fa0c80ea-8b9e-444b-bfe7-fa4300548a69",
+  "activeVersionId": "fa0c80ea-8b9e-444b-bfe7-fa4300548a69",
   "triggerCount": 1,
   "shared": [
     {
@@ -347,5 +282,271 @@
       "projectId": "jnu5GnxkoXUPZEif"
     }
   ],
+  "activeVersion": {
+    "updatedAt": "2025-12-07T14:13:24.026Z",
+    "createdAt": "2025-12-07T14:13:24.026Z",
+    "versionId": "fa0c80ea-8b9e-444b-bfe7-fa4300548a69",
+    "workflowId": "UDxhsnvTD0I8eqAW",
+    "nodes": [
+      {
+        "parameters": {
+          "updates": [
+            "message"
+          ],
+          "additionalFields": {
+            "chatIds": "-1001938190303, -1002102905787"
+          }
+        },
+        "type": "n8n-nodes-base.telegramTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          -320,
+          0
+        ],
+        "id": "4f7d710a-1eb6-4444-9ed7-f373e5ded035",
+        "name": "Telegram Trigger",
+        "webhookId": "7b5bd26a-fb4a-4ef6-b4c6-750102b75b35",
+        "credentials": {
+          "telegramApi": {
+            "id": "lCVLzUZFTFDGdi2H",
+            "name": "PeredastTest"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "6030ddd6-0586-46b6-a3f4-cd1649236776",
+                "leftValue": "={{ $json.message.text }}",
+                "rightValue": "instagram.com",
+                "operator": {
+                  "type": "string",
+                  "operation": "contains"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.2,
+        "position": [
+          -96,
+          0
+        ],
+        "id": "58dcc6db-8670-43a3-92c2-397d816ca370",
+        "name": "Filter"
+      },
+      {
+        "parameters": {
+          "language": "python",
+          "pythonCode": "import re\n\n# Input from previous node (Telegram Trigger)\ntext = _input.first().json.message.text\n\npattern = r\"(https?:\\/\\/(?:www\\.)?(?:instagram\\.com|instagr\\.am)\\/[^\\s]+)\"\nmatch = re.search(pattern, text, re.IGNORECASE)\n\nif not match:\n    return [{\n        \"hasInstagramUrl\": False,\n        \"originalText\": text,\n    }]\n\nreturn [{\n    \"hasInstagramUrl\": True,\n    \"instagramUrl\": match.group(0).split('?')[0],\n    \"originalText\": text,\n}]\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          128,
+          0
+        ],
+        "id": "bbe23fea-6cbf-4546-8a88-40d0cc4b2972",
+        "name": "Code in Python (Beta)"
+      },
+      {
+        "parameters": {
+          "actorId": {
+            "__rl": true,
+            "value": "nH2AHrwxeTRJoN5hX",
+            "mode": "list",
+            "cachedResultName": "Instagram Post Scraper (apify/instagram-post-scraper)",
+            "cachedResultUrl": "https://console.apify.com/actors/nH2AHrwxeTRJoN5hX/input"
+          },
+          "customBody": "={\n  \"resultsLimit\": 1,\n  \"skipPinnedPosts\": false,\n  \"username\": [\n    \"{{ $json.instagramUrl }}\"\n  ]\n}"
+        },
+        "type": "@apify/n8n-nodes-apify.apify",
+        "typeVersion": 1,
+        "position": [
+          352,
+          0
+        ],
+        "id": "4e38393f-1b0b-4e7e-80e9-a189a1935256",
+        "name": "Run an Actor",
+        "credentials": {
+          "apifyApi": {
+            "id": "3xdxnWLEKxL3Jh0S",
+            "name": "Apify account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "Datasets",
+          "datasetId": "={{ $json.defaultDatasetId }}",
+          "limit": 1
+        },
+        "type": "@apify/n8n-nodes-apify.apify",
+        "typeVersion": 1,
+        "position": [
+          800,
+          0
+        ],
+        "id": "41f536c6-161d-4839-b0cb-7389fff1a1c6",
+        "name": "Get dataset items",
+        "credentials": {
+          "apifyApi": {
+            "id": "3xdxnWLEKxL3Jh0S",
+            "name": "Apify account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "sendMediaGroup",
+          "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+          "media": {
+            "media": [
+              {
+                "media": "={{ $json.displayUrl }}",
+                "additionalFields": {
+                  "caption": "={{ $json.caption.substring(0, 1024) }}"
+                }
+              }
+            ]
+          },
+          "additionalFields": {
+            "reply_to_message_id": "={{ $('Telegram Trigger').item.json.message.message_id }}",
+            "message_thread_id": "={{ $('Telegram Trigger').item.json.message.message_thread_id }}"
+          }
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          1024,
+          0
+        ],
+        "id": "51270995-0b06-4f79-87fa-7203196da127",
+        "name": "Send a media group message",
+        "webhookId": "9a1a4cab-891e-49a4-8df1-3d9443a7e431",
+        "credentials": {
+          "telegramApi": {
+            "id": "tcX20TpSwtOgHBGq",
+            "name": "Peredast"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "64b2adc3-655b-47af-81da-47fbc7b929a3",
+                "leftValue": "={{ $json.status }}",
+                "rightValue": "SUCCEEDED",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          576,
+          0
+        ],
+        "id": "75aac693-b376-4c08-a0f3-e867f0fc0a69",
+        "name": "If"
+      }
+    ],
+    "connections": {
+      "Telegram Trigger": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "Code in Python (Beta)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in Python (Beta)": {
+        "main": [
+          [
+            {
+              "node": "Run an Actor",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Run an Actor": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get dataset items": {
+        "main": [
+          [
+            {
+              "node": "Send a media group message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Get dataset items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Alexandra Ershova",
+    "name": null,
+    "description": null
+  },
   "tags": []
 }
