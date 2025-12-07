@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-11-29T13:32:08.000Z",
+  "updatedAt": "2025-11-28T11:27:26.000Z",
   "createdAt": "2025-09-28T15:16:12.101Z",
   "id": "AwLuEu613JUuE8ue",
   "name": "Sterilization request flow",
@@ -25,7 +25,7 @@
     {
       "parameters": {
         "chatId": "-1001938190303",
-        "text": "=Пришла новая анкета!\nЗаявитель:ница: {{ $('Webhook').item.json.body.fields.requestor_name }}, язык {{ $('Webhook').item.json.body.fields.language.name }}\n{{ $('Webhook').item.json.body.fields.requestor_contact }}\nБеременность: {{ $('Webhook').item.json.body.fields.is_pregnant.name }}\nНужна ли передержка: {{ $('Webhook').item.json.body.fields['🏠 needs_foster_care'].name }}",
+        "text": "=Пришла новая анкета!\nЗаявитель:ница: {{ $('Webhook').item.json.body.fields.requestor_name }}, язык {{ $('Webhook').item.json.body.fields.language.name }}\n{{ $('Webhook').item.json.body.fields.requestor_contact }}\nБеременность: {{ $('Webhook').item.json.body.fields.is_pregnant.name }}",
         "additionalFields": {
           "message_thread_id": 2231
         }
@@ -119,7 +119,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "4f5303b4-61eb-4be7-ad0f-bf9f89a6dbf2",
+  "versionId": "dc25b68e-a146-47af-abae-5d8ef1ef8c9e",
+  "activeVersionId": "dc25b68e-a146-47af-abae-5d8ef1ef8c9e",
   "triggerCount": 1,
   "shared": [
     {
@@ -130,6 +131,115 @@
       "projectId": "jnu5GnxkoXUPZEif"
     }
   ],
+  "activeVersion": {
+    "updatedAt": "2025-11-27T11:21:42.558Z",
+    "createdAt": "2025-11-27T11:21:42.558Z",
+    "versionId": "dc25b68e-a146-47af-abae-5d8ef1ef8c9e",
+    "workflowId": "AwLuEu613JUuE8ue",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "new-sterilisation-form",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "6720ab9b-34cc-4545-9d27-69f1ed83137c",
+        "name": "Webhook",
+        "webhookId": "495b2d91-75ff-4272-99a8-45f1cee920bf"
+      },
+      {
+        "parameters": {
+          "chatId": "-1001938190303",
+          "text": "=Пришла новая анкета!\nЗаявитель:ница: {{ $('Webhook').item.json.body.fields.requestor_name }}, язык {{ $('Webhook').item.json.body.fields.language.name }}\n{{ $('Webhook').item.json.body.fields.requestor_contact }}\nБеременность: {{ $('Webhook').item.json.body.fields.is_pregnant.name }}",
+          "additionalFields": {
+            "message_thread_id": 2231
+          }
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          448,
+          0
+        ],
+        "id": "393be757-f80a-40b6-bc5f-3da4c6916ef0",
+        "name": "Send a text message",
+        "webhookId": "ef4a3edc-2aaa-495d-8dc0-de1d1c77e8ac",
+        "credentials": {
+          "telegramApi": {
+            "id": "tcX20TpSwtOgHBGq",
+            "name": "Peredast"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "94021197-e253-4dbd-9e92-9b0415960dca",
+                "leftValue": "={{ ['Да', 'Yes', 'დიახ', 'Not sure', 'Нет уверенности', 'არ ვარ დარწმუნებული'] }}",
+                "rightValue": "={{ $json.body.fields.is_pregnant.name }}",
+                "operator": {
+                  "type": "array",
+                  "operation": "contains",
+                  "rightType": "any"
+                }
+              }
+            ],
+            "combinator": "or"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          224,
+          0
+        ],
+        "id": "b21ef596-5a76-4eeb-bbc8-480c80437246",
+        "name": "If (maybe) pregnant"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "If (maybe) pregnant",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If (maybe) pregnant": {
+        "main": [
+          [
+            {
+              "node": "Send a text message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null
+  },
   "tags": [
     {
       "updatedAt": "2025-11-25T04:52:01.067Z",
