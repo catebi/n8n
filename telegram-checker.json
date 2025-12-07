@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-11-30T15:56:45.000Z",
+  "updatedAt": "2025-11-25T08:33:40.000Z",
   "createdAt": "2025-11-25T08:32:53.812Z",
   "id": "cBmBYZdErUpvcQ7P",
   "name": "telegram checker",
@@ -24,8 +24,8 @@
       "webhookId": "14fb8272-c48b-452a-8972-ef17620538d9",
       "credentials": {
         "telegramApi": {
-          "id": "lCVLzUZFTFDGdi2H",
-          "name": "PeredastTest"
+          "id": "tcX20TpSwtOgHBGq",
+          "name": "Peredast"
         }
       }
     }
@@ -39,7 +39,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "16bb250f-93ca-4029-a227-b7b9192745ed",
+  "versionId": "dc5bcae8-068a-4089-b876-43fecc1012fe",
+  "activeVersionId": null,
   "triggerCount": 0,
   "shared": [
     {
@@ -50,5 +51,6 @@
       "projectId": "jnu5GnxkoXUPZEif"
     }
   ],
+  "activeVersion": null,
   "tags": []
 }
