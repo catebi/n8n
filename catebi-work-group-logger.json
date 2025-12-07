@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-11-29T03:08:00.000Z",
+  "updatedAt": "2025-11-28T10:56:48.000Z",
   "createdAt": "2025-11-28T05:51:29.120Z",
   "id": "ruk1fJ3VKzawxKOD",
   "name": "Catebi Work Group Logger",
@@ -24,16 +24,15 @@
       "webhookId": "ba95c4ca-da79-477e-9450-871e7b0edb7f",
       "credentials": {
         "telegramApi": {
-          "id": "lCVLzUZFTFDGdi2H",
-          "name": "PeredastTest"
+          "id": "tcX20TpSwtOgHBGq",
+          "name": "Peredast"
         }
       }
     },
     {
       "parameters": {
-        "mode": "runOnceForEachItem",
         "language": "python",
-        "pythonCode": "from datetime import datetime, timezone\n\n# In \"Run once for each item\" mode, we have exactly one input item.\n# item = items[0]\ndata = _input.item.json.to_py()\n\nupd = (\n    data.get(\"message\")\n    or data.get(\"edited_message\")\n    or data.get(\"channel_post\")\n    or data.get(\"edited_channel_post\")\n)\n\nif not upd:\n    # Drop non-message updates\n    return []\n\nchat = upd.get(\"chat\", {}) or {}\nuser = upd.get(\"from\", {}) or {}\n\nunix_date = upd.get(\"date\")\ndate_iso = (\n    datetime.fromtimestamp(unix_date, tz=timezone.utc).isoformat()\n    if unix_date\n    else None\n)\n\nreply_to_msg = upd.get(\"reply_to_message\", {})\nreply_to_id = reply_to_msg[\"message_id\"] if reply_to_msg else None\n\n# --- Topic name handling (see section 2) ---\nforum_topic_created = reply_to_msg.get(\"forum_topic_created\") or {}\n\n# Extract attachments\nattachments = []\n\n# Photo (largest size)\nphotos = upd.get(\"photo\") or []\nif isinstance(photos, list) and photos:\n    p = photos[-1]\n    attachments.append({\n        \"kind\": \"photo\",\n        \"file_id\": p.get(\"file_id\"),\n        \"file_unique_id\": p.get(\"file_unique_id\"),\n        \"file_size\": p.get(\"file_size\"),\n        \"width\": p.get(\"width\"),\n        \"height\": p.get(\"height\"),\n        \"mime_type\": None,\n        \"file_name\": None,\n    })\n\n# Document\ndoc = upd.get(\"document\")\nif doc:\n    attachments.append({\n        \"kind\": \"document\",\n        \"file_id\": doc.get(\"file_id\"),\n        \"file_unique_id\": doc.get(\"file_unique_id\"),\n        \"file_size\": doc.get(\"file_size\"),\n        \"width\": None,\n        \"height\": None,\n        \"mime_type\": doc.get(\"mime_type\"),\n        \"file_name\": doc.get(\"file_name\"),\n    })\n\nnormalized = {\n    \"chat\": {\n        \"tg_chat_id\": chat.get(\"id\"),\n        \"type\": chat.get(\"type\"),\n        \"title\": chat.get(\"title\"),\n        \"username\": chat.get(\"username\", {}),\n        \"is_forum\": bool(chat.get(\"is_forum\", False)),\n    },\n    \"user\": {\n        \"tg_user_id\": user.get(\"id\"),\n        \"is_bot\": bool(user.get(\"is_bot\", False)),\n        \"username\": user.get(\"username\"),\n        \"first_name\": user.get(\"first_name\"),\n        \"last_name\": user.get(\"last_name\"),\n        \"language_code\": user.get(\"language_code\"),\n    },\n    \"topic\": {\n        \"message_thread_id\": upd.get(\"message_thread_id\")\n    },\n    \"message\": {\n        \"tg_message_id\": upd.get(\"message_id\"),\n        \"date_iso\": date_iso,\n        \"text\": upd.get(\"text\") or upd.get(\"caption\"),\n        \"reply_to_tg_message_id\": reply_to_id,\n        \"has_attachments\": len(attachments) > 0,\n        \"raw_json\": upd,\n    },\n    \"attachments\": attachments,\n}\n\n# n8n expects a list of items\nreturn {\"json\": normalized}\n"
+        "pythonCode": "from datetime import datetime, timezone\n\nitems_out = []\n\nfor item in items:\n    data = item.get(\"json\", {})\n\n    upd = (\n        data.get(\"message\")\n        or data.get(\"edited_message\")\n        or data.get(\"channel_post\")\n        or data.get(\"edited_channel_post\")\n    )\n\n    if not upd:\n        continue\n\n    chat = upd.get(\"chat\", {}) or {}\n    user = upd.get(\"from\", {}) or {}\n\n    unix_date = upd.get(\"date\")\n    date_iso = (\n        datetime.fromtimestamp(unix_date, tz=timezone.utc).isoformat()\n        if unix_date else None\n    )\n\n    reply_to_msg = upd.get(\"reply_to_message\")\n    reply_to_id = reply_to_msg[\"message_id\"] if reply_to_msg else None\n\n    # Extract attachments\n    attachments = []\n\n    # Photo (largest size)\n    photos = upd.get(\"photo\") or []\n    if isinstance(photos, list) and photos:\n        p = photos[-1]\n        attachments.append({\n            \"kind\": \"photo\",\n            \"file_id\": p.get(\"file_id\"),\n            \"file_unique_id\": p.get(\"file_unique_id\"),\n            \"file_size\": p.get(\"file_size\"),\n            \"width\": p.get(\"width\"),\n            \"height\": p.get(\"height\"),\n            \"mime_type\": None,\n            \"file_name\": None,\n        })\n\n    # Document\n    doc = upd.get(\"document\")\n    if doc:\n        attachments.append({\n            \"kind\": \"document\",\n            \"file_id\": doc.get(\"file_id\"),\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -43,267 +42,6 @@
       ],
       "id": "308beba8-6569-4d77-8821-cebef4ca3af4",
       "name": "Code in Python (Beta)"
-    },
-    {
-      "parameters": {
-        "operation": "upsert",
-        "schema": {
-          "__rl": true,
-          "mode": "list",
-          "value": "public"
-        },
-        "table": {
-          "__rl": true,
-          "value": "tg_chat",
-          "mode": "list",
-          "cachedResultName": "tg_chat"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "is_forum": false
-          },
-          "matchingColumns": [
-            "id"
-          ],
-          "schema": [
-            {
-              "id": "id",
-              "displayName": "id",
-              "required": false,
-              "defaultMatch": true,
-              "display": true,
-              "type": "number",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "tg_chat_id",
-              "displayName": "tg_chat_id",
-              "required": true,
-              "defaultMatch": false,
-              "display": true,
-              "type": "number",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "type",
-              "displayName": "type",
-              "required": true,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": false
-            },
-            {
-              "id": "title",
-              "displayName": "title",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": false
-            },
-            {
-              "id": "username",
-              "displayName": "username",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": false
-            },
-            {
-              "id": "is_forum",
-              "displayName": "is_forum",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "boolean",
-              "canBeUsedToMatch": false
-            },
-            {
-              "id": "created_at",
-              "displayName": "created_at",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "dateTime",
-              "canBeUsedToMatch": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.6,
-      "position": [
-        416,
-        0
-      ],
-      "id": "ea2de848-4963-4c11-aad1-10717a577620",
-      "name": "Upsert Chat",
-      "credentials": {
-        "postgres": {
-          "id": "u5hzEAvZADCVqBIT",
-          "name": "Postgres account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "upsert",
-        "schema": {
-          "__rl": true,
-          "mode": "list",
-          "value": "public"
-        },
-        "table": {
-          "__rl": true,
-          "value": "tg_message",
-          "mode": "list",
-          "cachedResultName": "tg_message"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "has_attachments": false
-          },
-          "matchingColumns": [
-            "id"
-          ],
-          "schema": [
-            {
-              "id": "id",
-              "displayName": "id",
-              "required": false,
-              "defaultMatch": true,
-              "display": true,
-              "type": "number",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "tg_message_id",
-              "displayName": "tg_message_id",
-              "required": true,
-              "defaultMatch": false,
-              "display": true,
-              "type": "number",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "chat_id",
-              "displayName": "chat_id",
-              "required": true,
-              "defaultMatch": false,
-              "display": true,
-              "type": "number",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "topic_id",
-              "displayName": "topic_id",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "number",
-              "canBeUsedToMatch": false
-            },
-            {
-              "id": "from_user_id",
-              "displayName": "from_user_id",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "number",
-              "canBeUsedToMatch": false
-            },
-            {
-              "id": "date",
-              "displayName": "date",
-              "required": true,
-              "defaultMatch": false,
-              "display": true,
-              "type": "dateTime",
-              "canBeUsedToMatch": false
-            },
-            {
-              "id": "text",
-              "displayName": "text",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": false
-            },
-            {
-              "id": "reply_to_tg_message_id",
-              "displayName": "reply_to_tg_message_id",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "number",
-              "canBeUsedToMatch": false
-            },
-            {
-              "id": "reply_to_internal_id",
-              "displayName": "reply_to_internal_id",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "number",
-              "canBeUsedToMatch": false
-            },
-            {
-              "id": "has_attachments",
-              "displayName": "has_attachments",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "boolean",
-              "canBeUsedToMatch": false
-            },
-            {
-              "id": "raw_json",
-              "displayName": "raw_json",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "object",
-              "canBeUsedToMatch": false
-            },
-            {
-              "id": "created_at",
-              "displayName": "created_at",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "dateTime",
-              "canBeUsedToMatch": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.6,
-      "position": [
-        624,
-        0
-      ],
-      "id": "2c5616ec-b08b-44ca-a13b-e87a4687a100",
-      "name": "Insert or update rows in a table",
-      "credentials": {
-        "postgres": {
-          "id": "u5hzEAvZADCVqBIT",
-          "name": "Postgres account"
-        }
-      }
     }
   ],
   "connections": {
@@ -312,28 +50,6 @@
         [
           {
             "node": "Code in Python (Beta)",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Code in Python (Beta)": {
-      "main": [
-        [
-          {
-            "node": "Upsert Chat",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Upsert Chat": {
-      "main": [
-        [
-          {
-            "node": "Insert or update rows in a table",
             "type": "main",
             "index": 0
           }
@@ -349,7 +65,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "a7f43068-559e-4fc2-a3af-82f4f9078fed",
+  "versionId": "3028bdac-a38d-49e0-b988-065953bcf6f1",
+  "activeVersionId": null,
   "triggerCount": 0,
   "shared": [
     {
@@ -360,5 +77,6 @@
       "projectId": "jnu5GnxkoXUPZEif"
     }
   ],
+  "activeVersion": null,
   "tags": []
 }
