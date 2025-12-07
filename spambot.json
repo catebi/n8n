@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-11-30T15:53:04.000Z",
+  "updatedAt": "2025-12-07T15:50:41.000Z",
   "createdAt": "2025-11-25T07:08:56.490Z",
   "id": "BzPT7nQWQllqpcsO",
   "name": "Spambot",
@@ -19,7 +19,7 @@
       "typeVersion": 1.2,
       "position": [
         -224,
-        144
+        32
       ],
       "id": "a57e1413-51c3-4c93-8eb5-8f94b086e118",
       "name": "Telegram Trigger",
@@ -61,8 +61,8 @@
       "type": "@n8n/n8n-nodes-langchain.textClassifier",
       "typeVersion": 1.1,
       "position": [
-        448,
-        376
+        672,
+        256
       ],
       "id": "0470a125-72fb-4754-b46f-e0bd3d028f49",
       "name": "Text Classifier",
@@ -76,8 +76,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        520,
-        664
+        752,
+        544
       ],
       "id": "697add10-046a-48a1-b2a0-f1840d4af847",
       "name": "Google Gemini Chat Model",
@@ -99,8 +99,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        800,
-        356
+        1024,
+        240
       ],
       "id": "8249f90a-36e0-4054-9b1f-f606af3e41b9",
       "name": "Send a text message",
@@ -122,8 +122,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        800,
-        548
+        1248,
+        432
       ],
       "id": "7d19429f-7252-4bf5-b54e-3ce17cd8b718",
       "name": "Delete a chat message",
@@ -134,6 +134,18 @@
           "name": "Peredast"
         }
       }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1024,
+        432
+      ],
+      "id": "54d6a6c9-619e-441c-8de3-b7d225616e6c",
+      "name": "Wait",
+      "webhookId": "43d7ca97-8413-4831-be54-e11f0fc83f3f"
     },
     {
       "parameters": {
@@ -158,8 +170,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1,
       "position": [
-        0,
-        264
+        224,
+        96
       ],
       "id": "5f95842e-8f6d-4a4c-a66d-58d53ec91363",
       "name": "Load whitelist",
@@ -184,17 +196,27 @@
                 "operation": "notEmpty",
                 "singleValue": true
               }
+            },
+            {
+              "id": "4cd8d027-d809-4a28-8055-3cc767817a75",
+              "leftValue": "={{ $('Telegram Trigger').item.json.message.from.username }}",
+              "rightValue": "Channel_Bot",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
             }
           ],
-          "combinator": "and"
+          "combinator": "or"
         },
         "options": {}
       },
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        224,
-        216
+        448,
+        96
       ],
       "id": "14b575c3-22c3-4428-a04a-d29a0ce9c965",
       "name": "If account in whitelist"
@@ -238,7 +260,7 @@
       "typeVersion": 2.2,
       "position": [
         0,
-        0
+        32
       ],
       "id": "5f014d99-9564-483b-8787-22e9fe24091e",
       "name": "If message contains text"
@@ -248,11 +270,109 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        800,
-        120
+        1024,
+        0
       ],
       "id": "aaad4c23-0f52-47a3-bdb5-38f8a8630221",
       "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "113754494",
+        "message": "=*Ban Request*\n\n{{ $('Telegram Trigger').item.json.message.text ?? $('Telegram Trigger').item.json.message.caption ?? 'empty message'}}\n\nUser: {{ $('Telegram Trigger').item.json.message.from.username }}\n\nChat: {{ $('Telegram Trigger').item.json.message.chat.title }}",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double",
+            "approveLabel": "✅ Ban",
+            "disapproveLabel": "❌ Ignore"
+          }
+        },
+        "options": {
+          "limitWaitTime": {
+            "values": {
+              "resumeAmount": 2,
+              "resumeUnit": "minutes"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1456,
+        432
+      ],
+      "id": "6c1b1b86-ff01-47bb-a163-6c72ba247f76",
+      "name": "Send message and wait for response",
+      "webhookId": "843dc7db-d870-4959-90ca-e69157d7d2d8",
+      "credentials": {
+        "telegramApi": {
+          "id": "tcX20TpSwtOgHBGq",
+          "name": "Peredast"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7021f91d-ef50-4ecb-9601-4db1c21480a2",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1664,
+        432
+      ],
+      "id": "2990ff49-ac34-44ee-894a-fa5e2a7f134b",
+      "name": "If Ban Approved"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot7510518102:AAF1KknszCeU67VNLecAjXxJKghAgWvNlFE/banChatMember",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "chat_id",
+              "value": "={{ $('Telegram Trigger').item.json.message.chat.id }}"
+            },
+            {
+              "name": "user_id",
+              "value": "={{ $('Telegram Trigger').item.json.message.from.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1872,
+        336
+      ],
+      "id": "1862a28d-0e5e-4126-84cd-2de681ff8a8f",
+      "name": "HTTP Request"
     },
     {
       "parameters": {
@@ -260,7 +380,15 @@
           "values": [
             {
               "key": "outcome",
-              "value": "deleted spam"
+              "value": "no ban"
+            },
+            {
+              "key": "from",
+              "value": "={{ $('Telegram Trigger').item.json.message.from.username }}"
+            },
+            {
+              "key": "text",
+              "value": "={{ $('Telegram Trigger').item.json.message.text }}"
             }
           ]
         }
@@ -268,11 +396,51 @@
       "type": "n8n-nodes-base.executionData",
       "typeVersion": 1.1,
       "position": [
-        1024,
-        548
+        1872,
+        528
       ],
-      "id": "392b3a45-fdbc-4672-8faa-3f84fb98a614",
-      "name": "Execution Data2"
+      "id": "68e8b360-f208-4d68-883b-b6d255adc182",
+      "name": "No Ban"
+    },
+    {
+      "parameters": {
+        "dataToSave": {
+          "values": [
+            {
+              "key": "outcome",
+              "value": "no action"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executionData",
+      "typeVersion": 1.1,
+      "position": [
+        1232,
+        0
+      ],
+      "id": "5edb718e-e99f-46a4-9890-2e1bd5b1789a",
+      "name": "No Action"
+    },
+    {
+      "parameters": {
+        "dataToSave": {
+          "values": [
+            {
+              "key": "outcome",
+              "value": "ban"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executionData",
+      "typeVersion": 1.1,
+      "position": [
+        2080,
+        336
+      ],
+      "id": "ea1b7fb1-5871-42c1-a37d-8413d077bf69",
+      "name": "Ban"
     }
   ],
   "connections": {
@@ -283,11 +451,6 @@
             "node": "If message contains text",
             "type": "main",
             "index": 0
-          },
-          {
-            "node": "Load whitelist",
-            "type": "main",
-            "index": 0
           }
         ]
       ]
@@ -296,12 +459,12 @@
       "main": [
         [
           {
-            "node": "Send a text message",
+            "node": "Wait",
             "type": "main",
             "index": 0
           },
           {
-            "node": "Delete a chat message",
+            "node": "Send a text message",
             "type": "main",
             "index": 0
           }
@@ -313,7 +476,7 @@
             "index": 0
           },
           {
-            "node": "Delete a chat message",
+            "node": "Wait",
             "type": "main",
             "index": 0
           }
@@ -340,6 +503,17 @@
           {
             "node": "Text Classifier",
             "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Delete a chat message",
+            "type": "main",
             "index": 0
           }
         ]
@@ -378,7 +552,7 @@
       "main": [
         [
           {
-            "node": "If account in whitelist",
+            "node": "Load whitelist",
             "type": "main",
             "index": 0
           }
@@ -392,21 +566,62 @@
         ]
       ]
     },
-    "No Operation, do nothing": {
-      "main": [
-        []
-      ]
-    },
-    "Send a text message": {
-      "main": [
-        []
-      ]
-    },
     "Delete a chat message": {
       "main": [
         [
           {
-            "node": "Execution Data2",
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing": {
+      "main": [
+        [
+          {
+            "node": "No Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response": {
+      "main": [
+        [
+          {
+            "node": "If Ban Approved",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Ban Approved": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Ban",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Ban",
             "type": "main",
             "index": 0
           }
@@ -427,8 +642,79 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {},
-  "versionId": "30748b25-1f67-4b48-94a3-69833a0fb50b",
+  "pinData": {
+    "Telegram Trigger": [
+      {
+        "json": {
+          "update_id": 833026213,
+          "message": {
+            "message_id": 46690,
+            "from": {
+              "id": 5347583586,
+              "is_bot": false,
+              "first_name": "Алина",
+              "username": "alinssfw",
+              "is_premium": true
+            },
+            "chat": {
+              "id": -1001247053710,
+              "title": "CATEBI Chat",
+              "username": "catebichat",
+              "type": "supergroup"
+            },
+            "date": 1764668083,
+            "text": "Есть подарок!\n\n- Предлагаю возможность дополнительного заработка на удаленке.\n\n   -  Никакого опыта не нужно.\n✔️$1100 в неделю — $350 день✔️\n\nПиши «+», дам всю информацию @onnnsw_hrrraw",
+            "entities": [
+              {
+                "offset": 0,
+                "length": 13,
+                "type": "bold"
+              },
+              {
+                "offset": 0,
+                "length": 13,
+                "type": "underline"
+              },
+              {
+                "offset": 110,
+                "length": 2,
+                "type": "custom_emoji",
+                "custom_emoji_id": "5206607081334906820"
+              },
+              {
+                "offset": 138,
+                "length": 2,
+                "type": "custom_emoji",
+                "custom_emoji_id": "5206607081334906820"
+              },
+              {
+                "offset": 142,
+                "length": 29,
+                "type": "bold"
+              },
+              {
+                "offset": 142,
+                "length": 29,
+                "type": "underline"
+              },
+              {
+                "offset": 171,
+                "length": 14,
+                "type": "mention"
+              },
+              {
+                "offset": 171,
+                "length": 14,
+                "type": "underline"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "versionId": "4b71a634-81da-4b3e-9961-2ccb3b71c5ed",
+  "activeVersionId": "4b71a634-81da-4b3e-9961-2ccb3b71c5ed",
   "triggerCount": 1,
   "shared": [
     {
@@ -439,6 +725,639 @@
       "projectId": "jnu5GnxkoXUPZEif"
     }
   ],
+  "activeVersion": {
+    "updatedAt": "2025-12-07T15:50:39.552Z",
+    "createdAt": "2025-12-07T15:50:39.552Z",
+    "versionId": "4b71a634-81da-4b3e-9961-2ccb3b71c5ed",
+    "workflowId": "BzPT7nQWQllqpcsO",
+    "nodes": [
+      {
+        "parameters": {
+          "updates": [
+            "message"
+          ],
+          "additionalFields": {
+            "chatIds": "-1001247053710, -1002113323185, -1001999193889"
+          }
+        },
+        "type": "n8n-nodes-base.telegramTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          -224,
+          32
+        ],
+        "id": "a57e1413-51c3-4c93-8eb5-8f94b086e118",
+        "name": "Telegram Trigger",
+        "webhookId": "978a936c-8fc1-4c28-bb3e-2d69702da145",
+        "credentials": {
+          "telegramApi": {
+            "id": "tcX20TpSwtOgHBGq",
+            "name": "Peredast"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "inputText": "={{ $('Telegram Trigger').item.json.message.text ?? $('Telegram Trigger').item.json.message.caption ?? \"default\"}}",
+          "categories": {
+            "categories": [
+              {
+                "category": "job description (excluding animal-related)",
+                "description": "text offering and promoting a job"
+              },
+              {
+                "category": "ticket sales offer (excluding animal-themed)",
+                "description": "text about selling tickets to an event"
+              },
+              {
+                "category": "other",
+                "description": "any text that is not about a job or selling something"
+              },
+              {
+                "category": "pet-related"
+              }
+            ]
+          },
+          "options": {
+            "systemPromptTemplate": "Please classify the text provided by the user into one of the following categories: {categories}. If the text says anything at all about animals or pets, put it into \"pet-related\" category. Use the provided formatting instructions below. Don't explain, and only output the json.",
+            "enableAutoFixing": false
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.textClassifier",
+        "typeVersion": 1.1,
+        "position": [
+          672,
+          256
+        ],
+        "id": "0470a125-72fb-4754-b46f-e0bd3d028f49",
+        "name": "Text Classifier",
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "modelName": "models/gemini-flash-lite-latest",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          752,
+          544
+        ],
+        "id": "697add10-046a-48a1-b2a0-f1840d4af847",
+        "name": "Google Gemini Chat Model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "82kFMSuErz4YBXNW",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "chatId": "-1001938190303",
+          "text": "=Чат {{ $('Telegram Trigger').item.json.message.chat.title }}\n\nУдалён спам от {{ $('Telegram Trigger').item.json.message.from.first_name }} {{ $('Telegram Trigger').item.json.message.from.last_name }}, юзернейм {{ $('Telegram Trigger').item.json.message.from.username }} (id {{ $('Telegram Trigger').item.json.message.from.id }})\n\nТекст сообщения:\n{{ $('Telegram Trigger').item.json.message.text }}",
+          "additionalFields": {
+            "message_thread_id": 382975
+          }
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          1024,
+          240
+        ],
+        "id": "8249f90a-36e0-4054-9b1f-f606af3e41b9",
+        "name": "Send a text message",
+        "webhookId": "4d94c551-eecf-40a7-ab49-a2ac815b613d",
+        "credentials": {
+          "telegramApi": {
+            "id": "tcX20TpSwtOgHBGq",
+            "name": "Peredast"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "operation": "deleteMessage",
+          "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+          "messageId": "={{ $('Telegram Trigger').item.json.message.message_id }}"
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          1248,
+          432
+        ],
+        "id": "7d19429f-7252-4bf5-b54e-3ce17cd8b718",
+        "name": "Delete a chat message",
+        "webhookId": "684d0175-5b57-41be-856d-5e6dd53da1aa",
+        "credentials": {
+          "telegramApi": {
+            "id": "tcX20TpSwtOgHBGq",
+            "name": "Peredast"
+          }
+        }
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1024,
+          432
+        ],
+        "id": "54d6a6c9-619e-441c-8de3-b7d225616e6c",
+        "name": "Wait",
+        "webhookId": "43d7ca97-8413-4831-be54-e11f0fc83f3f"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "GrE2DGG1g20sylSA",
+            "mode": "list",
+            "cachedResultName": "Telegram whitelist",
+            "cachedResultUrl": "/projects/jnu5GnxkoXUPZEif/datatables/GrE2DGG1g20sylSA"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "user_id",
+                "keyValue": "={{ $json.message.from.id }}"
+              }
+            ]
+          },
+          "returnAll": true
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1,
+        "position": [
+          224,
+          96
+        ],
+        "id": "5f95842e-8f6d-4a4c-a66d-58d53ec91363",
+        "name": "Load whitelist",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "bdcca430-ea36-4926-af23-9565a445e99a",
+                "leftValue": "={{ $json }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "object",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              },
+              {
+                "id": "4cd8d027-d809-4a28-8055-3cc767817a75",
+                "leftValue": "={{ $('Telegram Trigger').item.json.message.from.username }}",
+                "rightValue": "Channel_Bot",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              }
+            ],
+            "combinator": "or"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          448,
+          96
+        ],
+        "id": "14b575c3-22c3-4428-a04a-d29a0ce9c965",
+        "name": "If account in whitelist"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "dca8fac4-22b8-45b1-95de-ce4c70b8d15a",
+                "leftValue": "={{ $json.message.text }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "exists",
+                  "singleValue": true
+                }
+              },
+              {
+                "id": "35df3718-6777-4b66-8edd-21f53616b5d6",
+                "leftValue": "={{ $json.message.caption }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "exists",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "or"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          0,
+          32
+        ],
+        "id": "5f014d99-9564-483b-8787-22e9fe24091e",
+        "name": "If message contains text"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          1024,
+          0
+        ],
+        "id": "aaad4c23-0f52-47a3-bdb5-38f8a8630221",
+        "name": "No Operation, do nothing"
+      },
+      {
+        "parameters": {
+          "operation": "sendAndWait",
+          "chatId": "113754494",
+          "message": "=*Ban Request*\n\n{{ $('Telegram Trigger').item.json.message.text ?? $('Telegram Trigger').item.json.message.caption ?? 'empty message'}}\n\nUser: {{ $('Telegram Trigger').item.json.message.from.username }}\n\nChat: {{ $('Telegram Trigger').item.json.message.chat.title }}",
+          "approvalOptions": {
+            "values": {
+              "approvalType": "double",
+              "approveLabel": "✅ Ban",
+              "disapproveLabel": "❌ Ignore"
+            }
+          },
+          "options": {
+            "limitWaitTime": {
+              "values": {
+                "resumeAmount": 2,
+                "resumeUnit": "minutes"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          1456,
+          432
+        ],
+        "id": "6c1b1b86-ff01-47bb-a163-6c72ba247f76",
+        "name": "Send message and wait for response",
+        "webhookId": "843dc7db-d870-4959-90ca-e69157d7d2d8",
+        "credentials": {
+          "telegramApi": {
+            "id": "tcX20TpSwtOgHBGq",
+            "name": "Peredast"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "7021f91d-ef50-4ecb-9601-4db1c21480a2",
+                "leftValue": "={{ $json.data.approved }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          1664,
+          432
+        ],
+        "id": "2990ff49-ac34-44ee-894a-fa5e2a7f134b",
+        "name": "If Ban Approved"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.telegram.org/bot7510518102:AAF1KknszCeU67VNLecAjXxJKghAgWvNlFE/banChatMember",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "chat_id",
+                "value": "={{ $('Telegram Trigger').item.json.message.chat.id }}"
+              },
+              {
+                "name": "user_id",
+                "value": "={{ $('Telegram Trigger').item.json.message.from.id }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1872,
+          336
+        ],
+        "id": "1862a28d-0e5e-4126-84cd-2de681ff8a8f",
+        "name": "HTTP Request"
+      },
+      {
+        "parameters": {
+          "dataToSave": {
+            "values": [
+              {
+                "key": "outcome",
+                "value": "no ban"
+              },
+              {
+                "key": "from",
+                "value": "={{ $('Telegram Trigger').item.json.message.from.username }}"
+              },
+              {
+                "key": "text",
+                "value": "={{ $('Telegram Trigger').item.json.message.text }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executionData",
+        "typeVersion": 1.1,
+        "position": [
+          1872,
+          528
+        ],
+        "id": "68e8b360-f208-4d68-883b-b6d255adc182",
+        "name": "No Ban"
+      },
+      {
+        "parameters": {
+          "dataToSave": {
+            "values": [
+              {
+                "key": "outcome",
+                "value": "no action"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executionData",
+        "typeVersion": 1.1,
+        "position": [
+          1232,
+          0
+        ],
+        "id": "5edb718e-e99f-46a4-9890-2e1bd5b1789a",
+        "name": "No Action"
+      },
+      {
+        "parameters": {
+          "dataToSave": {
+            "values": [
+              {
+                "key": "outcome",
+                "value": "ban"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executionData",
+        "typeVersion": 1.1,
+        "position": [
+          2080,
+          336
+        ],
+        "id": "ea1b7fb1-5871-42c1-a37d-8413d077bf69",
+        "name": "Ban"
+      }
+    ],
+    "connections": {
+      "Telegram Trigger": {
+        "main": [
+          [
+            {
+              "node": "If message contains text",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Text Classifier": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Send a text message",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Send a text message",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Text Classifier",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Delete a chat message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Load whitelist": {
+        "main": [
+          [
+            {
+              "node": "If account in whitelist",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If account in whitelist": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Text Classifier",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If message contains text": {
+        "main": [
+          [
+            {
+              "node": "Load whitelist",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Delete a chat message": {
+        "main": [
+          [
+            {
+              "node": "Send message and wait for response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "No Operation, do nothing": {
+        "main": [
+          [
+            {
+              "node": "No Action",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send message and wait for response": {
+        "main": [
+          [
+            {
+              "node": "If Ban Approved",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If Ban Approved": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "No Ban",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "Ban",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Alexandra Ershova",
+    "name": null,
+    "description": null
+  },
   "tags": [
     {
       "updatedAt": "2025-11-25T04:52:01.067Z",
