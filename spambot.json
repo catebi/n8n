@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-08T08:37:47.000Z",
+  "updatedAt": "2025-12-08T14:36:01.000Z",
   "createdAt": "2025-11-25T07:08:56.490Z",
   "id": "BzPT7nQWQllqpcsO",
   "name": "Spambot",
@@ -209,7 +209,7 @@
         "options": {
           "limitWaitTime": {
             "values": {
-              "resumeAmount": 2,
+              "resumeAmount": 10,
               "resumeUnit": "minutes"
             }
           }
@@ -709,8 +709,8 @@
       }
     ]
   },
-  "versionId": "c3b46ddc-2f58-410f-ae51-271768824b5b",
-  "activeVersionId": "c3b46ddc-2f58-410f-ae51-271768824b5b",
+  "versionId": "1c185c08-9487-4d30-acff-3367e49b229c",
+  "activeVersionId": "1c185c08-9487-4d30-acff-3367e49b229c",
   "triggerCount": 1,
   "shared": [
     {
@@ -722,9 +722,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2025-12-08T08:37:47.186Z",
-    "createdAt": "2025-12-08T08:37:47.186Z",
-    "versionId": "c3b46ddc-2f58-410f-ae51-271768824b5b",
+    "updatedAt": "2025-12-08T14:36:01.056Z",
+    "createdAt": "2025-12-08T14:36:01.056Z",
+    "versionId": "1c185c08-9487-4d30-acff-3367e49b229c",
     "workflowId": "BzPT7nQWQllqpcsO",
     "nodes": [
       {
@@ -930,7 +930,7 @@
           "options": {
             "limitWaitTime": {
               "values": {
-                "resumeAmount": 2,
+                "resumeAmount": 10,
                 "resumeUnit": "minutes"
               }
             }
