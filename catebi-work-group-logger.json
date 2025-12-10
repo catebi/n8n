@@ -1,9 +1,9 @@
 {
-  "updatedAt": "2025-12-08T14:00:09.000Z",
+  "updatedAt": "2025-12-09T21:21:04.000Z",
   "createdAt": "2025-11-28T05:51:29.120Z",
   "id": "ruk1fJ3VKzawxKOD",
   "name": "Catebi Work Group Logger",
-  "active": false,
+  "active": true,
   "isArchived": false,
   "nodes": [
     {
@@ -11,7 +11,9 @@
         "updates": [
           "message"
         ],
-        "additionalFields": {}
+        "additionalFields": {
+          "chatIds": "-1001938190303"
+        }
       },
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
@@ -24,8 +26,609 @@
       "webhookId": "ba95c4ca-da79-477e-9450-871e7b0edb7f",
       "credentials": {
         "telegramApi": {
-          "id": "tcX20TpSwtOgHBGq",
-          "name": "Peredast"
+          "id": "Z92L3yN76eETho2v",
+          "name": "Logger Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tg_chat",
+          "mode": "list",
+          "cachedResultName": "tg_chat"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "is_forum": "={{ $json.message.chat.is_forum }}",
+            "tg_chat_id": "={{ $json.message.chat.id }}",
+            "type": "={{ $json.message.chat.type }}",
+            "title": "={{ $json.message.chat.title }}",
+            "username": "={{ $json.message.chat.username }}"
+          },
+          "matchingColumns": [
+            "tg_chat_id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "tg_chat_id",
+              "displayName": "tg_chat_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "type",
+              "displayName": "type",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "username",
+              "displayName": "username",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "is_forum",
+              "displayName": "is_forum",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "outputColumns": [
+            "id"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        224,
+        0
+      ],
+      "id": "b15c2aad-4f38-4c79-942b-16a40d55294b",
+      "name": "Upsert chat",
+      "credentials": {
+        "postgres": {
+          "id": "u5hzEAvZADCVqBIT",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tg_user",
+          "mode": "list",
+          "cachedResultName": "tg_user"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "is_bot": "={{ $('Telegram Trigger').item.json.message.from.is_bot }}",
+            "tg_user_id": "={{ $('Telegram Trigger').item.json.message.from.id }}",
+            "username": "={{ $('Telegram Trigger').item.json.message.from.username ?? ''}}",
+            "first_name": "={{ $('Telegram Trigger').item.json.message.from.first_name ?? ''}}",
+            "last_name": "={{ $('Telegram Trigger').item.json.message.from.last_name ?? ''}}",
+            "language_code": "={{ $('Telegram Trigger').item.json.message.from.language ?? ''}}"
+          },
+          "matchingColumns": [
+            "tg_user_id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "tg_user_id",
+              "displayName": "tg_user_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "is_bot",
+              "displayName": "is_bot",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "username",
+              "displayName": "username",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "first_name",
+              "displayName": "first_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "last_name",
+              "displayName": "last_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "language_code",
+              "displayName": "language_code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "outputColumns": [
+            "id"
+          ],
+          "replaceEmptyStrings": true
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        448,
+        0
+      ],
+      "id": "ca25408e-5936-4876-908a-847bd73d2295",
+      "name": "Upsert user",
+      "credentials": {
+        "postgres": {
+          "id": "u5hzEAvZADCVqBIT",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "40d8506d-fb0a-488c-8458-1d78027192a7",
+              "leftValue": "={{ $('Telegram Trigger').item.json.message.message_thread_id }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        656,
+        0
+      ],
+      "id": "e683a308-8465-4d58-8d77-6bf79af16076",
+      "name": "If topic exists"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tg_topic",
+          "mode": "list",
+          "cachedResultName": "tg_topic"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "tg_message_thread_id": "={{ $('Telegram Trigger').item.json.message.message_thread_id }}",
+            "chat_id": "={{ $('Upsert chat').item.json.id }}",
+            "name": "={{ $('Telegram Trigger').item.json.message.reply_to_message?.forum_topic_created?.name ?? $('Telegram Trigger').item.json.message.forum_topic_created?.name ?? null}}",
+            "icon_emoji_id": "={{ $('Telegram Trigger').item.json.message.reply_to_message?.forum_topic_created?.icon_custom_emoji_id ?? $('Telegram Trigger').item.json.message.forum_topic_created?.icon_custom_emoji_id ?? null}}"
+          },
+          "matchingColumns": [
+            "tg_message_thread_id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "chat_id",
+              "displayName": "chat_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "tg_message_thread_id",
+              "displayName": "tg_message_thread_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "icon_emoji_id",
+              "displayName": "icon_emoji_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "skipOnConflict": true
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        864,
+        -96
+      ],
+      "id": "2197de9c-3dc0-4d5e-bc6b-58516cc45788",
+      "name": "Insert topic",
+      "credentials": {
+        "postgres": {
+          "id": "u5hzEAvZADCVqBIT",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tg_topic",
+          "mode": "list",
+          "cachedResultName": "tg_topic"
+        },
+        "limit": 1,
+        "where": {
+          "values": [
+            {
+              "column": "chat_id",
+              "value": "={{ $('Telegram Trigger').item.json.message.chat.id }}"
+            },
+            {
+              "column": "tg_message_thread_id",
+              "value": "={{ $('Telegram Trigger').item.json.message.message_thread_id }}"
+            }
+          ]
+        },
+        "options": {
+          "outputColumns": [
+            "id"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1072,
+        -96
+      ],
+      "id": "d7fed031-b699-48f7-93b2-997ae4efd4f2",
+      "name": "Get topic id",
+      "credentials": {
+        "postgres": {
+          "id": "u5hzEAvZADCVqBIT",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tg_message",
+          "mode": "list",
+          "cachedResultName": "tg_message"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "has_attachments": "={{ !!($node[\"Telegram Trigger\"].json[\"message\"][\"photo\"] || $node[\"Telegram Trigger\"].json[\"message\"][\"document\"]) }}",
+            "tg_message_id": "={{ $('Telegram Trigger').item.json.message.message_id }}",
+            "chat_id": "={{ $('Upsert chat').item.json.id }}",
+            "from_user_id": "={{ $('Upsert user').item.json.id }}",
+            "reply_to_tg_message_id": "={{ $('Telegram Trigger').item.json.message.reply_to_message.message_id }}",
+            "topic_id": "={{ $json.id || 0 }}",
+            "date": "={{ ($('Telegram Trigger').item.json.message.date * 1000).toISOString() }}",
+            "text": "={{ $('Telegram Trigger').item.json.message.text || $('Telegram Trigger').item.json.message.tcaption || '' }}",
+            "raw_json": "={{ JSON.stringify($node[\"Telegram Trigger\"].json) }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "tg_message_id",
+              "displayName": "tg_message_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "chat_id",
+              "displayName": "chat_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "topic_id",
+              "displayName": "topic_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "from_user_id",
+              "displayName": "from_user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "text",
+              "displayName": "text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reply_to_tg_message_id",
+              "displayName": "reply_to_tg_message_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reply_to_internal_id",
+              "displayName": "reply_to_internal_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "has_attachments",
+              "displayName": "has_attachments",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "raw_json",
+              "displayName": "raw_json",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "skipOnConflict": true
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1248,
+        16
+      ],
+      "id": "e228435c-6e11-4f14-8d50-c444d41bea9c",
+      "name": "Insert message",
+      "credentials": {
+        "postgres": {
+          "id": "u5hzEAvZADCVqBIT",
+          "name": "Postgres account"
         }
       }
     }
@@ -33,7 +636,75 @@
   "connections": {
     "Telegram Trigger": {
       "main": [
-        []
+        [
+          {
+            "node": "Upsert chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert chat": {
+      "main": [
+        [
+          {
+            "node": "Upsert user",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert user": {
+      "main": [
+        [
+          {
+            "node": "If topic exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If topic exists": {
+      "main": [
+        [
+          {
+            "node": "Insert topic",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Insert message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert topic": {
+      "main": [
+        [
+          {
+            "node": "Get topic id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get topic id": {
+      "main": [
+        [
+          {
+            "node": "Insert message",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
@@ -45,9 +716,9 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "567e24c9-9e9d-47b4-aad0-86c682a2c0de",
-  "activeVersionId": null,
-  "triggerCount": 0,
+  "versionId": "a757ae44-5b0c-4af8-bfbc-f6173f86dc0e",
+  "activeVersionId": "a757ae44-5b0c-4af8-bfbc-f6173f86dc0e",
+  "triggerCount": 1,
   "shared": [
     {
       "updatedAt": "2025-11-28T05:51:29.128Z",
@@ -57,6 +728,717 @@
       "projectId": "jnu5GnxkoXUPZEif"
     }
   ],
-  "activeVersion": null,
+  "activeVersion": {
+    "updatedAt": "2025-12-09T21:21:04.876Z",
+    "createdAt": "2025-12-09T21:21:04.876Z",
+    "versionId": "a757ae44-5b0c-4af8-bfbc-f6173f86dc0e",
+    "workflowId": "ruk1fJ3VKzawxKOD",
+    "nodes": [
+      {
+        "parameters": {
+          "updates": [
+            "message"
+          ],
+          "additionalFields": {
+            "chatIds": "-1001938190303"
+          }
+        },
+        "type": "n8n-nodes-base.telegramTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          0,
+          0
+        ],
+        "id": "6f9d9102-407a-4a94-aa08-abe84e0bb13f",
+        "name": "Telegram Trigger",
+        "webhookId": "ba95c4ca-da79-477e-9450-871e7b0edb7f",
+        "credentials": {
+          "telegramApi": {
+            "id": "Z92L3yN76eETho2v",
+            "name": "Logger Bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "tg_chat",
+            "mode": "list",
+            "cachedResultName": "tg_chat"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "is_forum": "={{ $json.message.chat.is_forum }}",
+              "tg_chat_id": "={{ $json.message.chat.id }}",
+              "type": "={{ $json.message.chat.type }}",
+              "title": "={{ $json.message.chat.title }}",
+              "username": "={{ $json.message.chat.username }}"
+            },
+            "matchingColumns": [
+              "tg_chat_id"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "tg_chat_id",
+                "displayName": "tg_chat_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "type",
+                "displayName": "type",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "title",
+                "displayName": "title",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "username",
+                "displayName": "username",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "is_forum",
+                "displayName": "is_forum",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "boolean",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "created_at",
+                "displayName": "created_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {
+            "outputColumns": [
+              "id"
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          224,
+          0
+        ],
+        "id": "b15c2aad-4f38-4c79-942b-16a40d55294b",
+        "name": "Upsert chat",
+        "credentials": {
+          "postgres": {
+            "id": "u5hzEAvZADCVqBIT",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "tg_user",
+            "mode": "list",
+            "cachedResultName": "tg_user"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "is_bot": "={{ $('Telegram Trigger').item.json.message.from.is_bot }}",
+              "tg_user_id": "={{ $('Telegram Trigger').item.json.message.from.id }}",
+              "username": "={{ $('Telegram Trigger').item.json.message.from.username ?? ''}}",
+              "first_name": "={{ $('Telegram Trigger').item.json.message.from.first_name ?? ''}}",
+              "last_name": "={{ $('Telegram Trigger').item.json.message.from.last_name ?? ''}}",
+              "language_code": "={{ $('Telegram Trigger').item.json.message.from.language ?? ''}}"
+            },
+            "matchingColumns": [
+              "tg_user_id"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "tg_user_id",
+                "displayName": "tg_user_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "is_bot",
+                "displayName": "is_bot",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "boolean",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "username",
+                "displayName": "username",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "first_name",
+                "displayName": "first_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "last_name",
+                "displayName": "last_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "language_code",
+                "displayName": "language_code",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "created_at",
+                "displayName": "created_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {
+            "outputColumns": [
+              "id"
+            ],
+            "replaceEmptyStrings": true
+          }
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          448,
+          0
+        ],
+        "id": "ca25408e-5936-4876-908a-847bd73d2295",
+        "name": "Upsert user",
+        "credentials": {
+          "postgres": {
+            "id": "u5hzEAvZADCVqBIT",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "40d8506d-fb0a-488c-8458-1d78027192a7",
+                "leftValue": "={{ $('Telegram Trigger').item.json.message.message_thread_id }}",
+                "rightValue": 0,
+                "operator": {
+                  "type": "number",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          656,
+          0
+        ],
+        "id": "e683a308-8465-4d58-8d77-6bf79af16076",
+        "name": "If topic exists"
+      },
+      {
+        "parameters": {
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "tg_topic",
+            "mode": "list",
+            "cachedResultName": "tg_topic"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "tg_message_thread_id": "={{ $('Telegram Trigger').item.json.message.message_thread_id }}",
+              "chat_id": "={{ $('Upsert chat').item.json.id }}",
+              "name": "={{ $('Telegram Trigger').item.json.message.reply_to_message?.forum_topic_created?.name ?? $('Telegram Trigger').item.json.message.forum_topic_created?.name ?? null}}",
+              "icon_emoji_id": "={{ $('Telegram Trigger').item.json.message.reply_to_message?.forum_topic_created?.icon_custom_emoji_id ?? $('Telegram Trigger').item.json.message.forum_topic_created?.icon_custom_emoji_id ?? null}}"
+            },
+            "matchingColumns": [
+              "tg_message_thread_id"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "chat_id",
+                "displayName": "chat_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "tg_message_thread_id",
+                "displayName": "tg_message_thread_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "name",
+                "displayName": "name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "icon_emoji_id",
+                "displayName": "icon_emoji_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "created_at",
+                "displayName": "created_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {
+            "skipOnConflict": true
+          }
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          864,
+          -96
+        ],
+        "id": "2197de9c-3dc0-4d5e-bc6b-58516cc45788",
+        "name": "Insert topic",
+        "credentials": {
+          "postgres": {
+            "id": "u5hzEAvZADCVqBIT",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "select",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "tg_topic",
+            "mode": "list",
+            "cachedResultName": "tg_topic"
+          },
+          "limit": 1,
+          "where": {
+            "values": [
+              {
+                "column": "chat_id",
+                "value": "={{ $('Telegram Trigger').item.json.message.chat.id }}"
+              },
+              {
+                "column": "tg_message_thread_id",
+                "value": "={{ $('Telegram Trigger').item.json.message.message_thread_id }}"
+              }
+            ]
+          },
+          "options": {
+            "outputColumns": [
+              "id"
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          1072,
+          -96
+        ],
+        "id": "d7fed031-b699-48f7-93b2-997ae4efd4f2",
+        "name": "Get topic id",
+        "credentials": {
+          "postgres": {
+            "id": "u5hzEAvZADCVqBIT",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "tg_message",
+            "mode": "list",
+            "cachedResultName": "tg_message"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "has_attachments": "={{ !!($node[\"Telegram Trigger\"].json[\"message\"][\"photo\"] || $node[\"Telegram Trigger\"].json[\"message\"][\"document\"]) }}",
+              "tg_message_id": "={{ $('Telegram Trigger').item.json.message.message_id }}",
+              "chat_id": "={{ $('Upsert chat').item.json.id }}",
+              "from_user_id": "={{ $('Upsert user').item.json.id }}",
+              "reply_to_tg_message_id": "={{ $('Telegram Trigger').item.json.message.reply_to_message.message_id }}",
+              "topic_id": "={{ $json.id || 0 }}",
+              "date": "={{ ($('Telegram Trigger').item.json.message.date * 1000).toISOString() }}",
+              "text": "={{ $('Telegram Trigger').item.json.message.text || $('Telegram Trigger').item.json.message.tcaption || '' }}",
+              "raw_json": "={{ JSON.stringify($node[\"Telegram Trigger\"].json) }}"
+            },
+            "matchingColumns": [
+              "id"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "tg_message_id",
+                "displayName": "tg_message_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "chat_id",
+                "displayName": "chat_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "topic_id",
+                "displayName": "topic_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "from_user_id",
+                "displayName": "from_user_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "date",
+                "displayName": "date",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "text",
+                "displayName": "text",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "reply_to_tg_message_id",
+                "displayName": "reply_to_tg_message_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "reply_to_internal_id",
+                "displayName": "reply_to_internal_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "has_attachments",
+                "displayName": "has_attachments",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "boolean",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "raw_json",
+                "displayName": "raw_json",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "object",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "created_at",
+                "displayName": "created_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {
+            "skipOnConflict": true
+          }
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          1248,
+          16
+        ],
+        "id": "e228435c-6e11-4f14-8d50-c444d41bea9c",
+        "name": "Insert message",
+        "credentials": {
+          "postgres": {
+            "id": "u5hzEAvZADCVqBIT",
+            "name": "Postgres account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Telegram Trigger": {
+        "main": [
+          [
+            {
+              "node": "Upsert chat",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Upsert chat": {
+        "main": [
+          [
+            {
+              "node": "Upsert user",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Upsert user": {
+        "main": [
+          [
+            {
+              "node": "If topic exists",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If topic exists": {
+        "main": [
+          [
+            {
+              "node": "Insert topic",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Insert message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Insert topic": {
+        "main": [
+          [
+            {
+              "node": "Get topic id",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get topic id": {
+        "main": [
+          [
+            {
+              "node": "Insert message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Alexandra Ershova",
+    "name": null,
+    "description": null
+  },
   "tags": []
 }
