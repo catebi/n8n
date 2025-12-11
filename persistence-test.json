@@ -1,9 +1,9 @@
 {
-  "updatedAt": "2025-12-10T07:04:08.000Z",
+  "updatedAt": "2025-12-11T17:23:04.180Z",
   "createdAt": "2025-12-10T07:03:39.586Z",
   "id": "P5kkXFPducE2QA7j",
   "name": "Persistence test",
-  "active": false,
+  "active": true,
   "isArchived": false,
   "nodes": [
     {
@@ -39,6 +39,46 @@
       ],
       "id": "5d9428a7-8f1e-40ba-9dbf-83d3d300f760",
       "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 22,
+              "triggerAtMinute": 24
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        144,
+        144
+      ],
+      "id": "f2224f53-03ef-4a4d-b06f-b32824b8c8ba",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "dataToSave": {
+          "values": [
+            {
+              "key": "outcome",
+              "value": "={{ $now }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executionData",
+      "typeVersion": 1.1,
+      "position": [
+        352,
+        144
+      ],
+      "id": "674104ec-4afb-4742-b9fb-a73677b79d62",
+      "name": "Execution Data"
     }
   ],
   "connections": {
@@ -52,17 +92,32 @@
           }
         ]
       ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Execution Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
     "executionOrder": "v1"
   },
-  "staticData": null,
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
   "meta": null,
   "pinData": {},
-  "versionId": "f56faaa4-25e9-4c95-854f-08ded103d80d",
-  "activeVersionId": null,
-  "triggerCount": 0,
+  "versionId": "a575ccb7-646b-4ea0-8f6c-456a7a11a7d1",
+  "activeVersionId": "a575ccb7-646b-4ea0-8f6c-456a7a11a7d1",
+  "triggerCount": 1,
   "shared": [
     {
       "updatedAt": "2025-12-10T07:03:39.592Z",
@@ -72,6 +127,114 @@
       "projectId": "jnu5GnxkoXUPZEif"
     }
   ],
-  "activeVersion": null,
+  "activeVersion": {
+    "updatedAt": "2025-12-11T17:23:01.650Z",
+    "createdAt": "2025-12-11T17:23:01.650Z",
+    "versionId": "a575ccb7-646b-4ea0-8f6c-456a7a11a7d1",
+    "workflowId": "P5kkXFPducE2QA7j",
+    "nodes": [
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.manualTrigger",
+        "typeVersion": 1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "6ec87aae-79b1-4157-a908-3c93ce7e4795",
+        "name": "When clicking ‘Execute workflow’"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "84cd427a-a78c-49ab-aaca-a0cdc384844d",
+                "name": "outcome",
+                "value": "good",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          208,
+          0
+        ],
+        "id": "5d9428a7-8f1e-40ba-9dbf-83d3d300f760",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 22,
+                "triggerAtMinute": 24
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          144,
+          144
+        ],
+        "id": "f2224f53-03ef-4a4d-b06f-b32824b8c8ba",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "dataToSave": {
+            "values": [
+              {
+                "key": "outcome",
+                "value": "={{ $now }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executionData",
+        "typeVersion": 1.1,
+        "position": [
+          352,
+          144
+        ],
+        "id": "674104ec-4afb-4742-b9fb-a73677b79d62",
+        "name": "Execution Data"
+      }
+    ],
+    "connections": {
+      "When clicking ‘Execute workflow’": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Execution Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Alexandra Ershova",
+    "name": null,
+    "description": null
+  },
   "tags": []
 }
