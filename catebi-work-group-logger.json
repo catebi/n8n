@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-10T14:57:08.345Z",
+  "updatedAt": "2025-12-10T06:53:26.000Z",
   "createdAt": "2025-11-28T05:51:29.120Z",
   "id": "ruk1fJ3VKzawxKOD",
   "name": "Catebi Work Group Logger",
@@ -488,7 +488,7 @@
             "tg_message_id": "={{ $node['Telegram Trigger'].json.message.message_id }}",
             "chat_id": "={{ $node['Upsert chat'].json.id }}",
             "from_user_id": "={{ $node['Upsert user'].json.id }}",
-            "reply_to_tg_message_id": "={{ $node['Telegram Trigger'].json.message.reply_to_message?.message_id ?? null }}",
+            "reply_to_tg_message_id": "={{ $node['Telegram Trigger'].json.message.reply_to_message.message_id }}",
             "topic_id": "={{ $json.id || 0 }}",
             "date": "={{ new Date($node[\"Telegram Trigger\"].json[\"message\"][\"date\"] * 1000)\n    .toLocaleString(\"sv-SE\", { timeZone: \"Asia/Tbilisi\" }) }}",
             "text": "={{ $node['Telegram Trigger'].json['message']['text'] || $node['Telegram Trigger'].json['message']['caption'] || '' }}",
@@ -719,14 +719,15 @@
     "Telegram Trigger": [
       {
         "json": {
-          "update_id": 876070935,
+          "update_id": 876070654,
           "message": {
-            "message_id": 470952,
+            "message_id": 470667,
             "from": {
-              "id": 284194397,
+              "id": 83679600,
               "is_bot": false,
-              "first_name": "Natalia",
-              "username": "technasan",
+              "first_name": "sasha",
+              "last_name": "karpov",
+              "username": "lejafo",
               "is_premium": true
             },
             "chat": {
@@ -735,18 +736,45 @@
               "is_forum": true,
               "type": "supergroup"
             },
-            "date": 1765376306,
-            "text": "ну я заодно на приемку останусь"
+            "date": 1765347535,
+            "message_thread_id": 437417,
+            "reply_to_message": {
+              "message_id": 470642,
+              "from": {
+                "id": 113754494,
+                "is_bot": false,
+                "first_name": "Sasha",
+                "last_name": "Ershova",
+                "username": "religofsil",
+                "is_premium": true
+              },
+              "chat": {
+                "id": -1001938190303,
+                "title": "CATEBI. Рабочий чат",
+                "is_forum": true,
+                "type": "supergroup"
+              },
+              "date": 1765313549,
+              "message_thread_id": 437417,
+              "text": "@lejafo сможешь мб?",
+              "entities": [
+                {
+                  "offset": 0,
+                  "length": 7,
+                  "type": "mention"
+                }
+              ],
+              "is_topic_message": true
+            },
+            "text": "большая вероятность что я сегодня подключусь после семи, ну вряд ли смогу организовать запись",
+            "is_topic_message": true
           }
-        },
-        "pairedItem": {
-          "item": 0
         }
       }
     ]
   },
-  "versionId": "8c93eb41-c482-46e6-8ea7-a5564397a3cb",
-  "activeVersionId": "8c93eb41-c482-46e6-8ea7-a5564397a3cb",
+  "versionId": "05e0aa7f-4e44-488b-bd06-5e56b7f9d88a",
+  "activeVersionId": "05e0aa7f-4e44-488b-bd06-5e56b7f9d88a",
   "triggerCount": 1,
   "shared": [
     {
@@ -758,9 +786,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2025-12-10T14:57:08.386Z",
-    "createdAt": "2025-12-10T14:57:08.386Z",
-    "versionId": "8c93eb41-c482-46e6-8ea7-a5564397a3cb",
+    "updatedAt": "2025-12-10T06:53:26.947Z",
+    "createdAt": "2025-12-10T06:53:26.947Z",
+    "versionId": "05e0aa7f-4e44-488b-bd06-5e56b7f9d88a",
     "workflowId": "ruk1fJ3VKzawxKOD",
     "nodes": [
       {
@@ -1245,7 +1273,7 @@
               "tg_message_id": "={{ $node['Telegram Trigger'].json.message.message_id }}",
               "chat_id": "={{ $node['Upsert chat'].json.id }}",
               "from_user_id": "={{ $node['Upsert user'].json.id }}",
-              "reply_to_tg_message_id": "={{ $node['Telegram Trigger'].json.message.reply_to_message?.message_id ?? null }}",
+              "reply_to_tg_message_id": "={{ $node['Telegram Trigger'].json.message.reply_to_message.message_id }}",
               "topic_id": "={{ $json.id || 0 }}",
               "date": "={{ new Date($node[\"Telegram Trigger\"].json[\"message\"][\"date\"] * 1000)\n    .toLocaleString(\"sv-SE\", { timeZone: \"Asia/Tbilisi\" }) }}",
               "text": "={{ $node['Telegram Trigger'].json['message']['text'] || $node['Telegram Trigger'].json['message']['caption'] || '' }}",
