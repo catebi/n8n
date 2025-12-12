@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-08T09:07:49.000Z",
+  "updatedAt": "2025-12-12T08:46:36.466Z",
   "createdAt": "2025-11-25T14:46:39.204Z",
   "id": "uxiU7FOABx5M1moL",
   "name": "Error Notification workflow",
@@ -21,7 +21,7 @@
       "parameters": {
         "mode": "runOnceForEachItem",
         "language": "pythonNative",
-        "pythonCode": "message = f'''\nWORKFLOW ERROR\n\nWorkflow: {_item['json']['workflow']['name']}\nNode: {_item['json']['execution']['lastNodeExecuted']}\nError: {_item['json']['execution']['error']['message']}\nStacktrace: {_item['json']['execution']['error']['stack']}\n[Execution link]({_item['json']['execution']['url']})\n'''\nreturn {\"message\": message}\n\n# // Perfect error access untuk N8N v1.99.1\n# const errorData = $input.first().json;\n# const execution = errorData.execution;\n# const workflow = errorData.workflow;\n# const error = execution.error;\n\n# const message = `🚨 <b>WORKFLOW ERROR</b>\\n\\n` +\n#   `📋 Workflow: <b>${workflow.name}</b>\\n` +\n#   `⚙️ Node: <code>${error.node.name}</code>\\n` +\n#   `❌ Error: <code>${error.message}</code>\\n` +\n#   `📝 Description: <i>${error.description}</i>\\n` +\n#   `🕐 Waktu: ${new Date(error.timestamp).toLocaleString('id-ID')}\\n` +\n#   `🔍 Execution: <a href=\"${execution.url}\">${execution.id}</a>\\n` +\n#   `⚠️ Level: ${error.level.toUpperCase()}`;\n\n# return {\n#   message: message,\n#   parse_mode: 'HTML',\n#   chat_id: '621412350'\n# };"
+        "pythonCode": "def escape_markdown_v2(text: str) -> str:\n    \"\"\"\n    Escape all Telegram MarkdownV2 special characters\n    WITHOUT using regex.\n    \"\"\"\n    special_chars = {\n        '_', '*', '[', ']', '(', ')',\n        '~', '`', '>', '#', '+', '-',\n        '=', '|', '{', '}', '.', '!'\n    }\n\n    escaped = []\n    for ch in text:\n        if ch in special_chars:\n            escaped.append('\\\\' + ch)\n        else:\n            escaped.append(ch)\n\n    return ''.join(escaped)\n\n\n# Build the message with monospace stacktrace\nworkflow_name = _item['json']['workflow']['name']\nnode_name = _item['json']['execution']['lastNodeExecuted']\nerror_msg = _item['json']['execution']['error']['message']\nstacktrace = _item['json']['execution']['error']['stack']\nurl = _item['json']['execution']['url']\n\nmessage = (\n    f\"*WORKFLOW ERROR*\\n\\n\"\n    f\"*Workflow:* {escape_markdown_v2(workflow_name)}\\n\"\n    f\"*Node:* {escape_markdown_v2(node_name)}\\n\"\n    f\"*Error:* {escape_markdown_v2(error_msg)}\\n\"\n    f\"*Execution:* [open]({escape_markdown_v2(url)})\\n\\n\"\n    f\"*Stacktrace:*\\n\"\n    f\"```\\n{escape_markdown_v2(stacktrace)}\\n```\"\n)\n\nreturn {\"message\": message}"
       },
       "id": "5bb86eb6-87f6-4e8f-a9bb-47d6c652a6d7",
       "name": "Code",
@@ -130,74 +130,210 @@
       {
         "json": {
           "execution": {
-            "id": "4681",
-            "url": "https://n8n.religofsil.space/workflow/BzPT7nQWQllqpcsO/executions/4681",
+            "id": "7543",
+            "url": "https://n8n.religofsil.space/workflow/ruk1fJ3VKzawxKOD/executions/7543",
             "error": {
               "level": "warning",
               "tags": {},
-              "timestamp": 1765181700166,
+              "description": "Key (topic_id)=(3016) is not present in table \"tg_topic\".",
+              "timestamp": 1765528366075,
               "context": {},
               "functionality": "regular",
               "name": "NodeOperationError",
               "node": {
                 "parameters": {
-                  "inputText": "={{ $('Telegram Trigger').item.json.message.text ?? $('Telegram Trigger').item.json.message.caption ?? \"default\"}}",
-                  "categories": {
-                    "categories": [
+                  "resource": "database",
+                  "operation": "insert",
+                  "schema": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": "public"
+                  },
+                  "table": {
+                    "__rl": true,
+                    "value": "tg_message",
+                    "mode": "list",
+                    "cachedResultName": "tg_message"
+                  },
+                  "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                      "has_attachments": "={{ !!($node[\"Telegram Trigger\"].json[\"message\"][\"photo\"] || $node[\"Telegram Trigger\"].json[\"message\"][\"document\"]) }}",
+                      "tg_message_id": "={{ $node['Telegram Trigger'].json.message.message_id }}",
+                      "chat_id": "={{ $node['Upsert chat'].json.id }}",
+                      "from_user_id": "={{ $node['Upsert user'].json.id }}",
+                      "reply_to_tg_message_id": "={{ $node['Telegram Trigger'].json.message.reply_to_message?.message_id || null}}",
+                      "topic_id": "={{\n  $node[\"Get topic id\"].json?.id\n    ?? $node[\"Select General\"].json?.id\n    ?? null\n}}",
+                      "date": "={{ new Date($node[\"Telegram Trigger\"].json[\"message\"][\"date\"] * 1000)\n    .toLocaleString(\"sv-SE\", { timeZone: \"Asia/Tbilisi\" }) }}",
+                      "text": "={{ $node['Telegram Trigger'].json['message']['text'] || $node['Telegram Trigger'].json['message']['caption'] || '' }}",
+                      "raw_json": "={{ JSON.stringify($node[\"Telegram Trigger\"].json) }}"
+                    },
+                    "matchingColumns": [
+                      "id"
+                    ],
+                    "schema": [
                       {
-                        "category": "job description (excluding animal-related)",
-                        "description": "text offering and promoting a job"
+                        "id": "id",
+                        "displayName": "id",
+                        "required": false,
+                        "defaultMatch": true,
+                        "display": true,
+                        "type": "number",
+                        "canBeUsedToMatch": true,
+                        "removed": true
                       },
                       {
-                        "category": "ticket sales offer (excluding animal-themed)",
-                        "description": "text about selling tickets to an event"
+                        "id": "tg_message_id",
+                        "displayName": "tg_message_id",
+                        "required": true,
+                        "defaultMatch": false,
+                        "display": true,
+                        "type": "number",
+                        "canBeUsedToMatch": true
                       },
                       {
-                        "category": "other",
-                        "description": "any text that is not about a job or selling something"
+                        "id": "chat_id",
+                        "displayName": "chat_id",
+                        "required": true,
+                        "defaultMatch": false,
+                        "display": true,
+                        "type": "number",
+                        "canBeUsedToMatch": true
                       },
                       {
-                        "category": "pet-related",
-                        "description": ""
+                        "id": "topic_id",
+                        "displayName": "topic_id",
+                        "required": false,
+                        "defaultMatch": false,
+                        "display": true,
+                        "type": "number",
+                        "canBeUsedToMatch": true
+                      },
+                      {
+                        "id": "from_user_id",
+                        "displayName": "from_user_id",
+                        "required": false,
+                        "defaultMatch": false,
+                        "display": true,
+                        "type": "number",
+                        "canBeUsedToMatch": true
+                      },
+                      {
+                        "id": "date",
+                        "displayName": "date",
+                        "required": true,
+                        "defaultMatch": false,
+                        "display": true,
+                        "type": "dateTime",
+                        "canBeUsedToMatch": true
+                      },
+                      {
+                        "id": "text",
+                        "displayName": "text",
+                        "required": false,
+                        "defaultMatch": false,
+                        "display": true,
+                        "type": "string",
+                        "canBeUsedToMatch": true
+                      },
+                      {
+                        "id": "reply_to_tg_message_id",
+                        "displayName": "reply_to_tg_message_id",
+                        "required": false,
+                        "defaultMatch": false,
+                        "display": true,
+                        "type": "number",
+                        "canBeUsedToMatch": true
+                      },
+                      {
+                        "id": "reply_to_internal_id",
+                        "displayName": "reply_to_internal_id",
+                        "required": false,
+                        "defaultMatch": false,
+                        "display": true,
+                        "type": "number",
+                        "canBeUsedToMatch": true,
+                        "removed": true
+                      },
+                      {
+                        "id": "has_attachments",
+                        "displayName": "has_attachments",
+                        "required": false,
+                        "defaultMatch": false,
+                        "display": true,
+                        "type": "boolean",
+                        "canBeUsedToMatch": true
+                      },
+                      {
+                        "id": "raw_json",
+                        "displayName": "raw_json",
+                        "required": false,
+                        "defaultMatch": false,
+                        "display": true,
+                        "type": "object",
+                        "canBeUsedToMatch": true
+                      },
+                      {
+                        "id": "created_at",
+                        "displayName": "created_at",
+                        "required": false,
+                        "defaultMatch": false,
+                        "display": true,
+                        "type": "dateTime",
+                        "canBeUsedToMatch": true,
+                        "removed": true
                       }
-                    ]
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
                   },
                   "options": {
-                    "systemPromptTemplate": "Please classify the text provided by the user into one of the following categories: {categories}. If the text says anything at all about animals or pets, put it into \"pet-related\" category. Use the provided formatting instructions below. Don't explain, and only output the json.",
-                    "enableAutoFixing": false
+                    "outputColumns": [
+                      "*"
+                    ],
+                    "skipOnConflict": true
                   }
                 },
-                "type": "@n8n/n8n-nodes-langchain.textClassifier",
-                "typeVersion": 1.1,
+                "type": "n8n-nodes-base.postgres",
+                "typeVersion": 2.6,
                 "position": [
-                  672,
-                  256
+                  1568,
+                  0
                 ],
-                "id": "0470a125-72fb-4754-b46f-e0bd3d028f49",
-                "name": "Text Classifier",
-                "alwaysOutputData": false
+                "id": "e228435c-6e11-4f14-8d50-c444d41bea9c",
+                "name": "Insert message",
+                "credentials": {
+                  "postgres": {
+                    "id": "u5hzEAvZADCVqBIT",
+                    "name": "Postgres account"
+                  }
+                }
               },
               "messages": [],
-              "message": "Cannot read properties of undefined (reading 'message')",
-              "stack": "NodeOperationError: Cannot read properties of undefined (reading 'message')\n    at /usr/local/lib/node_modules/n8n/node_modules/.pnpm/@n8n+n8n-nodes-langchain@file+packages+@n8n+nodes-langchain_20900c8302166d11a7199f732c8d7bf5/node_modules/@n8n/n8n-nodes-langchain/nodes/chains/TextClassifier/TextClassifier.node.ts:270:14\n    at Array.forEach (<anonymous>)\n    at ExecuteContext.execute (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/@n8n+n8n-nodes-langchain@file+packages+@n8n+nodes-langchain_20900c8302166d11a7199f732c8d7bf5/node_modules/@n8n/n8n-nodes-langchain/nodes/chains/TextClassifier/TextClassifier.node.ts:259:18)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at WorkflowExecute.executeNode (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_08b575bec2313d5d8a4cc75358971443/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:1074:8)\n    at WorkflowExecute.runNode (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_08b575bec2313d5d8a4cc75358971443/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:1255:11)\n    at /usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_08b575bec2313d5d8a4cc75358971443/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:1691:27\n    at /usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_08b575bec2313d5d8a4cc75358971443/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:2307:11"
+              "message": "insert or update on table \"tg_message\" violates foreign key constraint \"tg_message_topic_id_fkey\"",
+              "stack": "NodeOperationError: insert or update on table \"tg_message\" violates foreign key constraint \"tg_message_topic_id_fkey\"\n    at parsePostgresError (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-nodes-base@file+packages+nodes-base_@aws-sdk+credential-providers@3.808.0_asn1.js@5_8da18263ca0574b0db58d4fefd8173ce/node_modules/n8n-nodes-base/nodes/Postgres/v2/helpers/utils.ts:124:9)\n    at /usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-nodes-base@file+packages+nodes-base_@aws-sdk+credential-providers@3.808.0_asn1.js@5_8da18263ca0574b0db58d4fefd8173ce/node_modules/n8n-nodes-base/nodes/Postgres/v2/helpers/utils.ts:279:19\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at ExecuteContext.execute (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-nodes-base@file+packages+nodes-base_@aws-sdk+credential-providers@3.808.0_asn1.js@5_8da18263ca0574b0db58d4fefd8173ce/node_modules/n8n-nodes-base/nodes/Postgres/v2/actions/database/insert.operation.ts:253:9)\n    at ExecuteContext.router (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-nodes-base@file+packages+nodes-base_@aws-sdk+credential-providers@3.808.0_asn1.js@5_8da18263ca0574b0db58d4fefd8173ce/node_modules/n8n-nodes-base/nodes/Postgres/v2/actions/router.ts:41:17)\n    at ExecuteContext.execute (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-nodes-base@file+packages+nodes-base_@aws-sdk+credential-providers@3.808.0_asn1.js@5_8da18263ca0574b0db58d4fefd8173ce/node_modules/n8n-nodes-base/nodes/Postgres/v2/PostgresV2.node.ts:26:10)\n    at WorkflowExecute.executeNode (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_ec37920eb95917b28efaa783206b20f3/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:1045:8)\n    at WorkflowExecute.runNode (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_ec37920eb95917b28efaa783206b20f3/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:1226:11)\n    at /usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_ec37920eb95917b28efaa783206b20f3/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:1662:27\n    at /usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_ec37920eb95917b28efaa783206b20f3/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:2274:11"
             },
-            "lastNodeExecuted": "Text Classifier",
-            "mode": "webhook",
+            "lastNodeExecuted": "Insert message",
+            "mode": "retry",
+            "retryOf": "7519",
             "executionContext": {
               "version": 1,
-              "establishedAt": 1765181699809,
+              "establishedAt": 1765523897966,
               "source": "webhook"
             }
           },
           "workflow": {
-            "id": "BzPT7nQWQllqpcsO",
-            "name": "Spambot"
+            "id": "ruk1fJ3VKzawxKOD",
+            "name": "Catebi Work Group Logger"
           }
+        },
+        "pairedItem": {
+          "item": 0
         }
       }
     ]
   },
-  "versionId": "cd919748-3157-4f37-a3cf-245e676e9a52",
+  "versionId": "709402b4-63b4-473b-80b3-65809d9d171d",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [
