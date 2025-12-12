@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-09T19:46:15.000Z",
+  "updatedAt": "2025-12-11T21:21:12.874Z",
   "createdAt": "2025-12-09T07:01:52.897Z",
   "id": "JUsbCQX9ptL9iGiv",
   "name": "Catebi Feedback",
@@ -121,8 +121,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1,
       "position": [
-        672,
-        352
+        512,
+        416
       ],
       "id": "1f952ae0-d0b1-4c45-ac47-763a3896039f",
       "name": "Insert mark"
@@ -333,8 +333,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        880,
-        352
+        736,
+        416
       ],
       "id": "466a26a1-6192-42ae-8738-1128973dd228",
       "name": "Answer Query a callback",
@@ -360,7 +360,7 @@
       "type": "n8n-nodes-base.executionData",
       "typeVersion": 1.1,
       "position": [
-        720,
+        736,
         224
       ],
       "id": "a9928334-99d5-41b3-8c8b-1117dca8e196",
@@ -380,8 +380,8 @@
       "type": "n8n-nodes-base.executionData",
       "typeVersion": 1.1,
       "position": [
-        1088,
-        352
+        960,
+        416
       ],
       "id": "64c6a675-3ba5-42c2-9d6d-d1df2e24022f",
       "name": "Execution Data1"
@@ -400,11 +400,413 @@
       "type": "n8n-nodes-base.executionData",
       "typeVersion": 1.1,
       "position": [
-        272,
+        288,
         0
       ],
       "id": "300e8541-900f-4ad0-8b9c-6f53013e3dbb",
       "name": "Execution Data2"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 23,
+              "triggerAtMinute": 55
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -160,
+        1024
+      ],
+      "id": "7fb06033-0005-4402-af24-e8b68e53462d",
+      "name": "Calculate Feedback"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "ZytHPdzN4WCB2DGq",
+          "mode": "list",
+          "cachedResultName": "catebi_feedback",
+          "cachedResultUrl": "/projects/jnu5GnxkoXUPZEif/datatables/ZytHPdzN4WCB2DGq"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "mark",
+              "condition": "gt",
+              "keyValue": "0"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        64,
+        832
+      ],
+      "id": "62608bf8-5812-4512-a4e2-9bf437ccf540",
+      "name": "Get marks"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "ZytHPdzN4WCB2DGq",
+          "mode": "list",
+          "cachedResultName": "catebi_feedback",
+          "cachedResultUrl": "/projects/jnu5GnxkoXUPZEif/datatables/ZytHPdzN4WCB2DGq"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "text_feedback",
+              "condition": "isNotEmpty"
+            },
+            {
+              "keyName": "createdAt",
+              "condition": "gte",
+              "keyValue": "={{ $today }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        736,
+        1216
+      ],
+      "id": "e53b3fab-bc72-40a0-9b82-7739e6ec8149",
+      "name": "Get feedback",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "concatenate",
+              "field": "text_feedback",
+              "separateBy": "other",
+              "customSeparator": "={{'\\n'}}------------------------------{{'\\n'}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        960,
+        1216
+      ],
+      "id": "d3e5d607-41a6-4c23-8a83-7ce0e6cfd191",
+      "name": "Summarize"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a143e0ec-2b70-49b2-8f35-c58341fb7974",
+              "leftValue": "={{ $json.createdAt }}",
+              "rightValue": "={{ $('Calculate Feedback').item.json.timestamp.toDateTime().format('yyyy-MM-dd') }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "afterOrEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        512,
+        640
+      ],
+      "id": "89e9909a-7493-4fec-b042-bebe183a9125",
+      "name": "Get Today Marks"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a143e0ec-2b70-49b2-8f35-c58341fb7974",
+              "leftValue": "={{ $json.createdAt }}",
+              "rightValue": "={{ $('Calculate Feedback').item.json.timestamp.toDateTime().minus(1, 'days').format('yyyy-MM-dd') }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "afterOrEquals"
+              }
+            },
+            {
+              "id": "8454a9fb-e174-423c-b9a6-2aaef0dacdc5",
+              "leftValue": "={{ $json.createdAt }}",
+              "rightValue": "={{ $('Calculate Feedback').item.json.timestamp.toDateTime().format('yyyy-MM-dd') }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "before"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        512,
+        832
+      ],
+      "id": "4322accb-c443-49bd-95bc-8dc9d779c7b7",
+      "name": "Get Yesterday Marks"
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "average",
+              "field": "mark"
+            },
+            {
+              "field": "mark"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        736,
+        640
+      ],
+      "id": "9c124026-bbbc-48a7-8bd5-e8b070bfd6ed",
+      "name": "Today Mark Summary"
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "average",
+              "field": "mark"
+            },
+            {
+              "field": "mark"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        736,
+        832
+      ],
+      "id": "b49d1a0b-c37e-4cbe-a294-b27f4b364ae9",
+      "name": "Yesterday Mark Summary"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d835e799-ec06-463e-8c36-0fd48014df19",
+              "name": "date",
+              "value": "={{ $node['Get marks'].json.createdAt.toDateTime().format('yyyy-MM-dd') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        288,
+        832
+      ],
+      "id": "6907c35d-ad39-4fdc-818b-834627e43873",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "average",
+              "field": "mark"
+            }
+          ]
+        },
+        "fieldsToSplitBy": "date",
+        "options": {
+          "outputFormat": "separateItems"
+        }
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        512,
+        1024
+      ],
+      "id": "6f2b5f49-a549-400b-bb19-80b8a499c138",
+      "name": "Historical Data"
+    },
+    {
+      "parameters": {
+        "chartType": "line",
+        "labelsMode": "array",
+        "labelsArray": "={{ $json.date }}",
+        "data": "={{ $json.average_mark }}",
+        "output": "chart",
+        "chartOptions": {
+          "format": "png"
+        },
+        "datasetOptions": {
+          "fill": false,
+          "label": "Feedback"
+        }
+      },
+      "type": "n8n-nodes-base.quickChart",
+      "typeVersion": 1,
+      "position": [
+        960,
+        1024
+      ],
+      "id": "b536cf61-c2cf-41ad-8f84-e015b19e3553",
+      "name": "QuickChart"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "date"
+            },
+            {
+              "fieldToAggregate": "average_mark"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        736,
+        1024
+      ],
+      "id": "27552da8-fab9-4330-a9cc-4228540f4e2f",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c3e42e02-d5a6-466a-a04b-b359a1b38ac6",
+              "name": "average_comment",
+              "value": "={{\n  (() => {\n    const t = $node['Today Mark Summary'].json.average_mark;\n    const y = $node['Yesterday Mark Summary'].json.average_mark;\n\n    if (y === 0) {\n      return 'Прошедший день волонтёр:ки оценили на ${t.toFixed(2)}.';\n    }\n\n    const pct = ((t - y) / y) * 100;\n\n    return `Прошедший день волонтёр:ки оценили на ${t.toFixed(2)}.\nЭто на ${pct.toFixed(0)}% ${pct >= 0 ? 'лучше' : 'хуже'}, чем предыдущий день.`;\n  })()\n}}\n",
+              "type": "string"
+            },
+            {
+              "id": "0b14ec85-9e1c-498f-8db1-f349275bfc48",
+              "name": "responders_comment",
+              "value": "={{   (() => {     const t = $node['Today Mark Summary'].json.count_mark;     const y = $node['Yesterday Mark Summary'].json.count_mark;      if (y === 0) {       return 'Оценивало ${t} респондент:ок.';     }      const pct = ((t - y) / y) * 100;      return `Оценивало ${t} респондент:ок.\nЭто на ${pct.toFixed(0)}% ${pct >= 0 ? 'лучше' : 'хуже'}, чем в предыдущий день.`;   })() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        960,
+        736
+      ],
+      "id": "d7eb6e68-5e26-4542-8ce9-bd4aa70303fa",
+      "name": "Diff"
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "-1001938190303",
+        "binaryData": true,
+        "binaryPropertyName": "chart",
+        "additionalFields": {
+          "caption": "={{ $node['Diff'].json.average_comment + '\\n' + $node['Diff'].json.responders_comment + '\\n\\nКомментарии:\\n\\n' + $json.concatenated_text_feedback }}",
+          "fileName": "chart.png",
+          "parse_mode": "Markdown",
+          "message_thread_id": 354496
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1808,
+        1008
+      ],
+      "id": "4fae7b89-86d5-4c78-b59a-db9dd0889055",
+      "name": "Send a photo message",
+      "webhookId": "9590a2fa-e1c8-494b-be6b-d515ed2b9ccf",
+      "credentials": {
+        "telegramApi": {
+          "id": "MaTjujU76kc0Yc86",
+          "name": "Feedback Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1472,
+        992
+      ],
+      "id": "8b2b9810-663a-4b7b-9447-49983b6528d3",
+      "name": "Merge"
     }
   ],
   "connections": {
@@ -513,6 +915,175 @@
           }
         ]
       ]
+    },
+    "Calculate Feedback": {
+      "main": [
+        [
+          {
+            "node": "Get marks",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get feedback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get feedback": {
+      "main": [
+        [
+          {
+            "node": "Summarize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get marks": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Today Marks": {
+      "main": [
+        [
+          {
+            "node": "Today Mark Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Yesterday Marks": {
+      "main": [
+        [
+          {
+            "node": "Yesterday Mark Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Yesterday Mark Summary": {
+      "main": [
+        [
+          {
+            "node": "Diff",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Get Today Marks",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Yesterday Marks",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Historical Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Today Mark Summary": {
+      "main": [
+        [
+          {
+            "node": "Diff",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Historical Data": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "QuickChart",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "QuickChart": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Diff": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Send a photo message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -523,6 +1094,9 @@
   },
   "staticData": {
     "node:Schedule Trigger": {
+      "recurrenceRules": []
+    },
+    "node:Calculate Feedback": {
       "recurrenceRules": []
     }
   },
@@ -606,11 +1180,39 @@
           }
         }
       }
+    ],
+    "Yesterday Mark Summary": [
+      {
+        "json": {
+          "average_mark": 3,
+          "count_mark": 10
+        }
+      }
+    ],
+    "Calculate Feedback": [
+      {
+        "json": {
+          "timestamp": "2025-12-12T01:10:20.531+04:00",
+          "Readable date": "December 12th 2025, 1:10:20 am",
+          "Readable time": "1:10:20 am",
+          "Day of week": "Friday",
+          "Year": "2025",
+          "Month": "December",
+          "Day of month": "12",
+          "Hour": "01",
+          "Minute": "10",
+          "Second": "20",
+          "Timezone": "Asia/Tbilisi (UTC+04:00)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
     ]
   },
-  "versionId": "ed16f484-e271-421e-9901-0b5d2ef1c62e",
-  "activeVersionId": "ed16f484-e271-421e-9901-0b5d2ef1c62e",
-  "triggerCount": 2,
+  "versionId": "8bce06e6-ed23-440b-8f90-57c129151fff",
+  "activeVersionId": "8bce06e6-ed23-440b-8f90-57c129151fff",
+  "triggerCount": 3,
   "shared": [
     {
       "updatedAt": "2025-12-09T07:01:52.920Z",
@@ -621,9 +1223,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2025-12-09T19:46:15.403Z",
-    "createdAt": "2025-12-09T19:46:15.403Z",
-    "versionId": "ed16f484-e271-421e-9901-0b5d2ef1c62e",
+    "updatedAt": "2025-12-11T21:21:12.901Z",
+    "createdAt": "2025-12-11T21:21:12.901Z",
+    "versionId": "8bce06e6-ed23-440b-8f90-57c129151fff",
     "workflowId": "JUsbCQX9ptL9iGiv",
     "nodes": [
       {
@@ -741,8 +1343,8 @@
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1,
         "position": [
-          672,
-          352
+          512,
+          416
         ],
         "id": "1f952ae0-d0b1-4c45-ac47-763a3896039f",
         "name": "Insert mark"
@@ -953,8 +1555,8 @@
         "type": "n8n-nodes-base.telegram",
         "typeVersion": 1.2,
         "position": [
-          880,
-          352
+          736,
+          416
         ],
         "id": "466a26a1-6192-42ae-8738-1128973dd228",
         "name": "Answer Query a callback",
@@ -980,7 +1582,7 @@
         "type": "n8n-nodes-base.executionData",
         "typeVersion": 1.1,
         "position": [
-          720,
+          736,
           224
         ],
         "id": "a9928334-99d5-41b3-8c8b-1117dca8e196",
@@ -1000,8 +1602,8 @@
         "type": "n8n-nodes-base.executionData",
         "typeVersion": 1.1,
         "position": [
-          1088,
-          352
+          960,
+          416
         ],
         "id": "64c6a675-3ba5-42c2-9d6d-d1df2e24022f",
         "name": "Execution Data1"
@@ -1020,11 +1622,413 @@
         "type": "n8n-nodes-base.executionData",
         "typeVersion": 1.1,
         "position": [
-          272,
+          288,
           0
         ],
         "id": "300e8541-900f-4ad0-8b9c-6f53013e3dbb",
         "name": "Execution Data2"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 23,
+                "triggerAtMinute": 55
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -160,
+          1024
+        ],
+        "id": "7fb06033-0005-4402-af24-e8b68e53462d",
+        "name": "Calculate Feedback"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "ZytHPdzN4WCB2DGq",
+            "mode": "list",
+            "cachedResultName": "catebi_feedback",
+            "cachedResultUrl": "/projects/jnu5GnxkoXUPZEif/datatables/ZytHPdzN4WCB2DGq"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "mark",
+                "condition": "gt",
+                "keyValue": "0"
+              }
+            ]
+          },
+          "returnAll": true
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1,
+        "position": [
+          64,
+          832
+        ],
+        "id": "62608bf8-5812-4512-a4e2-9bf437ccf540",
+        "name": "Get marks"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "ZytHPdzN4WCB2DGq",
+            "mode": "list",
+            "cachedResultName": "catebi_feedback",
+            "cachedResultUrl": "/projects/jnu5GnxkoXUPZEif/datatables/ZytHPdzN4WCB2DGq"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "text_feedback",
+                "condition": "isNotEmpty"
+              },
+              {
+                "keyName": "createdAt",
+                "condition": "gte",
+                "keyValue": "={{ $today }}"
+              }
+            ]
+          },
+          "returnAll": true
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1,
+        "position": [
+          736,
+          1216
+        ],
+        "id": "e53b3fab-bc72-40a0-9b82-7739e6ec8149",
+        "name": "Get feedback",
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "fieldsToSummarize": {
+            "values": [
+              {
+                "aggregation": "concatenate",
+                "field": "text_feedback",
+                "separateBy": "other",
+                "customSeparator": "={{'\\n'}}------------------------------{{'\\n'}}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.summarize",
+        "typeVersion": 1.1,
+        "position": [
+          960,
+          1216
+        ],
+        "id": "d3e5d607-41a6-4c23-8a83-7ce0e6cfd191",
+        "name": "Summarize"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "a143e0ec-2b70-49b2-8f35-c58341fb7974",
+                "leftValue": "={{ $json.createdAt }}",
+                "rightValue": "={{ $('Calculate Feedback').item.json.timestamp.toDateTime().format('yyyy-MM-dd') }}",
+                "operator": {
+                  "type": "dateTime",
+                  "operation": "afterOrEquals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          512,
+          640
+        ],
+        "id": "89e9909a-7493-4fec-b042-bebe183a9125",
+        "name": "Get Today Marks"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "a143e0ec-2b70-49b2-8f35-c58341fb7974",
+                "leftValue": "={{ $json.createdAt }}",
+                "rightValue": "={{ $('Calculate Feedback').item.json.timestamp.toDateTime().minus(1, 'days').format('yyyy-MM-dd') }}",
+                "operator": {
+                  "type": "dateTime",
+                  "operation": "afterOrEquals"
+                }
+              },
+              {
+                "id": "8454a9fb-e174-423c-b9a6-2aaef0dacdc5",
+                "leftValue": "={{ $json.createdAt }}",
+                "rightValue": "={{ $('Calculate Feedback').item.json.timestamp.toDateTime().format('yyyy-MM-dd') }}",
+                "operator": {
+                  "type": "dateTime",
+                  "operation": "before"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          512,
+          832
+        ],
+        "id": "4322accb-c443-49bd-95bc-8dc9d779c7b7",
+        "name": "Get Yesterday Marks"
+      },
+      {
+        "parameters": {
+          "fieldsToSummarize": {
+            "values": [
+              {
+                "aggregation": "average",
+                "field": "mark"
+              },
+              {
+                "field": "mark"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.summarize",
+        "typeVersion": 1.1,
+        "position": [
+          736,
+          640
+        ],
+        "id": "9c124026-bbbc-48a7-8bd5-e8b070bfd6ed",
+        "name": "Today Mark Summary"
+      },
+      {
+        "parameters": {
+          "fieldsToSummarize": {
+            "values": [
+              {
+                "aggregation": "average",
+                "field": "mark"
+              },
+              {
+                "field": "mark"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.summarize",
+        "typeVersion": 1.1,
+        "position": [
+          736,
+          832
+        ],
+        "id": "b49d1a0b-c37e-4cbe-a294-b27f4b364ae9",
+        "name": "Yesterday Mark Summary"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "d835e799-ec06-463e-8c36-0fd48014df19",
+                "name": "date",
+                "value": "={{ $node['Get marks'].json.createdAt.toDateTime().format('yyyy-MM-dd') }}",
+                "type": "string"
+              }
+            ]
+          },
+          "includeOtherFields": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          288,
+          832
+        ],
+        "id": "6907c35d-ad39-4fdc-818b-834627e43873",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "fieldsToSummarize": {
+            "values": [
+              {
+                "aggregation": "average",
+                "field": "mark"
+              }
+            ]
+          },
+          "fieldsToSplitBy": "date",
+          "options": {
+            "outputFormat": "separateItems"
+          }
+        },
+        "type": "n8n-nodes-base.summarize",
+        "typeVersion": 1.1,
+        "position": [
+          512,
+          1024
+        ],
+        "id": "6f2b5f49-a549-400b-bb19-80b8a499c138",
+        "name": "Historical Data"
+      },
+      {
+        "parameters": {
+          "chartType": "line",
+          "labelsMode": "array",
+          "labelsArray": "={{ $json.date }}",
+          "data": "={{ $json.average_mark }}",
+          "output": "chart",
+          "chartOptions": {
+            "format": "png"
+          },
+          "datasetOptions": {
+            "fill": false,
+            "label": "Feedback"
+          }
+        },
+        "type": "n8n-nodes-base.quickChart",
+        "typeVersion": 1,
+        "position": [
+          960,
+          1024
+        ],
+        "id": "b536cf61-c2cf-41ad-8f84-e015b19e3553",
+        "name": "QuickChart"
+      },
+      {
+        "parameters": {
+          "fieldsToAggregate": {
+            "fieldToAggregate": [
+              {
+                "fieldToAggregate": "date"
+              },
+              {
+                "fieldToAggregate": "average_mark"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          736,
+          1024
+        ],
+        "id": "27552da8-fab9-4330-a9cc-4228540f4e2f",
+        "name": "Aggregate"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "c3e42e02-d5a6-466a-a04b-b359a1b38ac6",
+                "name": "average_comment",
+                "value": "={{\n  (() => {\n    const t = $node['Today Mark Summary'].json.average_mark;\n    const y = $node['Yesterday Mark Summary'].json.average_mark;\n\n    if (y === 0) {\n      return 'Прошедший день волонтёр:ки оценили на ${t.toFixed(2)}.';\n    }\n\n    const pct = ((t - y) / y) * 100;\n\n    return `Прошедший день волонтёр:ки оценили на ${t.toFixed(2)}.\nЭто на ${pct.toFixed(0)}% ${pct >= 0 ? 'лучше' : 'хуже'}, чем предыдущий день.`;\n  })()\n}}\n",
+                "type": "string"
+              },
+              {
+                "id": "0b14ec85-9e1c-498f-8db1-f349275bfc48",
+                "name": "responders_comment",
+                "value": "={{   (() => {     const t = $node['Today Mark Summary'].json.count_mark;     const y = $node['Yesterday Mark Summary'].json.count_mark;      if (y === 0) {       return 'Оценивало ${t} респондент:ок.';     }      const pct = ((t - y) / y) * 100;      return `Оценивало ${t} респондент:ок.\nЭто на ${pct.toFixed(0)}% ${pct >= 0 ? 'лучше' : 'хуже'}, чем в предыдущий день.`;   })() }}",
+                "type": "string"
+              }
+            ]
+          },
+          "includeOtherFields": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          960,
+          736
+        ],
+        "id": "d7eb6e68-5e26-4542-8ce9-bd4aa70303fa",
+        "name": "Diff"
+      },
+      {
+        "parameters": {
+          "operation": "sendPhoto",
+          "chatId": "-1001938190303",
+          "binaryData": true,
+          "binaryPropertyName": "chart",
+          "additionalFields": {
+            "caption": "={{ $node['Diff'].json.average_comment + '\\n' + $node['Diff'].json.responders_comment + '\\n\\nКомментарии:\\n\\n' + $json.concatenated_text_feedback }}",
+            "fileName": "chart.png",
+            "parse_mode": "Markdown",
+            "message_thread_id": 354496
+          }
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          1808,
+          1008
+        ],
+        "id": "4fae7b89-86d5-4c78-b59a-db9dd0889055",
+        "name": "Send a photo message",
+        "webhookId": "9590a2fa-e1c8-494b-be6b-d515ed2b9ccf",
+        "credentials": {
+          "telegramApi": {
+            "id": "MaTjujU76kc0Yc86",
+            "name": "Feedback Bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineByPosition",
+          "numberInputs": 3,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          1472,
+          992
+        ],
+        "id": "8b2b9810-663a-4b7b-9447-49983b6528d3",
+        "name": "Merge"
       }
     ],
     "connections": {
@@ -1128,6 +2132,175 @@
           [
             {
               "node": "Execution Data1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Calculate Feedback": {
+        "main": [
+          [
+            {
+              "node": "Get marks",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Get feedback",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get feedback": {
+        "main": [
+          [
+            {
+              "node": "Summarize",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get marks": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Today Marks": {
+        "main": [
+          [
+            {
+              "node": "Today Mark Summary",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Yesterday Marks": {
+        "main": [
+          [
+            {
+              "node": "Yesterday Mark Summary",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Yesterday Mark Summary": {
+        "main": [
+          [
+            {
+              "node": "Diff",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "Get Today Marks",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Get Yesterday Marks",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Historical Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Today Mark Summary": {
+        "main": [
+          [
+            {
+              "node": "Diff",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Historical Data": {
+        "main": [
+          [
+            {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate": {
+        "main": [
+          [
+            {
+              "node": "QuickChart",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "QuickChart": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Diff": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Summarize": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 2
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Send a photo message",
               "type": "main",
               "index": 0
             }
