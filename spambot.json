@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-09T12:30:43.000Z",
+  "updatedAt": "2025-12-12T11:00:38.824Z",
   "createdAt": "2025-11-25T07:08:56.490Z",
   "id": "BzPT7nQWQllqpcsO",
   "name": "Spambot",
@@ -198,7 +198,7 @@
       "parameters": {
         "operation": "sendAndWait",
         "chatId": "113754494",
-        "message": "=*Ban Request*\n\n{{ $('Telegram Trigger').item.json.message.text ?? $('Telegram Trigger').item.json.message.caption ?? 'empty message'}}\n\nUser: {{ $('Telegram Trigger').item.json.message.from.username }}\n\nChat: {{ $('Telegram Trigger').item.json.message.chat.title }}",
+        "message": "=*Ban Request*\n\n{{ $('Telegram Trigger').item.json.message.text.replace(/([_*\\[\\]()~`>#+\\-=|{}.!\\\\])/g, '\\\\$1') ?? $('Telegram Trigger').item.json.message.caption ?? 'empty message'}}\n\nUser: @{{ $('Telegram Trigger').item.json.message.from.username?.replace(/([_*\\[\\]()~`>#+\\-=|{}.!\\\\])/g, '\\\\$1') ?? ''}}  \n[User link](tg://user?id={{ $('Telegram Trigger').item.json.message.from.id }}) \n\nChat: {{ $('Telegram Trigger').item.json.message.chat.title }}",
         "approvalOptions": {
           "values": {
             "approvalType": "double",
@@ -610,14 +610,13 @@
     "Telegram Trigger": [
       {
         "json": {
-          "update_id": 833034766,
+          "update_id": 833038839,
           "message": {
-            "message_id": 47320,
+            "message_id": 47692,
             "from": {
-              "id": 7550821995,
+              "id": 5137881999,
               "is_bot": false,
-              "first_name": "Ксения",
-              "username": "Ksuwahr",
+              "first_name": "Анатолий",
               "is_premium": true
             },
             "chat": {
@@ -626,92 +625,45 @@
               "username": "catebichat",
               "type": "supergroup"
             },
-            "date": 1765181699,
-            "text": "✅ СРОЧНО! ✅\nНУЖНЫ НАДЁЖНЫЕ ЛЮДИ В КОМАНДУ!\n\n⚡️ 1–2 часа в день в удобное время\n\n⚡️ Занятость с любой точки мира\n\n📨 Доход от 350$, с возможностью роста.\nА так же гибкий график, можно совмещать с основным родом деятельности, или учёбой. \n\nГлавное быть совершеннолетним.\n\nПишите в личные сообщения 👉🏻@Masleniikova 👈🏻за подробностями!",
+            "date": 1765536172,
+            "text": "Возьму в команду нескольких человек для заработка\nЗанятость до 1 часа в день. Задачи простые, связаны с обработкой сделок. Возраст 18+. Доход от 100$ в день. Опыт не требуется, обучаем. \nПо всем вопросам — обращайтесь @Hatuhina_K",
             "entities": [
               {
                 "offset": 0,
-                "length": 1,
-                "type": "custom_emoji",
-                "custom_emoji_id": "5208880351690112495"
-              },
-              {
-                "offset": 2,
-                "length": 8,
+                "length": 49,
                 "type": "bold"
               },
               {
-                "offset": 10,
-                "length": 1,
+                "offset": 205,
+                "length": 13,
                 "type": "bold"
               },
               {
-                "offset": 10,
-                "length": 1,
-                "type": "custom_emoji",
-                "custom_emoji_id": "5208880351690112495"
-              },
-              {
-                "offset": 11,
-                "length": 31,
-                "type": "bold"
-              },
-              {
-                "offset": 44,
-                "length": 2,
-                "type": "custom_emoji",
-                "custom_emoji_id": "5963318814958423599"
-              },
-              {
-                "offset": 80,
-                "length": 2,
-                "type": "custom_emoji",
-                "custom_emoji_id": "5963318814958423599"
-              },
-              {
-                "offset": 113,
-                "length": 2,
-                "type": "custom_emoji",
-                "custom_emoji_id": "5954097490109140119"
-              },
-              {
-                "offset": 176,
-                "length": 60,
-                "type": "bold"
-              },
-              {
-                "offset": 237,
-                "length": 31,
+                "offset": 205,
+                "length": 13,
                 "type": "underline"
               },
               {
-                "offset": 237,
-                "length": 1,
-                "type": "bold"
-              },
-              {
-                "offset": 269,
-                "length": 31,
-                "type": "bold"
-              },
-              {
-                "offset": 300,
-                "length": 13,
+                "offset": 218,
+                "length": 11,
                 "type": "mention"
               },
               {
-                "offset": 314,
-                "length": 21,
+                "offset": 218,
+                "length": 11,
                 "type": "bold"
               }
             ]
           }
+        },
+        "pairedItem": {
+          "item": 0
         }
       }
     ]
   },
-  "versionId": "d65abf73-69d3-4d15-afe4-00568c8da598",
-  "activeVersionId": "d65abf73-69d3-4d15-afe4-00568c8da598",
+  "versionId": "d7e86360-3f4e-4804-8f52-5764b81db250",
+  "activeVersionId": "d7e86360-3f4e-4804-8f52-5764b81db250",
   "triggerCount": 1,
   "shared": [
     {
@@ -723,9 +675,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2025-12-09T12:30:43.538Z",
-    "createdAt": "2025-12-09T12:30:43.538Z",
-    "versionId": "d65abf73-69d3-4d15-afe4-00568c8da598",
+    "updatedAt": "2025-12-12T11:00:38.827Z",
+    "createdAt": "2025-12-12T11:00:38.827Z",
+    "versionId": "d7e86360-3f4e-4804-8f52-5764b81db250",
     "workflowId": "BzPT7nQWQllqpcsO",
     "nodes": [
       {
@@ -920,7 +872,7 @@
         "parameters": {
           "operation": "sendAndWait",
           "chatId": "113754494",
-          "message": "=*Ban Request*\n\n{{ $('Telegram Trigger').item.json.message.text ?? $('Telegram Trigger').item.json.message.caption ?? 'empty message'}}\n\nUser: {{ $('Telegram Trigger').item.json.message.from.username }}\n\nChat: {{ $('Telegram Trigger').item.json.message.chat.title }}",
+          "message": "=*Ban Request*\n\n{{ $('Telegram Trigger').item.json.message.text.replace(/([_*\\[\\]()~`>#+\\-=|{}.!\\\\])/g, '\\\\$1') ?? $('Telegram Trigger').item.json.message.caption ?? 'empty message'}}\n\nUser: @{{ $('Telegram Trigger').item.json.message.from.username?.replace(/([_*\\[\\]()~`>#+\\-=|{}.!\\\\])/g, '\\\\$1') ?? ''}}  \n[User link](tg://user?id={{ $('Telegram Trigger').item.json.message.from.id }}) \n\nChat: {{ $('Telegram Trigger').item.json.message.chat.title }}",
           "approvalOptions": {
             "values": {
               "approvalType": "double",
