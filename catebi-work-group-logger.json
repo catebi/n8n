@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-11T18:05:10.059Z",
+  "updatedAt": "2025-12-12T18:11:49.830Z",
   "createdAt": "2025-11-28T05:51:29.120Z",
   "id": "ruk1fJ3VKzawxKOD",
   "name": "Catebi Work Group Logger",
@@ -280,40 +280,7 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "40d8506d-fb0a-488c-8458-1d78027192a7",
-              "leftValue": "={{ $('Telegram Trigger').item.json.message.message_thread_id }}",
-              "rightValue": 0,
-              "operator": {
-                "type": "number",
-                "operation": "notEmpty",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        656,
-        0
-      ],
-      "id": "e683a308-8465-4d58-8d77-6bf79af16076",
-      "name": "If topic exists"
-    },
-    {
-      "parameters": {
+        "operation": "upsert",
         "schema": {
           "__rl": true,
           "mode": "list",
@@ -328,12 +295,13 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "tg_message_thread_id": "={{ $('Telegram Trigger').item.json.message.message_thread_id }}",
-            "chat_id": "={{ $('Upsert chat').item.json.id }}",
-            "name": "={{ $('Telegram Trigger').item.json.message.reply_to_message?.forum_topic_created?.name ?? $('Telegram Trigger').item.json.message.forum_topic_created?.name ?? null}}",
-            "icon_emoji_id": "={{ $('Telegram Trigger').item.json.message.reply_to_message?.forum_topic_created?.icon_custom_emoji_id ?? $('Telegram Trigger').item.json.message.forum_topic_created?.icon_custom_emoji_id ?? null}}"
+            "tg_message_thread_id": "={{ $node['Telegram Trigger'].json?.message.message_thread_id ?? 0 }}",
+            "chat_id": "={{ $node['Upsert chat'].json.id }}",
+            "name": "={{ $node['Telegram Trigger'].json.message.reply_to_message?.forum_topic_created?.name ?? $node['Telegram Trigger'].json.message.reply_to_message?.forum_topic_created?.name ?? $node['Telegram Trigger'].json.message.forum_topic_created?.name ?? null}}",
+            "icon_emoji_id": "={{ $node['Telegram Trigger'].json.message.reply_to_message?.forum_topic_created?.icon_custom_emoji_id ?? $node['Telegram Trigger'].json.message.forum_topic_created?.icon_custom_emoji_id ?? null}}"
           },
           "matchingColumns": [
+            "chat_id",
             "tg_message_thread_id"
           ],
           "schema": [
@@ -374,7 +342,7 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
+              "canBeUsedToMatch": false,
               "removed": false
             },
             {
@@ -384,7 +352,7 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
+              "canBeUsedToMatch": false,
               "removed": false
             },
             {
@@ -394,7 +362,7 @@
               "defaultMatch": false,
               "display": true,
               "type": "dateTime",
-              "canBeUsedToMatch": true,
+              "canBeUsedToMatch": false,
               "removed": true
             }
           ],
@@ -402,14 +370,16 @@
           "convertFieldsToString": false
         },
         "options": {
-          "skipOnConflict": true
+          "outputColumns": [
+            "*"
+          ]
         }
       },
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        864,
-        -96
+        832,
+        0
       ],
       "id": "2197de9c-3dc0-4d5e-bc6b-58516cc45788",
       "name": "Insert topic",
@@ -434,12 +404,12 @@
           "mode": "list",
           "cachedResultName": "tg_topic"
         },
-        "limit": 1,
+        "returnAll": true,
         "where": {
           "values": [
             {
               "column": "chat_id",
-              "value": "={{ $('Telegram Trigger').item.json.message.chat.id }}"
+              "value": "={{ $('Upsert chat').item.json.id }}"
             },
             {
               "column": "tg_message_thread_id",
@@ -449,15 +419,15 @@
         },
         "options": {
           "outputColumns": [
-            "id"
+            "*"
           ]
         }
       },
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        1072,
-        -96
+        1152,
+        -16
       ],
       "id": "d7fed031-b699-48f7-93b2-997ae4efd4f2",
       "name": "Get topic id",
@@ -488,8 +458,8 @@
             "tg_message_id": "={{ $node['Telegram Trigger'].json.message.message_id }}",
             "chat_id": "={{ $node['Upsert chat'].json.id }}",
             "from_user_id": "={{ $node['Upsert user'].json.id }}",
-            "reply_to_tg_message_id": "={{ $node['Telegram Trigger'].json.message.reply_to_message.message_id }}",
-            "topic_id": "={{ $json.id || 0 }}",
+            "reply_to_tg_message_id": "={{ $node['Telegram Trigger'].json.message.reply_to_message?.message_id || null}}",
+            "topic_id": "={{\n  $node[\"Get topic id\"].json?.id\n    ?? null\n}}",
             "date": "={{ new Date($node[\"Telegram Trigger\"].json[\"message\"][\"date\"] * 1000)\n    .toLocaleString(\"sv-SE\", { timeZone: \"Asia/Tbilisi\" }) }}",
             "text": "={{ $node['Telegram Trigger'].json['message']['text'] || $node['Telegram Trigger'].json['message']['caption'] || '' }}",
             "raw_json": "={{ JSON.stringify($node[\"Telegram Trigger\"].json) }}"
@@ -623,8 +593,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        1248,
-        16
+        1776,
+        0
       ],
       "id": "e228435c-6e11-4f14-8d50-c444d41bea9c",
       "name": "Insert message",
@@ -663,25 +633,7 @@
       "main": [
         [
           {
-            "node": "If topic exists",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "If topic exists": {
-      "main": [
-        [
-          {
             "node": "Insert topic",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Insert message",
             "type": "main",
             "index": 0
           }
@@ -712,7 +664,12 @@
     }
   },
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "saveExecutionProgress": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "errorWorkflow": "uxiU7FOABx5M1moL"
   },
   "staticData": null,
   "meta": {
@@ -722,15 +679,15 @@
     "Telegram Trigger": [
       {
         "json": {
-          "update_id": 876071465,
+          "update_id": 876071931,
           "message": {
-            "message_id": 471499,
+            "message_id": 471981,
             "from": {
-              "id": 464155497,
+              "id": 380228655,
               "is_bot": false,
-              "first_name": "Ksy",
-              "last_name": "Acid",
-              "username": "Ksyacid"
+              "first_name": "KS",
+              "username": "kkkkkkksssssss",
+              "is_premium": true
             },
             "chat": {
               "id": -1001938190303,
@@ -738,57 +695,8 @@
               "is_forum": true,
               "type": "supergroup"
             },
-            "date": 1765476156,
-            "message_thread_id": 262387,
-            "reply_to_message": {
-              "message_id": 262387,
-              "from": {
-                "id": 464155497,
-                "is_bot": false,
-                "first_name": "Ksy",
-                "last_name": "Acid",
-                "username": "Ksyacid"
-              },
-              "chat": {
-                "id": -1001938190303,
-                "title": "CATEBI. Рабочий чат",
-                "is_forum": true,
-                "type": "supergroup"
-              },
-              "date": 1744829379,
-              "message_thread_id": 262387,
-              "forum_topic_created": {
-                "name": "Дети тети Сильвы",
-                "icon_color": 16749490
-              },
-              "is_topic_message": true
-            },
-            "video": {
-              "duration": 49,
-              "width": 720,
-              "height": 1280,
-              "file_name": "IMG_6757.MOV",
-              "mime_type": "video/mp4",
-              "thumbnail": {
-                "file_id": "AAMCAgADHQJzhm_fAAEHMctpOwc71OqvUJ1MbXSV7HfHLFRFbwACfJgAAnWN2El_SywcwSmhPQEAB20AAzYE",
-                "file_unique_id": "AQADfJgAAnWN2Ely",
-                "file_size": 11462,
-                "width": 180,
-                "height": 320
-              },
-              "thumb": {
-                "file_id": "AAMCAgADHQJzhm_fAAEHMctpOwc71OqvUJ1MbXSV7HfHLFRFbwACfJgAAnWN2El_SywcwSmhPQEAB20AAzYE",
-                "file_unique_id": "AQADfJgAAnWN2Ely",
-                "file_size": 11462,
-                "width": 180,
-                "height": 320
-              },
-              "file_id": "BAACAgIAAx0Cc4Zv3wABBzHLaTsHO9Tqr1CdTG10lex3xyxURW8AAnyYAAJ1jdhJf0ssHMEpoT02BA",
-              "file_unique_id": "AgADfJgAAnWN2Ek",
-              "file_size": 18533036
-            },
-            "caption": "Ахахааа",
-            "is_topic_message": true
+            "date": 1765562286,
+            "text": "Сука третий раз уже такое(((\n(Либо я в глаза ебусь)\n\nНо такой порядок в холле, красота!"
           }
         },
         "pairedItem": {
@@ -797,8 +705,8 @@
       }
     ]
   },
-  "versionId": "9751c1cf-ec71-4172-b0c1-a765498740b5",
-  "activeVersionId": "9751c1cf-ec71-4172-b0c1-a765498740b5",
+  "versionId": "d30565e1-e1b0-47e4-b265-35e20d52d1b7",
+  "activeVersionId": "d30565e1-e1b0-47e4-b265-35e20d52d1b7",
   "triggerCount": 1,
   "shared": [
     {
@@ -810,9 +718,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2025-12-11T18:05:10.063Z",
-    "createdAt": "2025-12-11T18:05:10.063Z",
-    "versionId": "9751c1cf-ec71-4172-b0c1-a765498740b5",
+    "updatedAt": "2025-12-12T18:11:49.833Z",
+    "createdAt": "2025-12-12T18:11:49.833Z",
+    "versionId": "d30565e1-e1b0-47e4-b265-35e20d52d1b7",
     "workflowId": "ruk1fJ3VKzawxKOD",
     "nodes": [
       {
@@ -1089,40 +997,7 @@
       },
       {
         "parameters": {
-          "conditions": {
-            "options": {
-              "caseSensitive": true,
-              "leftValue": "",
-              "typeValidation": "strict",
-              "version": 2
-            },
-            "conditions": [
-              {
-                "id": "40d8506d-fb0a-488c-8458-1d78027192a7",
-                "leftValue": "={{ $('Telegram Trigger').item.json.message.message_thread_id }}",
-                "rightValue": 0,
-                "operator": {
-                  "type": "number",
-                  "operation": "notEmpty",
-                  "singleValue": true
-                }
-              }
-            ],
-            "combinator": "and"
-          },
-          "options": {}
-        },
-        "type": "n8n-nodes-base.if",
-        "typeVersion": 2.2,
-        "position": [
-          656,
-          0
-        ],
-        "id": "e683a308-8465-4d58-8d77-6bf79af16076",
-        "name": "If topic exists"
-      },
-      {
-        "parameters": {
+          "operation": "upsert",
           "schema": {
             "__rl": true,
             "mode": "list",
@@ -1137,12 +1012,13 @@
           "columns": {
             "mappingMode": "defineBelow",
             "value": {
-              "tg_message_thread_id": "={{ $('Telegram Trigger').item.json.message.message_thread_id }}",
-              "chat_id": "={{ $('Upsert chat').item.json.id }}",
-              "name": "={{ $('Telegram Trigger').item.json.message.reply_to_message?.forum_topic_created?.name ?? $('Telegram Trigger').item.json.message.forum_topic_created?.name ?? null}}",
-              "icon_emoji_id": "={{ $('Telegram Trigger').item.json.message.reply_to_message?.forum_topic_created?.icon_custom_emoji_id ?? $('Telegram Trigger').item.json.message.forum_topic_created?.icon_custom_emoji_id ?? null}}"
+              "tg_message_thread_id": "={{ $node['Telegram Trigger'].json?.message.message_thread_id ?? 0 }}",
+              "chat_id": "={{ $node['Upsert chat'].json.id }}",
+              "name": "={{ $node['Telegram Trigger'].json.message.reply_to_message?.forum_topic_created?.name ?? $node['Telegram Trigger'].json.message.reply_to_message?.forum_topic_created?.name ?? $node['Telegram Trigger'].json.message.forum_topic_created?.name ?? null}}",
+              "icon_emoji_id": "={{ $node['Telegram Trigger'].json.message.reply_to_message?.forum_topic_created?.icon_custom_emoji_id ?? $node['Telegram Trigger'].json.message.forum_topic_created?.icon_custom_emoji_id ?? null}}"
             },
             "matchingColumns": [
+              "chat_id",
               "tg_message_thread_id"
             ],
             "schema": [
@@ -1183,7 +1059,7 @@
                 "defaultMatch": false,
                 "display": true,
                 "type": "string",
-                "canBeUsedToMatch": true,
+                "canBeUsedToMatch": false,
                 "removed": false
               },
               {
@@ -1193,7 +1069,7 @@
                 "defaultMatch": false,
                 "display": true,
                 "type": "string",
-                "canBeUsedToMatch": true,
+                "canBeUsedToMatch": false,
                 "removed": false
               },
               {
@@ -1203,7 +1079,7 @@
                 "defaultMatch": false,
                 "display": true,
                 "type": "dateTime",
-                "canBeUsedToMatch": true,
+                "canBeUsedToMatch": false,
                 "removed": true
               }
             ],
@@ -1211,14 +1087,16 @@
             "convertFieldsToString": false
           },
           "options": {
-            "skipOnConflict": true
+            "outputColumns": [
+              "*"
+            ]
           }
         },
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 2.6,
         "position": [
-          864,
-          -96
+          832,
+          0
         ],
         "id": "2197de9c-3dc0-4d5e-bc6b-58516cc45788",
         "name": "Insert topic",
@@ -1243,12 +1121,12 @@
             "mode": "list",
             "cachedResultName": "tg_topic"
           },
-          "limit": 1,
+          "returnAll": true,
           "where": {
             "values": [
               {
                 "column": "chat_id",
-                "value": "={{ $('Telegram Trigger').item.json.message.chat.id }}"
+                "value": "={{ $('Upsert chat').item.json.id }}"
               },
               {
                 "column": "tg_message_thread_id",
@@ -1258,15 +1136,15 @@
           },
           "options": {
             "outputColumns": [
-              "id"
+              "*"
             ]
           }
         },
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 2.6,
         "position": [
-          1072,
-          -96
+          1152,
+          -16
         ],
         "id": "d7fed031-b699-48f7-93b2-997ae4efd4f2",
         "name": "Get topic id",
@@ -1297,8 +1175,8 @@
               "tg_message_id": "={{ $node['Telegram Trigger'].json.message.message_id }}",
               "chat_id": "={{ $node['Upsert chat'].json.id }}",
               "from_user_id": "={{ $node['Upsert user'].json.id }}",
-              "reply_to_tg_message_id": "={{ $node['Telegram Trigger'].json.message.reply_to_message.message_id }}",
-              "topic_id": "={{ $json.id || 0 }}",
+              "reply_to_tg_message_id": "={{ $node['Telegram Trigger'].json.message.reply_to_message?.message_id || null}}",
+              "topic_id": "={{\n  $node[\"Get topic id\"].json?.id\n    ?? null\n}}",
               "date": "={{ new Date($node[\"Telegram Trigger\"].json[\"message\"][\"date\"] * 1000)\n    .toLocaleString(\"sv-SE\", { timeZone: \"Asia/Tbilisi\" }) }}",
               "text": "={{ $node['Telegram Trigger'].json['message']['text'] || $node['Telegram Trigger'].json['message']['caption'] || '' }}",
               "raw_json": "={{ JSON.stringify($node[\"Telegram Trigger\"].json) }}"
@@ -1432,8 +1310,8 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 2.6,
         "position": [
-          1248,
-          16
+          1776,
+          0
         ],
         "id": "e228435c-6e11-4f14-8d50-c444d41bea9c",
         "name": "Insert message",
@@ -1472,25 +1350,7 @@
         "main": [
           [
             {
-              "node": "If topic exists",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "If topic exists": {
-        "main": [
-          [
-            {
               "node": "Insert topic",
-              "type": "main",
-              "index": 0
-            }
-          ],
-          [
-            {
-              "node": "Insert message",
               "type": "main",
               "index": 0
             }
