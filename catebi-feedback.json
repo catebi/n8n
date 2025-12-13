@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-11T21:21:12.874Z",
+  "updatedAt": "2025-12-13T17:48:21.937Z",
   "createdAt": "2025-12-09T07:01:52.897Z",
   "id": "JUsbCQX9ptL9iGiv",
   "name": "Catebi Feedback",
@@ -485,7 +485,7 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1,
       "position": [
-        736,
+        576,
         1216
       ],
       "id": "e53b3fab-bc72-40a0-9b82-7739e6ec8149",
@@ -504,7 +504,9 @@
             }
           ]
         },
-        "options": {}
+        "options": {
+          "outputFormat": "separateItems"
+        }
       },
       "type": "n8n-nodes-base.summarize",
       "typeVersion": 1.1,
@@ -740,13 +742,13 @@
             {
               "id": "c3e42e02-d5a6-466a-a04b-b359a1b38ac6",
               "name": "average_comment",
-              "value": "={{\n  (() => {\n    const t = $node['Today Mark Summary'].json.average_mark;\n    const y = $node['Yesterday Mark Summary'].json.average_mark;\n\n    if (y === 0) {\n      return 'Прошедший день волонтёр:ки оценили на ${t.toFixed(2)}.';\n    }\n\n    const pct = ((t - y) / y) * 100;\n\n    return `Прошедший день волонтёр:ки оценили на ${t.toFixed(2)}.\nЭто на ${pct.toFixed(0)}% ${pct >= 0 ? 'лучше' : 'хуже'}, чем предыдущий день.`;\n  })()\n}}\n",
+              "value": "={{\n  (() => {\n    const t = $json.average_mark_1;\n    const y = $json.average_mark_2;\n\n    if (y === 0) {\n      return 'Прошедший день волонтёр:ки оценили на ${t.toFixed(2)}.';\n    }\n\n    const pct = ((t - y) / y) * 100;\n\n    return `Прошедший день волонтёр:ки оценили на ${t.toFixed(2)}.\nЭто на ${pct.toFixed(0)}% ${pct >= 0 ? 'лучше' : 'хуже'}, чем предыдущий день.`;\n  })()\n}}\n",
               "type": "string"
             },
             {
               "id": "0b14ec85-9e1c-498f-8db1-f349275bfc48",
               "name": "responders_comment",
-              "value": "={{   (() => {     const t = $node['Today Mark Summary'].json.count_mark;     const y = $node['Yesterday Mark Summary'].json.count_mark;      if (y === 0) {       return 'Оценивало ${t} респондент:ок.';     }      const pct = ((t - y) / y) * 100;      return `Оценивало ${t} респондент:ок.\nЭто на ${pct.toFixed(0)}% ${pct >= 0 ? 'лучше' : 'хуже'}, чем в предыдущий день.`;   })() }}",
+              "value": "={{   (() => {     const t = $json.count_mark_1;     const y = $json.count_mark_2;      if (y === 0) {       return 'Оценивало ${t} респондент:ок.';     }      const pct = ((t - y) / y) * 100;      return `Оценивало ${t} респондент:ок.\nЭто на ${pct.toFixed(0)}% ${pct >= 0 ? 'лучше' : 'хуже'}, чем в предыдущий день.`;   })() }}",
               "type": "string"
             }
           ]
@@ -757,8 +759,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        960,
-        736
+        1344,
+        752
       ],
       "id": "d7eb6e68-5e26-4542-8ce9-bd4aa70303fa",
       "name": "Diff"
@@ -766,20 +768,19 @@
     {
       "parameters": {
         "operation": "sendPhoto",
-        "chatId": "-1001938190303",
+        "chatId": "113754494",
         "binaryData": true,
         "binaryPropertyName": "chart",
         "additionalFields": {
-          "caption": "={{ $node['Diff'].json.average_comment + '\\n' + $node['Diff'].json.responders_comment + '\\n\\nКомментарии:\\n\\n' + $json.concatenated_text_feedback }}",
+          "caption": "={{ $node['Diff'].json.average_comment + '\\n' + $node['Diff'].json.responders_comment + '\\n\\nКомментарии:\\n'}} {{$json.concatenated_text_feedback ?? '(пусто)' }}",
           "fileName": "chart.png",
-          "parse_mode": "Markdown",
-          "message_thread_id": 354496
+          "parse_mode": "Markdown"
         }
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1808,
+        2016,
         1008
       ],
       "id": "4fae7b89-86d5-4c78-b59a-db9dd0889055",
@@ -797,16 +798,39 @@
         "mode": "combine",
         "combineBy": "combineByPosition",
         "numberInputs": 3,
-        "options": {}
+        "options": {
+          "includeUnpaired": true
+        }
       },
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        1472,
+        1680,
         992
       ],
       "id": "8b2b9810-663a-4b7b-9447-49983b6528d3",
       "name": "Merge"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {
+          "clashHandling": {
+            "values": {
+              "resolveClash": "addSuffix"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1072,
+        720
+      ],
+      "id": "3175fb6f-136a-4068-8c9d-550fc9550e8a",
+      "name": "Merge Values"
     }
   ],
   "connections": {
@@ -980,9 +1004,9 @@
       "main": [
         [
           {
-            "node": "Diff",
+            "node": "Merge Values",
             "type": "main",
-            "index": 0
+            "index": 1
           }
         ]
       ]
@@ -1012,7 +1036,7 @@
       "main": [
         [
           {
-            "node": "Diff",
+            "node": "Merge Values",
             "type": "main",
             "index": 0
           }
@@ -1079,6 +1103,17 @@
         [
           {
             "node": "Send a photo message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Values": {
+      "main": [
+        [
+          {
+            "node": "Diff",
             "type": "main",
             "index": 0
           }
@@ -1192,16 +1227,16 @@
     "Calculate Feedback": [
       {
         "json": {
-          "timestamp": "2025-12-12T01:10:20.531+04:00",
-          "Readable date": "December 12th 2025, 1:10:20 am",
-          "Readable time": "1:10:20 am",
+          "timestamp": "2025-12-12T23:55:04.039+04:00",
+          "Readable date": "December 12th 2025, 11:55:04 pm",
+          "Readable time": "11:55:04 pm",
           "Day of week": "Friday",
           "Year": "2025",
           "Month": "December",
           "Day of month": "12",
-          "Hour": "01",
-          "Minute": "10",
-          "Second": "20",
+          "Hour": "23",
+          "Minute": "55",
+          "Second": "04",
           "Timezone": "Asia/Tbilisi (UTC+04:00)"
         },
         "pairedItem": {
@@ -1210,8 +1245,8 @@
       }
     ]
   },
-  "versionId": "8bce06e6-ed23-440b-8f90-57c129151fff",
-  "activeVersionId": "8bce06e6-ed23-440b-8f90-57c129151fff",
+  "versionId": "4128804e-0568-4839-95db-d0931d72e353",
+  "activeVersionId": "4128804e-0568-4839-95db-d0931d72e353",
   "triggerCount": 3,
   "shared": [
     {
@@ -1223,9 +1258,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2025-12-11T21:21:12.901Z",
-    "createdAt": "2025-12-11T21:21:12.901Z",
-    "versionId": "8bce06e6-ed23-440b-8f90-57c129151fff",
+    "updatedAt": "2025-12-12T20:16:54.499Z",
+    "createdAt": "2025-12-12T20:16:54.499Z",
+    "versionId": "4128804e-0568-4839-95db-d0931d72e353",
     "workflowId": "JUsbCQX9ptL9iGiv",
     "nodes": [
       {
@@ -1707,7 +1742,7 @@
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1,
         "position": [
-          736,
+          576,
           1216
         ],
         "id": "e53b3fab-bc72-40a0-9b82-7739e6ec8149",
@@ -1726,7 +1761,9 @@
               }
             ]
           },
-          "options": {}
+          "options": {
+            "outputFormat": "separateItems"
+          }
         },
         "type": "n8n-nodes-base.summarize",
         "typeVersion": 1.1,
@@ -1962,13 +1999,13 @@
               {
                 "id": "c3e42e02-d5a6-466a-a04b-b359a1b38ac6",
                 "name": "average_comment",
-                "value": "={{\n  (() => {\n    const t = $node['Today Mark Summary'].json.average_mark;\n    const y = $node['Yesterday Mark Summary'].json.average_mark;\n\n    if (y === 0) {\n      return 'Прошедший день волонтёр:ки оценили на ${t.toFixed(2)}.';\n    }\n\n    const pct = ((t - y) / y) * 100;\n\n    return `Прошедший день волонтёр:ки оценили на ${t.toFixed(2)}.\nЭто на ${pct.toFixed(0)}% ${pct >= 0 ? 'лучше' : 'хуже'}, чем предыдущий день.`;\n  })()\n}}\n",
+                "value": "={{\n  (() => {\n    const t = $json.average_mark_1;\n    const y = $json.average_mark_2;\n\n    if (y === 0) {\n      return 'Прошедший день волонтёр:ки оценили на ${t.toFixed(2)}.';\n    }\n\n    const pct = ((t - y) / y) * 100;\n\n    return `Прошедший день волонтёр:ки оценили на ${t.toFixed(2)}.\nЭто на ${pct.toFixed(0)}% ${pct >= 0 ? 'лучше' : 'хуже'}, чем предыдущий день.`;\n  })()\n}}\n",
                 "type": "string"
               },
               {
                 "id": "0b14ec85-9e1c-498f-8db1-f349275bfc48",
                 "name": "responders_comment",
-                "value": "={{   (() => {     const t = $node['Today Mark Summary'].json.count_mark;     const y = $node['Yesterday Mark Summary'].json.count_mark;      if (y === 0) {       return 'Оценивало ${t} респондент:ок.';     }      const pct = ((t - y) / y) * 100;      return `Оценивало ${t} респондент:ок.\nЭто на ${pct.toFixed(0)}% ${pct >= 0 ? 'лучше' : 'хуже'}, чем в предыдущий день.`;   })() }}",
+                "value": "={{   (() => {     const t = $json.count_mark_1;     const y = $json.count_mark_2;      if (y === 0) {       return 'Оценивало ${t} респондент:ок.';     }      const pct = ((t - y) / y) * 100;      return `Оценивало ${t} респондент:ок.\nЭто на ${pct.toFixed(0)}% ${pct >= 0 ? 'лучше' : 'хуже'}, чем в предыдущий день.`;   })() }}",
                 "type": "string"
               }
             ]
@@ -1979,8 +2016,8 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          960,
-          736
+          1344,
+          752
         ],
         "id": "d7eb6e68-5e26-4542-8ce9-bd4aa70303fa",
         "name": "Diff"
@@ -1988,20 +2025,19 @@
       {
         "parameters": {
           "operation": "sendPhoto",
-          "chatId": "-1001938190303",
+          "chatId": "113754494",
           "binaryData": true,
           "binaryPropertyName": "chart",
           "additionalFields": {
-            "caption": "={{ $node['Diff'].json.average_comment + '\\n' + $node['Diff'].json.responders_comment + '\\n\\nКомментарии:\\n\\n' + $json.concatenated_text_feedback }}",
+            "caption": "={{ $node['Diff'].json.average_comment + '\\n' + $node['Diff'].json.responders_comment + '\\n\\nКомментарии:\\n'}} {{$json.concatenated_text_feedback ?? '(пусто)' }}",
             "fileName": "chart.png",
-            "parse_mode": "Markdown",
-            "message_thread_id": 354496
+            "parse_mode": "Markdown"
           }
         },
         "type": "n8n-nodes-base.telegram",
         "typeVersion": 1.2,
         "position": [
-          1808,
+          2016,
           1008
         ],
         "id": "4fae7b89-86d5-4c78-b59a-db9dd0889055",
@@ -2019,16 +2055,39 @@
           "mode": "combine",
           "combineBy": "combineByPosition",
           "numberInputs": 3,
-          "options": {}
+          "options": {
+            "includeUnpaired": true
+          }
         },
         "type": "n8n-nodes-base.merge",
         "typeVersion": 3.2,
         "position": [
-          1472,
+          1680,
           992
         ],
         "id": "8b2b9810-663a-4b7b-9447-49983b6528d3",
         "name": "Merge"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineByPosition",
+          "options": {
+            "clashHandling": {
+              "values": {
+                "resolveClash": "addSuffix"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          1072,
+          720
+        ],
+        "id": "3175fb6f-136a-4068-8c9d-550fc9550e8a",
+        "name": "Merge Values"
       }
     ],
     "connections": {
@@ -2202,9 +2261,9 @@
         "main": [
           [
             {
-              "node": "Diff",
+              "node": "Merge Values",
               "type": "main",
-              "index": 0
+              "index": 1
             }
           ]
         ]
@@ -2234,7 +2293,7 @@
         "main": [
           [
             {
-              "node": "Diff",
+              "node": "Merge Values",
               "type": "main",
               "index": 0
             }
@@ -2301,6 +2360,17 @@
           [
             {
               "node": "Send a photo message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge Values": {
+        "main": [
+          [
+            {
+              "node": "Diff",
               "type": "main",
               "index": 0
             }
