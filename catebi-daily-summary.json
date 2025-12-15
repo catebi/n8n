@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-15T08:28:09.247Z",
+  "updatedAt": "2025-12-15T19:47:22.548Z",
   "createdAt": "2025-12-14T10:31:39.535Z",
   "id": "ki83AovnVbBGdtXO",
   "name": "Catebi Daily Summary",
@@ -20,7 +20,7 @@
       "typeVersion": 1.3,
       "position": [
         0,
-        604
+        608
       ],
       "id": "1785f12e-037c-4092-a30d-6a25f92d009a",
       "name": "Schedule Trigger"
@@ -35,7 +35,7 @@
       "typeVersion": 2.6,
       "position": [
         224,
-        604
+        608
       ],
       "id": "741eb759-2210-4bb5-98f4-f1dbc5d07a8c",
       "name": "Get Yesterday Messages",
@@ -55,7 +55,7 @@
       "typeVersion": 2,
       "position": [
         448,
-        604
+        608
       ],
       "id": "8befda91-1cc3-44e2-8e07-4ab0f35acc25",
       "name": "Get Dialogs by Topic"
@@ -76,7 +76,7 @@
       "typeVersion": 1,
       "position": [
         672,
-        604
+        608
       ],
       "id": "c6a4fbe6-6024-4a95-9718-de430ac1eb86",
       "name": "Sort"
@@ -109,7 +109,7 @@
       "typeVersion": 2.3,
       "position": [
         896,
-        604
+        608
       ],
       "id": "d9fc119c-89f6-4be7-a5ce-62214b388d19",
       "name": "Does the topic need summary?"
@@ -143,7 +143,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        1128,
+        1136,
         704
       ],
       "id": "ca4b20ac-0e00-47a3-ab6c-c74759f8d6d9",
@@ -164,7 +164,7 @@
       "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
       "typeVersion": 1,
       "position": [
-        1256,
+        1264,
         704
       ],
       "id": "ca3e454c-0a89-44b5-bad9-af9a1b4808a9",
@@ -185,7 +185,7 @@
       "typeVersion": 2.1,
       "position": [
         2368,
-        408
+        416
       ],
       "id": "0d677e67-37cb-44cc-9a5a-df9b0722d222",
       "name": "Super-summary"
@@ -198,8 +198,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        2440,
-        632
+        2448,
+        640
       ],
       "id": "6a9d8c51-3ed2-4da5-b2b5-32a32d2f6533",
       "name": "Google Gemini Chat Model1",
@@ -271,7 +271,7 @@
       "typeVersion": 3.2,
       "position": [
         2720,
-        260
+        272
       ],
       "id": "4afb2813-745c-4ae1-a265-280682265b87",
       "name": "Merge"
@@ -353,7 +353,7 @@
       "typeVersion": 3.4,
       "position": [
         1472,
-        772
+        784
       ],
       "id": "558ec205-a790-45b8-b894-a26b89dc56c0",
       "name": "Dialogs Collection"
@@ -401,7 +401,7 @@
       "typeVersion": 1.1,
       "position": [
         1696,
-        772
+        784
       ],
       "id": "a2437861-e853-4cd8-b1d8-5b36c49f7941",
       "name": "Concat Dialogs"
@@ -420,7 +420,7 @@
       "typeVersion": 1,
       "position": [
         1920,
-        552
+        560
       ],
       "id": "3debf470-bf4e-4dff-a0b3-7d5612807918",
       "name": "Summary to HTML"
@@ -439,7 +439,7 @@
       "typeVersion": 1,
       "position": [
         1920,
-        772
+        784
       ],
       "id": "938b7e14-867e-4a51-8551-5a88088d6911",
       "name": "Dialogs to HTML"
@@ -463,7 +463,7 @@
       "typeVersion": 1.1,
       "position": [
         1696,
-        164
+        176
       ],
       "id": "e98e949b-9562-43fa-8a39-c0a3a25a9e0b",
       "name": "List Major Topics"
@@ -487,7 +487,7 @@
       "typeVersion": 1.1,
       "position": [
         1696,
-        964
+        976
       ],
       "id": "c1d6eb31-8eed-4990-b637-4a6746bb91e4",
       "name": "List Minor Topics"
@@ -528,7 +528,7 @@
       "typeVersion": 3.4,
       "position": [
         1920,
-        164
+        176
       ],
       "id": "0bf46417-a050-4a1b-96b0-dc873415b360",
       "name": "Major Topics"
@@ -551,7 +551,7 @@
       "typeVersion": 3.4,
       "position": [
         1920,
-        964
+        976
       ],
       "id": "3ca3cbe6-8093-409b-a5c0-80abece3064d",
       "name": "Minor Topics"
@@ -572,8 +572,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        3152,
-        256
+        3136,
+        272
       ],
       "id": "6dcc6d63-38ea-405b-a387-f6317afe2dfa",
       "name": "PROD Send a document",
@@ -622,7 +622,7 @@
       "typeVersion": 1,
       "position": [
         2944,
-        260
+        272
       ],
       "id": "a64cb552-060a-492c-a5cf-89945ab4e46a",
       "name": "Telegramify Markdown"
@@ -931,9 +931,24 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {},
-  "versionId": "bf34ebf8-8945-44f4-9611-48b75f363e50",
-  "activeVersionId": "bf34ebf8-8945-44f4-9611-48b75f363e50",
+  "pinData": {
+    "Telegramify Markdown": [
+      {
+        "json": {
+          "download_url": "https://pub-cdn.apitemplate.io/2025/12/85abc325-7c77-4105-8670-b1103c09843e.pdf",
+          "template_id": "b3277b2359369038",
+          "transaction_ref": "85abc325-7c77-4105-8670-b1103c09843e",
+          "status": "success",
+          "output": {
+            "text": "Вот краткое резюме переписки:\n\n**Главные темы:**\n*   **Пристройство:** Передача \"Хутят\" отложена до 19.12 из-за проверки наличия безопасных сеток («антикошка») у хозяев. Кошка Черри улетела в ЕС, «Шпротные штанишки» и семейство Маруши нашли дом.\n*   **Работа Котоквартиры (КК):** @AleekKau берет смены по вторникам и средам. Введен строгий запрет на прием невакцинированных животных. Из-за кондиционеров выбивало пробки — их запретили включать в комнате к1.\n*   **Медицина:** Обсуждали лечение диареи у Адольфа, дозировки от глистов и ушного клеща. Выявлены пропуски вакцинации у двух кошек — @olia443 должна это исправить.\n*   **IT и оргвопросы:** @JayKuehn временно отошел от дел. @DieAhnung и @lejafo обновляют базу и анкеты, внедряя автоматизацию и обязательные поля по вакцинации.\n\n**Ключевые задачи:**\n*   Провести встречу с потенциальными хозяевами \"Хутят\".\n*   Наладить IT-инструменты (чекбоксы вакцинации, проверки швов).\n*   Контроль медицинских процедур (глистогонка, прививки)."
+          },
+          "markdownText": "Вот краткое резюме переписки:\n\n*Главные темы:*\n\n•   *Пристройство:* Передача \"Хутят\" отложена до 19\\.12 из\\-за проверки наличия безопасных сеток \\(«антикошка»\\) у хозяев\\. Кошка Черри улетела в ЕС, «Шпротные штанишки» и семейство Маруши нашли дом\\.\n•   *Работа Котоквартиры \\(КК\\):* @AleekKau берет смены по вторникам и средам\\. Введен строгий запрет на прием невакцинированных животных\\. Из\\-за кондиционеров выбивало пробки — их запретили включать в комнате к1\\.\n•   *Медицина:* Обсуждали лечение диареи у Адольфа, дозировки от глистов и ушного клеща\\. Выявлены пропуски вакцинации у двух кошек — @olia443 должна это исправить\\.\n•   *IT и оргвопросы:* @JayKuehn временно отошел от дел\\. @DieAhnung и @lejafo обновляют базу и анкеты, внедряя автоматизацию и обязательные поля по вакцинации\\.\n\n*Ключевые задачи:*\n\n•   Провести встречу с потенциальными хозяевами \"Хутят\"\\.\n•   Наладить IT\\-инструменты \\(чекбоксы вакцинации, проверки швов\\)\\.\n•   Контроль медицинских процедур \\(глистогонка, прививки\\)\\.\n"
+        }
+      }
+    ]
+  },
+  "versionId": "8f569e52-4973-4433-9867-1113635a0cbb",
+  "activeVersionId": "8f569e52-4973-4433-9867-1113635a0cbb",
   "triggerCount": 1,
   "shared": [
     {
@@ -945,9 +960,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2025-12-15T08:28:09.252Z",
-    "createdAt": "2025-12-15T08:28:09.252Z",
-    "versionId": "bf34ebf8-8945-44f4-9611-48b75f363e50",
+    "updatedAt": "2025-12-15T19:47:35.000Z",
+    "createdAt": "2025-12-15T19:47:22.557Z",
+    "versionId": "8f569e52-4973-4433-9867-1113635a0cbb",
     "workflowId": "ki83AovnVbBGdtXO",
     "nodes": [
       {
@@ -964,7 +979,7 @@
         "typeVersion": 1.3,
         "position": [
           0,
-          604
+          608
         ],
         "id": "1785f12e-037c-4092-a30d-6a25f92d009a",
         "name": "Schedule Trigger"
@@ -979,7 +994,7 @@
         "typeVersion": 2.6,
         "position": [
           224,
-          604
+          608
         ],
         "id": "741eb759-2210-4bb5-98f4-f1dbc5d07a8c",
         "name": "Get Yesterday Messages",
@@ -999,7 +1014,7 @@
         "typeVersion": 2,
         "position": [
           448,
-          604
+          608
         ],
         "id": "8befda91-1cc3-44e2-8e07-4ab0f35acc25",
         "name": "Get Dialogs by Topic"
@@ -1020,7 +1035,7 @@
         "typeVersion": 1,
         "position": [
           672,
-          604
+          608
         ],
         "id": "c6a4fbe6-6024-4a95-9718-de430ac1eb86",
         "name": "Sort"
@@ -1053,7 +1068,7 @@
         "typeVersion": 2.3,
         "position": [
           896,
-          604
+          608
         ],
         "id": "d9fc119c-89f6-4be7-a5ce-62214b388d19",
         "name": "Does the topic need summary?"
@@ -1087,7 +1102,7 @@
         "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
         "typeVersion": 1,
         "position": [
-          1128,
+          1136,
           704
         ],
         "id": "ca4b20ac-0e00-47a3-ab6c-c74759f8d6d9",
@@ -1108,7 +1123,7 @@
         "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
         "typeVersion": 1,
         "position": [
-          1256,
+          1264,
           704
         ],
         "id": "ca3e454c-0a89-44b5-bad9-af9a1b4808a9",
@@ -1129,7 +1144,7 @@
         "typeVersion": 2.1,
         "position": [
           2368,
-          408
+          416
         ],
         "id": "0d677e67-37cb-44cc-9a5a-df9b0722d222",
         "name": "Super-summary"
@@ -1142,8 +1157,8 @@
         "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
         "typeVersion": 1,
         "position": [
-          2440,
-          632
+          2448,
+          640
         ],
         "id": "6a9d8c51-3ed2-4da5-b2b5-32a32d2f6533",
         "name": "Google Gemini Chat Model1",
@@ -1215,7 +1230,7 @@
         "typeVersion": 3.2,
         "position": [
           2720,
-          260
+          272
         ],
         "id": "4afb2813-745c-4ae1-a265-280682265b87",
         "name": "Merge"
@@ -1297,7 +1312,7 @@
         "typeVersion": 3.4,
         "position": [
           1472,
-          772
+          784
         ],
         "id": "558ec205-a790-45b8-b894-a26b89dc56c0",
         "name": "Dialogs Collection"
@@ -1345,7 +1360,7 @@
         "typeVersion": 1.1,
         "position": [
           1696,
-          772
+          784
         ],
         "id": "a2437861-e853-4cd8-b1d8-5b36c49f7941",
         "name": "Concat Dialogs"
@@ -1364,7 +1379,7 @@
         "typeVersion": 1,
         "position": [
           1920,
-          552
+          560
         ],
         "id": "3debf470-bf4e-4dff-a0b3-7d5612807918",
         "name": "Summary to HTML"
@@ -1383,7 +1398,7 @@
         "typeVersion": 1,
         "position": [
           1920,
-          772
+          784
         ],
         "id": "938b7e14-867e-4a51-8551-5a88088d6911",
         "name": "Dialogs to HTML"
@@ -1407,7 +1422,7 @@
         "typeVersion": 1.1,
         "position": [
           1696,
-          164
+          176
         ],
         "id": "e98e949b-9562-43fa-8a39-c0a3a25a9e0b",
         "name": "List Major Topics"
@@ -1431,7 +1446,7 @@
         "typeVersion": 1.1,
         "position": [
           1696,
-          964
+          976
         ],
         "id": "c1d6eb31-8eed-4990-b637-4a6746bb91e4",
         "name": "List Minor Topics"
@@ -1472,7 +1487,7 @@
         "typeVersion": 3.4,
         "position": [
           1920,
-          164
+          176
         ],
         "id": "0bf46417-a050-4a1b-96b0-dc873415b360",
         "name": "Major Topics"
@@ -1495,7 +1510,7 @@
         "typeVersion": 3.4,
         "position": [
           1920,
-          964
+          976
         ],
         "id": "3ca3cbe6-8093-409b-a5c0-80abece3064d",
         "name": "Minor Topics"
@@ -1516,8 +1531,8 @@
         "type": "n8n-nodes-base.telegram",
         "typeVersion": 1.2,
         "position": [
-          3152,
-          256
+          3136,
+          272
         ],
         "id": "6dcc6d63-38ea-405b-a387-f6317afe2dfa",
         "name": "PROD Send a document",
@@ -1566,7 +1581,7 @@
         "typeVersion": 1,
         "position": [
           2944,
-          260
+          272
         ],
         "id": "a64cb552-060a-492c-a5cf-89945ab4e46a",
         "name": "Telegramify Markdown"
@@ -1861,8 +1876,8 @@
       }
     },
     "authors": "Alexandra Ershova",
-    "name": null,
-    "description": null
+    "name": "Version 8f569e52",
+    "description": ""
   },
   "tags": []
 }
