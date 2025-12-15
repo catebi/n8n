@@ -3,7 +3,7 @@
   "createdAt": "2025-11-25T14:46:39.204Z",
   "id": "uxiU7FOABx5M1moL",
   "name": "Error Notification workflow",
-  "active": false,
+  "active": true,
   "isArchived": false,
   "nodes": [
     {
@@ -334,7 +334,7 @@
     ]
   },
   "versionId": "709402b4-63b4-473b-80b3-65809d9d171d",
-  "activeVersionId": null,
+  "activeVersionId": "709402b4-63b4-473b-80b3-65809d9d171d",
   "triggerCount": 0,
   "shared": [
     {
@@ -345,6 +345,129 @@
       "projectId": "jnu5GnxkoXUPZEif"
     }
   ],
-  "activeVersion": null,
+  "activeVersion": {
+    "updatedAt": "2025-12-12T08:46:36.470Z",
+    "createdAt": "2025-12-12T08:46:36.470Z",
+    "versionId": "709402b4-63b4-473b-80b3-65809d9d171d",
+    "workflowId": "uxiU7FOABx5M1moL",
+    "nodes": [
+      {
+        "parameters": {},
+        "id": "b78a90ee-7ca8-49a5-acea-69ed9711cac5",
+        "name": "Error Trigger",
+        "type": "n8n-nodes-base.errorTrigger",
+        "position": [
+          -448,
+          400
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "language": "pythonNative",
+          "pythonCode": "def escape_markdown_v2(text: str) -> str:\n    \"\"\"\n    Escape all Telegram MarkdownV2 special characters\n    WITHOUT using regex.\n    \"\"\"\n    special_chars = {\n        '_', '*', '[', ']', '(', ')',\n        '~', '`', '>', '#', '+', '-',\n        '=', '|', '{', '}', '.', '!'\n    }\n\n    escaped = []\n    for ch in text:\n        if ch in special_chars:\n            escaped.append('\\\\' + ch)\n        else:\n            escaped.append(ch)\n\n    return ''.join(escaped)\n\n\n# Build the message with monospace stacktrace\nworkflow_name = _item['json']['workflow']['name']\nnode_name = _item['json']['execution']['lastNodeExecuted']\nerror_msg = _item['json']['execution']['error']['message']\nstacktrace = _item['json']['execution']['error']['stack']\nurl = _item['json']['execution']['url']\n\nmessage = (\n    f\"*WORKFLOW ERROR*\\n\\n\"\n    f\"*Workflow:* {escape_markdown_v2(workflow_name)}\\n\"\n    f\"*Node:* {escape_markdown_v2(node_name)}\\n\"\n    f\"*Error:* {escape_markdown_v2(error_msg)}\\n\"\n    f\"*Execution:* [open]({escape_markdown_v2(url)})\\n\\n\"\n    f\"*Stacktrace:*\\n\"\n    f\"```\\n{escape_markdown_v2(stacktrace)}\\n```\"\n)\n\nreturn {\"message\": message}"
+        },
+        "id": "5bb86eb6-87f6-4e8f-a9bb-47d6c652a6d7",
+        "name": "Code",
+        "type": "n8n-nodes-base.code",
+        "position": [
+          -224,
+          400
+        ],
+        "typeVersion": 2
+      },
+      {
+        "parameters": {
+          "sendTo": "catebi.tbilisi@gmail.com",
+          "subject": "n8n Workflow Error",
+          "message": "={{ $json.message }}",
+          "options": {}
+        },
+        "id": "4e95fef0-edd0-4baa-b873-82e747092195",
+        "name": "Notify Gmail",
+        "type": "n8n-nodes-base.gmail",
+        "position": [
+          0,
+          400
+        ],
+        "webhookId": "52f0cc71-1ad8-4f9a-b07c-bae9be1e217c",
+        "typeVersion": 2.1,
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "chatId": "113754494",
+          "text": "={{ $json.message }}",
+          "additionalFields": {
+            "parse_mode": "MarkdownV2"
+          }
+        },
+        "id": "ed2c4471-a740-48a1-892f-38d654cd1c39",
+        "name": "Notify Telegram",
+        "type": "n8n-nodes-base.telegram",
+        "position": [
+          0,
+          208
+        ],
+        "webhookId": "13c616bf-a3ad-4035-998a-1dfe6021b89f",
+        "typeVersion": 1,
+        "credentials": {
+          "telegramApi": {
+            "id": "tcX20TpSwtOgHBGq",
+            "name": "Peredast"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "## 🚨 Error Notification Workflow\n\nThis workflow automatically sends notifications when any other workflow fails.\n\nSimply download copy and paste into your workflow then add your credential with prefered channel\n\nThis workflow is free. \nwant more? [contact me](khmuhtadin.com)\n\nhave something to helps me chill, [a coffee](coff.ee/khmuhtadin) would be great!",
+          "height": 280,
+          "width": 420,
+          "color": 5
+        },
+        "id": "badc57af-3ca6-49ee-ba26-f147e083908f",
+        "name": "Sticky Note1",
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -528,
+          64
+        ],
+        "typeVersion": 1
+      }
+    ],
+    "connections": {
+      "Code": {
+        "main": [
+          [
+            {
+              "node": "Notify Telegram",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Notify Gmail",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Error Trigger": {
+        "main": [
+          [
+            {
+              "node": "Code",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Alexandra Ershova",
+    "name": null,
+    "description": null
+  },
   "tags": []
 }
