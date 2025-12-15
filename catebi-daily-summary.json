@@ -1,0 +1,1868 @@
+{
+  "updatedAt": "2025-12-15T08:28:09.247Z",
+  "createdAt": "2025-12-14T10:31:39.535Z",
+  "id": "ki83AovnVbBGdtXO",
+  "name": "Catebi Daily Summary",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 2
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        604
+      ],
+      "id": "1785f12e-037c-4092-a30d-6a25f92d009a",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "select topic_name, from_username, from_first_name, from_last_name, tg_user_id, date, text\nfrom v_tg_message_flat\nwhere date >= '{{ $node['Schedule Trigger'].json.timestamp.toDateTime().startOf('day').minus(1, 'days').format('yyyy-MM-dd') }}'\nand not is_bot\norder by topic_name, date",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        224,
+        604
+      ],
+      "id": "741eb759-2210-4bb5-98f4-f1dbc5d07a8c",
+      "name": "Get Yesterday Messages",
+      "credentials": {
+        "postgres": {
+          "id": "u5hzEAvZADCVqBIT",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "language": "pythonNative",
+        "pythonCode": "topics = {}\n\nfor item in _items:\n    j = item.get(\"json\") if isinstance(item, dict) else None\n    if not isinstance(j, dict):\n        j = item if isinstance(item, dict) else {}\n\n    topic = (j.get(\"topic_name\") or \"General\").strip()\n\n    raw_date = j.get(\"date\")\n    ts = \"UNKNOWN_TIME\"\n\n    if isinstance(raw_date, str) and \"T\" in raw_date:\n        try:\n            date_part, time_part = raw_date.replace(\"Z\", \"\").split(\"T\", 1)\n            hh = int(time_part[0:2]) + 4  # UTC -> Tbilisi\n            mm = time_part[3:5]\n\n            # rollover\n            if hh >= 24:\n                hh -= 24\n                y = int(date_part[0:4])\n                m = int(date_part[5:7])\n                d = int(date_part[8:10])\n\n                leap = (y % 4 == 0 and (y % 100 != 0 or y % 400 == 0))\n                dim = [31, 29 if leap else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m - 1]\n\n                d += 1\n                if d > dim:\n                    d = 1\n                    m += 1\n                    if m > 12:\n                        m = 1\n                        y += 1\n                date_part = f\"{y:04d}-{m:02d}-{d:02d}\"\n\n            ts = f\"{date_part} {hh:02d}:{mm}\"\n        except Exception:\n            ts = \"UNKNOWN_TIME\"\n\n    first = (j.get(\"from_first_name\") or \"\").strip()\n    last = (j.get(\"from_last_name\") or \"\").strip()\n    username = (j.get(\"from_username\") or \"\").strip()\n\n    name = \" \".join(x for x in [first, last] if x).strip()\n    if not name and username:\n        name = f\"@{username}\"\n    elif username:\n        name = f\"{name} (@{username})\" if name else f\"@{username}\"\n\n    text = (j.get(\"text\") or \"\").strip()\n    if not text:\n        continue\n\n    line = f\"[{ts}] {name}: {text}\"\n    topics.setdefault(topic, []).append(line)\n\nout = []\nfor topic, lines in topics.items():\n    out.append({\n        \"json\": {\n            \"topic_name\": topic,\n            \"dialog\": \"\\n\".join(lines),\n            \"length\": len(lines)\n        }\n    })\n\nreturn out\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        604
+      ],
+      "id": "8befda91-1cc3-44e2-8e07-4ab0f35acc25",
+      "name": "Get Dialogs by Topic"
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "length",
+              "order": "descending"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        672,
+        604
+      ],
+      "id": "c6a4fbe6-6024-4a95-9718-de430ac1eb86",
+      "name": "Sort"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "fcdefedf-2fc7-41b8-9b5d-8f099ca866cd",
+              "leftValue": "={{ $json.length }}",
+              "rightValue": 10,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        896,
+        604
+      ],
+      "id": "d9fc119c-89f6-4be7-a5ce-62214b388d19",
+      "name": "Does the topic need summary?"
+    },
+    {
+      "parameters": {
+        "chunkingMode": "advanced",
+        "options": {
+          "summarizationMethodAndPrompts": {
+            "values": {
+              "summarizationMethod": "stuff",
+              "prompt": "Write a concise summary of the following in Russian:\n\n\n\"{text}\"\n\nRefer to each participant as their @username.\nExtract actionables and responsible individuals, list it separately under summary.\nList questions that were not answered.\nDon't refer to TNR organization as a shelter. КК refers to котоквартира -- an apartment where cats heal after castration.\n\nCONCISE SUMMARY:"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainSummarization",
+      "typeVersion": 2.1,
+      "position": [
+        1120,
+        480
+      ],
+      "id": "3979c31a-b790-4076-98b6-e22795f0b93c",
+      "name": "Summarization Chain"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3-pro-preview",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1128,
+        704
+      ],
+      "id": "ca4b20ac-0e00-47a3-ab6c-c74759f8d6d9",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "82kFMSuErz4YBXNW",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "splitCode": "markdown"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        1256,
+        704
+      ],
+      "id": "ca3e454c-0a89-44b5-bad9-af9a1b4808a9",
+      "name": "Recursive Character Text Splitter"
+    },
+    {
+      "parameters": {
+        "options": {
+          "summarizationMethodAndPrompts": {
+            "values": {
+              "summarizationMethod": "stuff",
+              "prompt": "Write a very short and concise summary of the following in Russian, try keeping the output under 200 tokens:\n\n\n\"{text}\"\n\nDon't refer to TNR organization as a shelter. КК refers to котоквартира -- an apartment where cats heal after castration. Don't escape @usernames with ``.\n\nCONCISE SUMMARY:"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainSummarization",
+      "typeVersion": 2.1,
+      "position": [
+        2368,
+        408
+      ],
+      "id": "0d677e67-37cb-44cc-9a5a-df9b0722d222",
+      "name": "Super-summary"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3-pro-preview",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2440,
+        632
+      ],
+      "id": "6a9d8c51-3ed2-4da5-b2b5-32a32d2f6533",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "82kFMSuErz4YBXNW",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "pdf",
+        "pdfTemplateId": "b3277b2359369038",
+        "download": true,
+        "binaryProperty": "summary",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "date",
+              "value": "={{ $node['Get Yesterday Messages'].json.date.toDateTime().format('dd.MM.yyyy') }}"
+            },
+            {
+              "key": "summary",
+              "value": "={{ $node['Merge PDF Data'].json.summaries }}"
+            },
+            {
+              "key": "dialogs",
+              "value": "={{ $node['Merge PDF Data'].json.dialogs }}"
+            },
+            {
+              "key": "major_topics",
+              "value": "={{ $json.major_topics }}"
+            },
+            {
+              "key": "minor_topics",
+              "value": "={{ $json.minor_topics }}"
+            }
+          ]
+        },
+        "options": {
+          "fileName": "=summary-{{ $node['Get Yesterday Messages'].json.date.toDateTime().format('dd.MM.yyyy') }}.pdf"
+        }
+      },
+      "type": "n8n-nodes-base.apiTemplateIo",
+      "typeVersion": 1,
+      "position": [
+        2432,
+        112
+      ],
+      "id": "9c232b7c-25c8-49d9-98da-c5f02785d1f0",
+      "name": "Create a pdf",
+      "credentials": {
+        "apiTemplateIoApi": {
+          "id": "MsxRMjLeePKOOOzn",
+          "name": "APITemplate.io account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {
+          "includeUnpaired": true
+        }
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2720,
+        260
+      ],
+      "id": "4afb2813-745c-4ae1-a265-280682265b87",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fc641d1b-e9bd-4100-8b41-521959a5dbbe",
+              "name": "topic_name",
+              "value": "={{ $node['Does the topic need summary?'].json.topic_name }}",
+              "type": "string"
+            },
+            {
+              "id": "967f442a-3bee-4310-94bc-0fd371b7b16f",
+              "name": "topic_summary",
+              "value": "={{ $json.output.text }}",
+              "type": "string"
+            },
+            {
+              "id": "8b5e8c23-203d-4862-9a0c-aa57730826b7",
+              "name": "total_messages",
+              "value": "={{ $node['Does the topic need summary?'].json.length }}",
+              "type": "number"
+            },
+            {
+              "id": "b8d556a5-ff4f-483d-9e20-b2b11360d5f7",
+              "name": "text",
+              "value": "=### Топик: {{ $node['Does the topic need summary?'].json.topic_name }} ({{ $node['Does the topic need summary?'].json.length }} сообщений)\n\n{{ $json.output.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1472,
+        480
+      ],
+      "id": "ed974006-cbc2-4f25-857c-624c9e395989",
+      "name": "Summary Collection"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fc641d1b-e9bd-4100-8b41-521959a5dbbe",
+              "name": "topic_name",
+              "value": "={{ $node['Does the topic need summary?'].json.topic_name }}",
+              "type": "string"
+            },
+            {
+              "id": "967f442a-3bee-4310-94bc-0fd371b7b16f",
+              "name": "topic_summary",
+              "value": "={{ $json.dialog }}",
+              "type": "string"
+            },
+            {
+              "id": "8b5e8c23-203d-4862-9a0c-aa57730826b7",
+              "name": "total_messages",
+              "value": "={{ $('Does the topic need summary?').item.json.length }}",
+              "type": "number"
+            },
+            {
+              "id": "77c45de9-e106-47ac-9421-e08e7bec4f5a",
+              "name": "text",
+              "value": "=### Топик: {{ $node['Does the topic need summary?'].json.topic_name }} ({{ $node['Does the topic need summary?'].json.length }} сообщений)\n\n{{ $json.dialog }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1472,
+        772
+      ],
+      "id": "558ec205-a790-45b8-b894-a26b89dc56c0",
+      "name": "Dialogs Collection"
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "concatenate",
+              "field": "text",
+              "separateBy": "other",
+              "customSeparator": "={{'\\n\\n'}}"
+            }
+          ]
+        },
+        "options": {
+          "outputFormat": "singleItem"
+        }
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        1696,
+        480
+      ],
+      "id": "112c9040-1c5e-416d-a69d-a091b7c691af",
+      "name": "Concat Summaries"
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "concatenate",
+              "field": "text",
+              "separateBy": "other",
+              "customSeparator": "={{'\\n\\n'}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        1696,
+        772
+      ],
+      "id": "a2437861-e853-4cd8-b1d8-5b36c49f7941",
+      "name": "Concat Dialogs"
+    },
+    {
+      "parameters": {
+        "mode": "markdownToHtml",
+        "markdown": "={{ $json.concatenated_text }}",
+        "destinationKey": "summaries",
+        "options": {
+          "emoji": true,
+          "simpleLineBreaks": true
+        }
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        1920,
+        552
+      ],
+      "id": "3debf470-bf4e-4dff-a0b3-7d5612807918",
+      "name": "Summary to HTML"
+    },
+    {
+      "parameters": {
+        "mode": "markdownToHtml",
+        "markdown": "={{ $json.concatenated_text }}",
+        "destinationKey": "dialogs",
+        "options": {
+          "emoji": true,
+          "simpleLineBreaks": true
+        }
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        1920,
+        772
+      ],
+      "id": "938b7e14-867e-4a51-8551-5a88088d6911",
+      "name": "Dialogs to HTML"
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "concatenate",
+              "field": "topic_name",
+              "separateBy": ", "
+            }
+          ]
+        },
+        "options": {
+          "outputFormat": "singleItem"
+        }
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        1696,
+        164
+      ],
+      "id": "e98e949b-9562-43fa-8a39-c0a3a25a9e0b",
+      "name": "List Major Topics"
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "concatenate",
+              "field": "topic_name",
+              "separateBy": ", "
+            }
+          ]
+        },
+        "options": {
+          "outputFormat": "singleItem"
+        }
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        1696,
+        964
+      ],
+      "id": "c1d6eb31-8eed-4990-b637-4a6746bb91e4",
+      "name": "List Minor Topics"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 4,
+        "options": {
+          "includeUnpaired": true
+        }
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2144,
+        80
+      ],
+      "id": "7c40d7e1-b47d-4419-92f1-48d0ebdbaff7",
+      "name": "Merge PDF Data"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1cd3a242-0b4b-4aa0-873b-db620f095ba6",
+              "name": "major_topics",
+              "value": "={{ $json.concatenated_topic_name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1920,
+        164
+      ],
+      "id": "0bf46417-a050-4a1b-96b0-dc873415b360",
+      "name": "Major Topics"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1cd3a242-0b4b-4aa0-873b-db620f095ba6",
+              "name": "minor_topics",
+              "value": "={{ $json.concatenated_topic_name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1920,
+        964
+      ],
+      "id": "3ca3cbe6-8093-409b-a5c0-80abece3064d",
+      "name": "Minor Topics"
+    },
+    {
+      "parameters": {
+        "operation": "sendDocument",
+        "chatId": "-1001938190303",
+        "binaryData": true,
+        "binaryPropertyName": "summary",
+        "additionalFields": {
+          "caption": "=_Я в режиме отладки, могу генерировать кринж\\._\n\nЧто происходило `{{ $today.minus(1, 'days').format('yyyy-MM-dd') }}`?\n\n{{ $json.markdownText.slice(0, 2000) }}",
+          "fileName": "=summary{{ $today.minus(1, 'days').format('yyyy-MM-dd') }}.pdf",
+          "parse_mode": "MarkdownV2",
+          "message_thread_id": 354496
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3152,
+        256
+      ],
+      "id": "6dcc6d63-38ea-405b-a387-f6317afe2dfa",
+      "name": "PROD Send a document",
+      "webhookId": "e040c5f4-3fac-4d92-9440-a0194182c69c",
+      "credentials": {
+        "telegramApi": {
+          "id": "tcX20TpSwtOgHBGq",
+          "name": "Peredast"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendDocument",
+        "chatId": "113754494",
+        "binaryData": true,
+        "binaryPropertyName": "summary",
+        "additionalFields": {
+          "caption": "=_Я в режиме отладки, могу генерировать кринж\\._\n\n{{ $json.markdownText.slice(0, 2000) }}",
+          "fileName": "=summary{{ $today.minus(1, 'days').format('yyyy-MM-dd') }}.pdf",
+          "parse_mode": "MarkdownV2"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3392,
+        0
+      ],
+      "id": "e05edc60-379e-45bd-9be7-c960be58050c",
+      "name": "DEV Send a document",
+      "webhookId": "e040c5f4-3fac-4d92-9440-a0194182c69c",
+      "credentials": {
+        "telegramApi": {
+          "id": "tcX20TpSwtOgHBGq",
+          "name": "Peredast"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "markdownText": "={{ $('Super-summary').item.json.output.text }}",
+        "unsupportedTagsStrategy": "keep"
+      },
+      "type": "@aotoki/n8n-nodes-telegramify-markdown.telegramifyMarkdown",
+      "typeVersion": 1,
+      "position": [
+        2944,
+        260
+      ],
+      "id": "a64cb552-060a-492c-a5cf-89945ab4e46a",
+      "name": "Telegramify Markdown"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Yesterday Messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Yesterday Messages": {
+      "main": [
+        [
+          {
+            "node": "Get Dialogs by Topic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Dialogs by Topic": {
+      "main": [
+        [
+          {
+            "node": "Sort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sort": {
+      "main": [
+        [
+          {
+            "node": "Does the topic need summary?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Does the topic need summary?": {
+      "main": [
+        [
+          {
+            "node": "Summarization Chain",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "List Major Topics",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Dialogs Collection",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "List Minor Topics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Summarization Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Summarization Chain",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarization Chain": {
+      "main": [
+        [
+          {
+            "node": "Summary Collection",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Super-summary",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Super-summary": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Create a pdf": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Telegramify Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summary Collection": {
+      "main": [
+        [
+          {
+            "node": "Concat Summaries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dialogs Collection": {
+      "main": [
+        [
+          {
+            "node": "Concat Dialogs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Concat Summaries": {
+      "main": [
+        [
+          {
+            "node": "Super-summary",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Summary to HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Concat Dialogs": {
+      "main": [
+        [
+          {
+            "node": "Dialogs to HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summary to HTML": {
+      "main": [
+        [
+          {
+            "node": "Merge PDF Data",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Dialogs to HTML": {
+      "main": [
+        [
+          {
+            "node": "Merge PDF Data",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "List Major Topics": {
+      "main": [
+        [
+          {
+            "node": "Major Topics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Minor Topics": {
+      "main": [
+        [
+          {
+            "node": "Minor Topics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge PDF Data": {
+      "main": [
+        [
+          {
+            "node": "Create a pdf",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Major Topics": {
+      "main": [
+        [
+          {
+            "node": "Merge PDF Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Minor Topics": {
+      "main": [
+        [
+          {
+            "node": "Merge PDF Data",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Telegramify Markdown": {
+      "main": [
+        [
+          {
+            "node": "PROD Send a document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "errorWorkflow": "uxiU7FOABx5M1moL"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "bf34ebf8-8945-44f4-9611-48b75f363e50",
+  "activeVersionId": "bf34ebf8-8945-44f4-9611-48b75f363e50",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-12-14T10:31:39.545Z",
+      "createdAt": "2025-12-14T10:31:39.545Z",
+      "role": "workflow:owner",
+      "workflowId": "ki83AovnVbBGdtXO",
+      "projectId": "jnu5GnxkoXUPZEif"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2025-12-15T08:28:09.252Z",
+    "createdAt": "2025-12-15T08:28:09.252Z",
+    "versionId": "bf34ebf8-8945-44f4-9611-48b75f363e50",
+    "workflowId": "ki83AovnVbBGdtXO",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 2
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          0,
+          604
+        ],
+        "id": "1785f12e-037c-4092-a30d-6a25f92d009a",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "select topic_name, from_username, from_first_name, from_last_name, tg_user_id, date, text\nfrom v_tg_message_flat\nwhere date >= '{{ $node['Schedule Trigger'].json.timestamp.toDateTime().startOf('day').minus(1, 'days').format('yyyy-MM-dd') }}'\nand not is_bot\norder by topic_name, date",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          224,
+          604
+        ],
+        "id": "741eb759-2210-4bb5-98f4-f1dbc5d07a8c",
+        "name": "Get Yesterday Messages",
+        "credentials": {
+          "postgres": {
+            "id": "u5hzEAvZADCVqBIT",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "language": "pythonNative",
+          "pythonCode": "topics = {}\n\nfor item in _items:\n    j = item.get(\"json\") if isinstance(item, dict) else None\n    if not isinstance(j, dict):\n        j = item if isinstance(item, dict) else {}\n\n    topic = (j.get(\"topic_name\") or \"General\").strip()\n\n    raw_date = j.get(\"date\")\n    ts = \"UNKNOWN_TIME\"\n\n    if isinstance(raw_date, str) and \"T\" in raw_date:\n        try:\n            date_part, time_part = raw_date.replace(\"Z\", \"\").split(\"T\", 1)\n            hh = int(time_part[0:2]) + 4  # UTC -> Tbilisi\n            mm = time_part[3:5]\n\n            # rollover\n            if hh >= 24:\n                hh -= 24\n                y = int(date_part[0:4])\n                m = int(date_part[5:7])\n                d = int(date_part[8:10])\n\n                leap = (y % 4 == 0 and (y % 100 != 0 or y % 400 == 0))\n                dim = [31, 29 if leap else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m - 1]\n\n                d += 1\n                if d > dim:\n                    d = 1\n                    m += 1\n                    if m > 12:\n                        m = 1\n                        y += 1\n                date_part = f\"{y:04d}-{m:02d}-{d:02d}\"\n\n            ts = f\"{date_part} {hh:02d}:{mm}\"\n        except Exception:\n            ts = \"UNKNOWN_TIME\"\n\n    first = (j.get(\"from_first_name\") or \"\").strip()\n    last = (j.get(\"from_last_name\") or \"\").strip()\n    username = (j.get(\"from_username\") or \"\").strip()\n\n    name = \" \".join(x for x in [first, last] if x).strip()\n    if not name and username:\n        name = f\"@{username}\"\n    elif username:\n        name = f\"{name} (@{username})\" if name else f\"@{username}\"\n\n    text = (j.get(\"text\") or \"\").strip()\n    if not text:\n        continue\n\n    line = f\"[{ts}] {name}: {text}\"\n    topics.setdefault(topic, []).append(line)\n\nout = []\nfor topic, lines in topics.items():\n    out.append({\n        \"json\": {\n            \"topic_name\": topic,\n            \"dialog\": \"\\n\".join(lines),\n            \"length\": len(lines)\n        }\n    })\n\nreturn out\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          448,
+          604
+        ],
+        "id": "8befda91-1cc3-44e2-8e07-4ab0f35acc25",
+        "name": "Get Dialogs by Topic"
+      },
+      {
+        "parameters": {
+          "sortFieldsUi": {
+            "sortField": [
+              {
+                "fieldName": "length",
+                "order": "descending"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.sort",
+        "typeVersion": 1,
+        "position": [
+          672,
+          604
+        ],
+        "id": "c6a4fbe6-6024-4a95-9718-de430ac1eb86",
+        "name": "Sort"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "fcdefedf-2fc7-41b8-9b5d-8f099ca866cd",
+                "leftValue": "={{ $json.length }}",
+                "rightValue": 10,
+                "operator": {
+                  "type": "number",
+                  "operation": "gte"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          896,
+          604
+        ],
+        "id": "d9fc119c-89f6-4be7-a5ce-62214b388d19",
+        "name": "Does the topic need summary?"
+      },
+      {
+        "parameters": {
+          "chunkingMode": "advanced",
+          "options": {
+            "summarizationMethodAndPrompts": {
+              "values": {
+                "summarizationMethod": "stuff",
+                "prompt": "Write a concise summary of the following in Russian:\n\n\n\"{text}\"\n\nRefer to each participant as their @username.\nExtract actionables and responsible individuals, list it separately under summary.\nList questions that were not answered.\nDon't refer to TNR organization as a shelter. КК refers to котоквартира -- an apartment where cats heal after castration.\n\nCONCISE SUMMARY:"
+              }
+            }
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainSummarization",
+        "typeVersion": 2.1,
+        "position": [
+          1120,
+          480
+        ],
+        "id": "3979c31a-b790-4076-98b6-e22795f0b93c",
+        "name": "Summarization Chain"
+      },
+      {
+        "parameters": {
+          "modelName": "models/gemini-3-pro-preview",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          1128,
+          704
+        ],
+        "id": "ca4b20ac-0e00-47a3-ab6c-c74759f8d6d9",
+        "name": "Google Gemini Chat Model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "82kFMSuErz4YBXNW",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {
+            "splitCode": "markdown"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+        "typeVersion": 1,
+        "position": [
+          1256,
+          704
+        ],
+        "id": "ca3e454c-0a89-44b5-bad9-af9a1b4808a9",
+        "name": "Recursive Character Text Splitter"
+      },
+      {
+        "parameters": {
+          "options": {
+            "summarizationMethodAndPrompts": {
+              "values": {
+                "summarizationMethod": "stuff",
+                "prompt": "Write a very short and concise summary of the following in Russian, try keeping the output under 200 tokens:\n\n\n\"{text}\"\n\nDon't refer to TNR organization as a shelter. КК refers to котоквартира -- an apartment where cats heal after castration. Don't escape @usernames with ``.\n\nCONCISE SUMMARY:"
+              }
+            }
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainSummarization",
+        "typeVersion": 2.1,
+        "position": [
+          2368,
+          408
+        ],
+        "id": "0d677e67-37cb-44cc-9a5a-df9b0722d222",
+        "name": "Super-summary"
+      },
+      {
+        "parameters": {
+          "modelName": "models/gemini-3-pro-preview",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          2440,
+          632
+        ],
+        "id": "6a9d8c51-3ed2-4da5-b2b5-32a32d2f6533",
+        "name": "Google Gemini Chat Model1",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "82kFMSuErz4YBXNW",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "pdf",
+          "pdfTemplateId": "b3277b2359369038",
+          "download": true,
+          "binaryProperty": "summary",
+          "propertiesUi": {
+            "propertyValues": [
+              {
+                "key": "date",
+                "value": "={{ $node['Get Yesterday Messages'].json.date.toDateTime().format('dd.MM.yyyy') }}"
+              },
+              {
+                "key": "summary",
+                "value": "={{ $node['Merge PDF Data'].json.summaries }}"
+              },
+              {
+                "key": "dialogs",
+                "value": "={{ $node['Merge PDF Data'].json.dialogs }}"
+              },
+              {
+                "key": "major_topics",
+                "value": "={{ $json.major_topics }}"
+              },
+              {
+                "key": "minor_topics",
+                "value": "={{ $json.minor_topics }}"
+              }
+            ]
+          },
+          "options": {
+            "fileName": "=summary-{{ $node['Get Yesterday Messages'].json.date.toDateTime().format('dd.MM.yyyy') }}.pdf"
+          }
+        },
+        "type": "n8n-nodes-base.apiTemplateIo",
+        "typeVersion": 1,
+        "position": [
+          2432,
+          112
+        ],
+        "id": "9c232b7c-25c8-49d9-98da-c5f02785d1f0",
+        "name": "Create a pdf",
+        "credentials": {
+          "apiTemplateIoApi": {
+            "id": "MsxRMjLeePKOOOzn",
+            "name": "APITemplate.io account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineByPosition",
+          "options": {
+            "includeUnpaired": true
+          }
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          2720,
+          260
+        ],
+        "id": "4afb2813-745c-4ae1-a265-280682265b87",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "fc641d1b-e9bd-4100-8b41-521959a5dbbe",
+                "name": "topic_name",
+                "value": "={{ $node['Does the topic need summary?'].json.topic_name }}",
+                "type": "string"
+              },
+              {
+                "id": "967f442a-3bee-4310-94bc-0fd371b7b16f",
+                "name": "topic_summary",
+                "value": "={{ $json.output.text }}",
+                "type": "string"
+              },
+              {
+                "id": "8b5e8c23-203d-4862-9a0c-aa57730826b7",
+                "name": "total_messages",
+                "value": "={{ $node['Does the topic need summary?'].json.length }}",
+                "type": "number"
+              },
+              {
+                "id": "b8d556a5-ff4f-483d-9e20-b2b11360d5f7",
+                "name": "text",
+                "value": "=### Топик: {{ $node['Does the topic need summary?'].json.topic_name }} ({{ $node['Does the topic need summary?'].json.length }} сообщений)\n\n{{ $json.output.text }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1472,
+          480
+        ],
+        "id": "ed974006-cbc2-4f25-857c-624c9e395989",
+        "name": "Summary Collection"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "fc641d1b-e9bd-4100-8b41-521959a5dbbe",
+                "name": "topic_name",
+                "value": "={{ $node['Does the topic need summary?'].json.topic_name }}",
+                "type": "string"
+              },
+              {
+                "id": "967f442a-3bee-4310-94bc-0fd371b7b16f",
+                "name": "topic_summary",
+                "value": "={{ $json.dialog }}",
+                "type": "string"
+              },
+              {
+                "id": "8b5e8c23-203d-4862-9a0c-aa57730826b7",
+                "name": "total_messages",
+                "value": "={{ $('Does the topic need summary?').item.json.length }}",
+                "type": "number"
+              },
+              {
+                "id": "77c45de9-e106-47ac-9421-e08e7bec4f5a",
+                "name": "text",
+                "value": "=### Топик: {{ $node['Does the topic need summary?'].json.topic_name }} ({{ $node['Does the topic need summary?'].json.length }} сообщений)\n\n{{ $json.dialog }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1472,
+          772
+        ],
+        "id": "558ec205-a790-45b8-b894-a26b89dc56c0",
+        "name": "Dialogs Collection"
+      },
+      {
+        "parameters": {
+          "fieldsToSummarize": {
+            "values": [
+              {
+                "aggregation": "concatenate",
+                "field": "text",
+                "separateBy": "other",
+                "customSeparator": "={{'\\n\\n'}}"
+              }
+            ]
+          },
+          "options": {
+            "outputFormat": "singleItem"
+          }
+        },
+        "type": "n8n-nodes-base.summarize",
+        "typeVersion": 1.1,
+        "position": [
+          1696,
+          480
+        ],
+        "id": "112c9040-1c5e-416d-a69d-a091b7c691af",
+        "name": "Concat Summaries"
+      },
+      {
+        "parameters": {
+          "fieldsToSummarize": {
+            "values": [
+              {
+                "aggregation": "concatenate",
+                "field": "text",
+                "separateBy": "other",
+                "customSeparator": "={{'\\n\\n'}}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.summarize",
+        "typeVersion": 1.1,
+        "position": [
+          1696,
+          772
+        ],
+        "id": "a2437861-e853-4cd8-b1d8-5b36c49f7941",
+        "name": "Concat Dialogs"
+      },
+      {
+        "parameters": {
+          "mode": "markdownToHtml",
+          "markdown": "={{ $json.concatenated_text }}",
+          "destinationKey": "summaries",
+          "options": {
+            "emoji": true,
+            "simpleLineBreaks": true
+          }
+        },
+        "type": "n8n-nodes-base.markdown",
+        "typeVersion": 1,
+        "position": [
+          1920,
+          552
+        ],
+        "id": "3debf470-bf4e-4dff-a0b3-7d5612807918",
+        "name": "Summary to HTML"
+      },
+      {
+        "parameters": {
+          "mode": "markdownToHtml",
+          "markdown": "={{ $json.concatenated_text }}",
+          "destinationKey": "dialogs",
+          "options": {
+            "emoji": true,
+            "simpleLineBreaks": true
+          }
+        },
+        "type": "n8n-nodes-base.markdown",
+        "typeVersion": 1,
+        "position": [
+          1920,
+          772
+        ],
+        "id": "938b7e14-867e-4a51-8551-5a88088d6911",
+        "name": "Dialogs to HTML"
+      },
+      {
+        "parameters": {
+          "fieldsToSummarize": {
+            "values": [
+              {
+                "aggregation": "concatenate",
+                "field": "topic_name",
+                "separateBy": ", "
+              }
+            ]
+          },
+          "options": {
+            "outputFormat": "singleItem"
+          }
+        },
+        "type": "n8n-nodes-base.summarize",
+        "typeVersion": 1.1,
+        "position": [
+          1696,
+          164
+        ],
+        "id": "e98e949b-9562-43fa-8a39-c0a3a25a9e0b",
+        "name": "List Major Topics"
+      },
+      {
+        "parameters": {
+          "fieldsToSummarize": {
+            "values": [
+              {
+                "aggregation": "concatenate",
+                "field": "topic_name",
+                "separateBy": ", "
+              }
+            ]
+          },
+          "options": {
+            "outputFormat": "singleItem"
+          }
+        },
+        "type": "n8n-nodes-base.summarize",
+        "typeVersion": 1.1,
+        "position": [
+          1696,
+          964
+        ],
+        "id": "c1d6eb31-8eed-4990-b637-4a6746bb91e4",
+        "name": "List Minor Topics"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineByPosition",
+          "numberInputs": 4,
+          "options": {
+            "includeUnpaired": true
+          }
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          2144,
+          80
+        ],
+        "id": "7c40d7e1-b47d-4419-92f1-48d0ebdbaff7",
+        "name": "Merge PDF Data"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "1cd3a242-0b4b-4aa0-873b-db620f095ba6",
+                "name": "major_topics",
+                "value": "={{ $json.concatenated_topic_name }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1920,
+          164
+        ],
+        "id": "0bf46417-a050-4a1b-96b0-dc873415b360",
+        "name": "Major Topics"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "1cd3a242-0b4b-4aa0-873b-db620f095ba6",
+                "name": "minor_topics",
+                "value": "={{ $json.concatenated_topic_name }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1920,
+          964
+        ],
+        "id": "3ca3cbe6-8093-409b-a5c0-80abece3064d",
+        "name": "Minor Topics"
+      },
+      {
+        "parameters": {
+          "operation": "sendDocument",
+          "chatId": "-1001938190303",
+          "binaryData": true,
+          "binaryPropertyName": "summary",
+          "additionalFields": {
+            "caption": "=_Я в режиме отладки, могу генерировать кринж\\._\n\nЧто происходило `{{ $today.minus(1, 'days').format('yyyy-MM-dd') }}`?\n\n{{ $json.markdownText.slice(0, 2000) }}",
+            "fileName": "=summary{{ $today.minus(1, 'days').format('yyyy-MM-dd') }}.pdf",
+            "parse_mode": "MarkdownV2",
+            "message_thread_id": 354496
+          }
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          3152,
+          256
+        ],
+        "id": "6dcc6d63-38ea-405b-a387-f6317afe2dfa",
+        "name": "PROD Send a document",
+        "webhookId": "e040c5f4-3fac-4d92-9440-a0194182c69c",
+        "credentials": {
+          "telegramApi": {
+            "id": "tcX20TpSwtOgHBGq",
+            "name": "Peredast"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "sendDocument",
+          "chatId": "113754494",
+          "binaryData": true,
+          "binaryPropertyName": "summary",
+          "additionalFields": {
+            "caption": "=_Я в режиме отладки, могу генерировать кринж\\._\n\n{{ $json.markdownText.slice(0, 2000) }}",
+            "fileName": "=summary{{ $today.minus(1, 'days').format('yyyy-MM-dd') }}.pdf",
+            "parse_mode": "MarkdownV2"
+          }
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          3392,
+          0
+        ],
+        "id": "e05edc60-379e-45bd-9be7-c960be58050c",
+        "name": "DEV Send a document",
+        "webhookId": "e040c5f4-3fac-4d92-9440-a0194182c69c",
+        "credentials": {
+          "telegramApi": {
+            "id": "tcX20TpSwtOgHBGq",
+            "name": "Peredast"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "markdownText": "={{ $('Super-summary').item.json.output.text }}",
+          "unsupportedTagsStrategy": "keep"
+        },
+        "type": "@aotoki/n8n-nodes-telegramify-markdown.telegramifyMarkdown",
+        "typeVersion": 1,
+        "position": [
+          2944,
+          260
+        ],
+        "id": "a64cb552-060a-492c-a5cf-89945ab4e46a",
+        "name": "Telegramify Markdown"
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Get Yesterday Messages",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Yesterday Messages": {
+        "main": [
+          [
+            {
+              "node": "Get Dialogs by Topic",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Dialogs by Topic": {
+        "main": [
+          [
+            {
+              "node": "Sort",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Sort": {
+        "main": [
+          [
+            {
+              "node": "Does the topic need summary?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Does the topic need summary?": {
+        "main": [
+          [
+            {
+              "node": "Summarization Chain",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "List Major Topics",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Dialogs Collection",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "List Minor Topics",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Summarization Chain",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Recursive Character Text Splitter": {
+        "ai_textSplitter": [
+          [
+            {
+              "node": "Summarization Chain",
+              "type": "ai_textSplitter",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Summarization Chain": {
+        "main": [
+          [
+            {
+              "node": "Summary Collection",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model1": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Super-summary",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Super-summary": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Create a pdf": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Telegramify Markdown",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Summary Collection": {
+        "main": [
+          [
+            {
+              "node": "Concat Summaries",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Dialogs Collection": {
+        "main": [
+          [
+            {
+              "node": "Concat Dialogs",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Concat Summaries": {
+        "main": [
+          [
+            {
+              "node": "Super-summary",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Summary to HTML",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Concat Dialogs": {
+        "main": [
+          [
+            {
+              "node": "Dialogs to HTML",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Summary to HTML": {
+        "main": [
+          [
+            {
+              "node": "Merge PDF Data",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Dialogs to HTML": {
+        "main": [
+          [
+            {
+              "node": "Merge PDF Data",
+              "type": "main",
+              "index": 2
+            }
+          ]
+        ]
+      },
+      "List Major Topics": {
+        "main": [
+          [
+            {
+              "node": "Major Topics",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "List Minor Topics": {
+        "main": [
+          [
+            {
+              "node": "Minor Topics",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge PDF Data": {
+        "main": [
+          [
+            {
+              "node": "Create a pdf",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Major Topics": {
+        "main": [
+          [
+            {
+              "node": "Merge PDF Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Minor Topics": {
+        "main": [
+          [
+            {
+              "node": "Merge PDF Data",
+              "type": "main",
+              "index": 3
+            }
+          ]
+        ]
+      },
+      "Telegramify Markdown": {
+        "main": [
+          [
+            {
+              "node": "PROD Send a document",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Alexandra Ershova",
+    "name": null,
+    "description": null
+  },
+  "tags": []
+}
