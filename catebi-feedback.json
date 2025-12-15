@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-13T17:48:21.937Z",
+  "updatedAt": "2025-12-13T21:43:59.452Z",
   "createdAt": "2025-12-09T07:01:52.897Z",
   "id": "JUsbCQX9ptL9iGiv",
   "name": "Catebi Feedback",
@@ -768,13 +768,14 @@
     {
       "parameters": {
         "operation": "sendPhoto",
-        "chatId": "113754494",
+        "chatId": "-1001938190303",
         "binaryData": true,
         "binaryPropertyName": "chart",
         "additionalFields": {
           "caption": "={{ $node['Diff'].json.average_comment + '\\n' + $node['Diff'].json.responders_comment + '\\n\\nКомментарии:\\n'}} {{$json.concatenated_text_feedback ?? '(пусто)' }}",
           "fileName": "chart.png",
-          "parse_mode": "Markdown"
+          "parse_mode": "Markdown",
+          "message_thread_id": 354496
         }
       },
       "type": "n8n-nodes-base.telegram",
@@ -1245,8 +1246,8 @@
       }
     ]
   },
-  "versionId": "4128804e-0568-4839-95db-d0931d72e353",
-  "activeVersionId": "4128804e-0568-4839-95db-d0931d72e353",
+  "versionId": "2d280a08-cad6-4657-b6fb-4f08dd1b2066",
+  "activeVersionId": "2d280a08-cad6-4657-b6fb-4f08dd1b2066",
   "triggerCount": 3,
   "shared": [
     {
@@ -1258,9 +1259,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2025-12-12T20:16:54.499Z",
-    "createdAt": "2025-12-12T20:16:54.499Z",
-    "versionId": "4128804e-0568-4839-95db-d0931d72e353",
+    "updatedAt": "2025-12-13T21:43:59.456Z",
+    "createdAt": "2025-12-13T21:43:59.456Z",
+    "versionId": "2d280a08-cad6-4657-b6fb-4f08dd1b2066",
     "workflowId": "JUsbCQX9ptL9iGiv",
     "nodes": [
       {
@@ -2025,13 +2026,14 @@
       {
         "parameters": {
           "operation": "sendPhoto",
-          "chatId": "113754494",
+          "chatId": "-1001938190303",
           "binaryData": true,
           "binaryPropertyName": "chart",
           "additionalFields": {
             "caption": "={{ $node['Diff'].json.average_comment + '\\n' + $node['Diff'].json.responders_comment + '\\n\\nКомментарии:\\n'}} {{$json.concatenated_text_feedback ?? '(пусто)' }}",
             "fileName": "chart.png",
-            "parse_mode": "Markdown"
+            "parse_mode": "Markdown",
+            "message_thread_id": 354496
           }
         },
         "type": "n8n-nodes-base.telegram",
