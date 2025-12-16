@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-08T09:10:24.000Z",
+  "updatedAt": "2025-12-16T07:23:54.573Z",
   "createdAt": "2025-11-25T08:06:45.871Z",
   "id": "UDxhsnvTD0I8eqAW",
   "name": "Instagram downloader",
@@ -185,7 +185,7 @@
       "parameters": {
         "mode": "runOnceForEachItem",
         "language": "pythonNative",
-        "pythonCode": "import re\n\n# Input from previous node (Telegram Trigger)\ntext = _item['json']['message']['text']\n\npattern = r\"(https?:\\/\\/(?:www\\.)?(?:instagram\\.com|instagr\\.am)\\/[^\\s]+)\"\nmatch = re.search(pattern, text, re.IGNORECASE)\n\nif not match:\n    return [{\n        \"hasInstagramUrl\": False,\n        \"originalText\": text,\n    }]\n\nreturn [{\n    \"hasInstagramUrl\": True,\n    \"instagramUrl\": match.group(0).split('?')[0],\n    \"originalText\": text,\n}]\n"
+        "pythonCode": "# Input from previous node (Telegram Trigger)\n# return _item['json']\ntext = _item['json']['message']['text']\n\ndomains = (\n    \"https://instagram.com/\",\n    \"http://instagram.com/\",\n    \"https://www.instagram.com/\",\n    \"http://www.instagram.com/\",\n    \"https://instagr.am/\",\n    \"http://instagr.am/\",\n)\n\ninstagram_url = None\n\nfor token in text.split():\n    for domain in domains:\n        if token.lower().startswith(domain):\n            instagram_url = token.split(\"?\")[0]\n            break\n    if instagram_url:\n        break\n\nif not instagram_url:\n    return [{\n        \"hasInstagramUrl\": False,\n        \"originalText\": text,\n    }]\n\nreturn {\n    \"json\": {\n        \"hasInstagramUrl\": instagram_url is not None,\n        \"instagramUrl\": instagram_url,\n        \"originalText\": text,\n    }\n}\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -272,9 +272,77 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {},
-  "versionId": "0cc1adef-9d2d-42b8-825e-87e2d209e3e3",
-  "activeVersionId": "0cc1adef-9d2d-42b8-825e-87e2d209e3e3",
+  "pinData": {
+    "Telegram Trigger": [
+      {
+        "json": {
+          "update_id": 614267324,
+          "message": {
+            "message_id": 473708,
+            "from": {
+              "id": 380228655,
+              "is_bot": false,
+              "first_name": "KS",
+              "username": "kkkkkkksssssss",
+              "is_premium": true
+            },
+            "chat": {
+              "id": -1001938190303,
+              "title": "CATEBI. Рабочий чат",
+              "is_forum": true,
+              "type": "supergroup"
+            },
+            "date": 1765804928,
+            "forward_origin": {
+              "type": "user",
+              "sender_user": {
+                "id": 819433760,
+                "is_bot": false,
+                "first_name": "жыбий рыр",
+                "username": "nimerenavi",
+                "is_premium": true
+              },
+              "date": 1765804892
+            },
+            "forward_from": {
+              "id": 819433760,
+              "is_bot": false,
+              "first_name": "жыбий рыр",
+              "username": "nimerenavi",
+              "is_premium": true
+            },
+            "forward_date": 1765804892,
+            "text": "Здравствуйте! \nК сожалению я не работаю вне компании и не занимаюсь ремонтами. У нас полный цикл, проектирование, монтаж.\n\nМожете попробовать написать Евгению\nhttps://t.me/Evgenij_Kirsanov\n\nИли в чат электриков \nhttps://t.me/raguzoff_elektro\n\nИзвините :(\nЕсли вам нужна будет электрика с нуля в офисе\\квартире\\заводе, можете написать нам в инстаграм\nhttps://www.instagram.com/engineer.nota.tech/\nОтветит Алексей",
+            "entities": [
+              {
+                "offset": 159,
+                "length": 29,
+                "type": "url"
+              },
+              {
+                "offset": 212,
+                "length": 29,
+                "type": "url"
+              },
+              {
+                "offset": 350,
+                "length": 45,
+                "type": "url"
+              }
+            ],
+            "link_preview_options": {
+              "is_disabled": true
+            }
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "8db46353-be91-42b8-afba-4140ec5782bb",
+  "activeVersionId": "8db46353-be91-42b8-afba-4140ec5782bb",
   "triggerCount": 1,
   "shared": [
     {
@@ -286,9 +354,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2025-12-08T09:10:24.682Z",
-    "createdAt": "2025-12-08T09:10:24.682Z",
-    "versionId": "0cc1adef-9d2d-42b8-825e-87e2d209e3e3",
+    "updatedAt": "2025-12-16T07:24:07.000Z",
+    "createdAt": "2025-12-16T07:23:54.580Z",
+    "versionId": "8db46353-be91-42b8-afba-4140ec5782bb",
     "workflowId": "UDxhsnvTD0I8eqAW",
     "nodes": [
       {
@@ -470,7 +538,7 @@
         "parameters": {
           "mode": "runOnceForEachItem",
           "language": "pythonNative",
-          "pythonCode": "import re\n\n# Input from previous node (Telegram Trigger)\ntext = _item['json']['message']['text']\n\npattern = r\"(https?:\\/\\/(?:www\\.)?(?:instagram\\.com|instagr\\.am)\\/[^\\s]+)\"\nmatch = re.search(pattern, text, re.IGNORECASE)\n\nif not match:\n    return [{\n        \"hasInstagramUrl\": False,\n        \"originalText\": text,\n    }]\n\nreturn [{\n    \"hasInstagramUrl\": True,\n    \"instagramUrl\": match.group(0).split('?')[0],\n    \"originalText\": text,\n}]\n"
+          "pythonCode": "# Input from previous node (Telegram Trigger)\n# return _item['json']\ntext = _item['json']['message']['text']\n\ndomains = (\n    \"https://instagram.com/\",\n    \"http://instagram.com/\",\n    \"https://www.instagram.com/\",\n    \"http://www.instagram.com/\",\n    \"https://instagr.am/\",\n    \"http://instagr.am/\",\n)\n\ninstagram_url = None\n\nfor token in text.split():\n    for domain in domains:\n        if token.lower().startswith(domain):\n            instagram_url = token.split(\"?\")[0]\n            break\n    if instagram_url:\n        break\n\nif not instagram_url:\n    return [{\n        \"hasInstagramUrl\": False,\n        \"originalText\": text,\n    }]\n\nreturn {\n    \"json\": {\n        \"hasInstagramUrl\": instagram_url is not None,\n        \"instagramUrl\": instagram_url,\n        \"originalText\": text,\n    }\n}\n"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -551,8 +619,8 @@
       }
     },
     "authors": "Alexandra Ershova",
-    "name": null,
-    "description": null
+    "name": "Version 8db46353",
+    "description": "removed re module"
   },
   "tags": []
 }
