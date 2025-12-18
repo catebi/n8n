@@ -1,0 +1,499 @@
+{
+  "updatedAt": "2025-12-18T19:44:06.936Z",
+  "createdAt": "2025-12-18T19:44:06.936Z",
+  "id": "u278JKmdXYPNHigd",
+  "name": "Free PDF Generator in n8n – No External Libraries or Paid Services",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1",
+          "cachedResultName": "gpt-4.1"
+        },
+        "options": {}
+      },
+      "id": "334ed026-cd65-4389-9fb2-222c3bb4f9fc",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        1392,
+        864
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "name": "={{ $json.name }}.pdf",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "1IPcko8bzogO3W4mxhrW2Q017QA0Lc5MI",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1IPcko8bzogO3W4mxhrW2Q017QA0Lc5MI",
+          "cachedResultName": "SmartSales"
+        },
+        "options": {}
+      },
+      "id": "f43a9aff-78d9-43a0-919f-0868e0274f66",
+      "name": "Archiving PDF File",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        2368,
+        640
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.id }}"
+        },
+        "options": {}
+      },
+      "id": "e3db26db-b3e7-495c-a9a7-babf91d7d6d6",
+      "name": "Download attachment file",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        2592,
+        640
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "uploadType",
+              "value": "multipart"
+            },
+            {
+              "name": "supportsAllDrives",
+              "value": "true"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "boundary",
+              "value": "foo_bar_baz"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "multipart/related; boundary=foo_bar_baz",
+        "body": "=--foo_bar_baz\nContent-Type: application/json; charset=UTF-8\n\n{\n  \"name\": \"{{ $json.Today }}\",\n  \"mimeType\": \"application/vnd.google-apps.document\",\n  \"parents\": [\"{{ $json['Drive Folder ID'] }}\"]\n}\n\n--foo_bar_baz\nContent-Type: text/markdown; charset=UTF-8\n\n{{ $('Generate sample markdown document').item.json.output }}\n\n--foo_bar_baz--",
+        "options": {}
+      },
+      "id": "9131bc01-6619-49a3-b41c-d54b3d36b0cc",
+      "name": "Create document file",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1920,
+        640
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.id }}"
+        },
+        "options": {
+          "googleFileConversion": {
+            "conversion": {
+              "docsToFormat": "application/pdf"
+            }
+          }
+        }
+      },
+      "id": "8aa03ae7-e1e9-402b-9c4e-da4ba9f23c99",
+      "name": "Convert document to PDF",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        2144,
+        640
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {},
+      "id": "ee2f15a2-c4b6-4e53-b42b-9c773f3250cc",
+      "name": "When clicking ‘Execute workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        1072,
+        640
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "file",
+        "options": {
+          "channelId": "C097VAKKPUP",
+          "fileName": "={{ $json.name }}",
+          "initialComment": "Formatted PDF file from markdown"
+        }
+      },
+      "id": "3ab64f20-3b3a-49e1-ace8-6c8a5f8c83ca",
+      "name": "Send message",
+      "type": "n8n-nodes-base.slack",
+      "position": [
+        2816,
+        640
+      ],
+      "webhookId": "524619ce-d662-428d-bb56-ea97e5366dec",
+      "typeVersion": 2.3
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a Markdown expert. Write a single sample document in Markdown format that demonstrates all major Markdown syntax.\nThe document should be well-organized and easy to follow, with each section labeled clearly.\n\nInclude examples for:\n\t1.\tHeadings (H1 to H6)\n\t2.\tParagraphs and line breaks\n\t3.\tBold, italic, bold italic, and strikethrough\n\t4.\tBlockquotes (single and nested)\n\t5.\tLists: unordered, ordered, nested lists, and task lists\n\t6.\tLinks: inline, reference-style, and automatic links\n\t7.\tImages: inline and reference-style\n\t8.\tCode: inline code, fenced code blocks with language highlighting\n\t9.\tTables with alignment options\n\t10.\tHorizontal rules\n\t11.\tFootnotes\n\t12.\tEscaping special characters\n\t13.\tEmoji usage (if supported)\n\t14.\tHTML elements inside Markdown (example: <details> or <sup>)\n\nAt the top, add a short title and description of the document.\nUse clear section headings and short explanations before each example.\nMake sure the output is entirely valid Markdown so it can be rendered directly without edits.\n\nOutput only the Markdown content, nothing else.",
+        "options": {
+          "systemMessage": ""
+        }
+      },
+      "id": "4f350268-23c2-4adc-b30f-c495b91a85a8",
+      "name": "Generate sample markdown document",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        1296,
+        640
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1ff0b9a4-7d60-44ec-b047-e49252f1ace9",
+              "name": "Drive Folder ID",
+              "type": "string",
+              "value": "1IPcko8bzogO3W4mxhrW2Q017QA0Lc5MI"
+            },
+            {
+              "id": "d64a1ac4-15db-4c84-a1db-fbd6b48084f5",
+              "name": "Today",
+              "type": "string",
+              "value": "={{ $now.format(\"ddMMyyyyhhmmss\") }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "012f1866-3489-48c0-b82f-bed1d33f0348",
+      "name": "Configure Google Drive Folder ",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1696,
+        640
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "content": "# Free PDF Generator in n8n – No External Libraries or Paid Services\n> A 100% free n8n workflow for generating professionally formatted PDFs without relying on external libraries or paid converters. It uses OpenAI to create Markdown content, Google Docs to format and convert to PDF, and integrates with Google Drive and Slack for archiving and sharing, ideal for reports, BRDs, proposals, or any document you need directly inside n8n.\n### Watch the demo video below:\n[![Watch the video](https://wisestackai.s3.ap-southeast-1.amazonaws.com/Presentation1+(1).jpg)](https://www.youtube.com/watch?v=BB32RPQYI94)\n\n## **Who’s it for**\n- Teams that need **auto-generated documents** (reports, guides, checklists) in PDF format.\n- Operations or enablement teams who want files **archived in Google Drive** and **shared in Slack** automatically.\n- Anyone experimenting with **LLM-powered document generation** integrated into business workflows.\n\n## **How it works / What it does**\n1. **Manual trigger** starts the workflow.\n2. **LLM generates** a sample Markdown document (via OpenAI Chat Model).\n3. **Google Drive folder** is configured for storage.\n4. **Google Doc is created** from the generated Markdown content.\n5. **Document is exported to PDF** using Google Drive. ([Sample PDF generated from comprehensive markdown](https://wisestackai.s3.ap-southeast-1.amazonaws.com/12082025052957.pdf))\n6. **PDF is archived** in a designated Drive folder.\n7. **Archived PDF is downloaded** for sharing.\n8. **Slack message is sent** with the PDF attached.\n\n## **How to set up**\n1. **Add nodes in sequence**:\n   - Manual Trigger\n   - OpenAI Chat Model (prompt to generate sample Markdown)\n   - Set/Manual input for Google Drive folder ID(s)\n   - HTTP Request or Google Drive Upload (convert to Google Docs)\n   - Google Drive Download (PDF export)\n   - Google Drive Upload (archive PDF)\n   - Google Drive Download (fetch archived file)\n   - Slack Upload (send message with attachment)\n2. **Configure credentials** for OpenAI, Google Drive, and Slack.\n3. **Map output fields**:\n   - `data.markdown` → Google Docs creation\n   - `docId` → PDF export\n   - `fileId` → Slack upload\n4. **Test run** to ensure PDF is generated, archived, and posted to Slack.\n\n## **Requirements**\n- **Credentials**:\n  - OpenAI API key (or compatible LLM provider)\n  - Google Drive (OAuth2) with read/write permissions\n  - Slack bot token with `files:write` permission\n- **Access**:\n  - Write access to target Google Drive folders\n  - Slack bot invited to the target channel\n\n## **How to customize the workflow**\n- **Change the prompt** in the OpenAI Chat Model to generate different types of content (reports, meeting notes, checklists).\n- **Automate triggering**:\n  - Replace Manual Trigger with Cron for scheduled document generation.\n  - Use Webhook Trigger to run on-demand from external apps.\n- **Modify storage logic**:\n  - Save both `.md` and `.pdf` versions in Google Drive.\n  - Use separate folders for drafts vs. final versions.\n- **Enhance distribution**:\n  - Send PDFs to multiple Slack channels or via email.\n  - Integrate with project management tools for automated task creation.",
+        "height": 1472,
+        "width": 912
+      },
+      "id": "8bda04b7-60db-4442-85cc-7a5adb511d40",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "**Trigger the Workflow**  \n   Start the process manually or replace with another trigger (e.g., Cron or Webhook) to run automatically.",
+        "height": 480,
+        "width": 288,
+        "color": 4
+      },
+      "id": "64f00496-cdcf-4c1e-8be1-c57cf3908662",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        944,
+        512
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "**Generate Markdown Content with AI**  \n   Use the OpenAI Chat Model to create a structured Markdown document based on your prompt, perfect for reports, BRDs, proposals, or meeting notes.",
+        "height": 480,
+        "width": 352,
+        "color": 4
+      },
+      "id": "f6568705-be28-4e5b-85c1-1de9b1767fa1",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1264,
+        512
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "**Create Google Doc from Markdown**  \n   Upload the generated Markdown content to Google Drive and convert it into a Google Doc for proper formatting.\n\n[Sample PDF generated from comprehensive markdown](https://wisestackai.s3.ap-southeast-1.amazonaws.com/12082025052957.pdf)",
+        "height": 480,
+        "width": 432,
+        "color": 4
+      },
+      "id": "6c2b767d-40e7-4f54-be95-7b967db091c4",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1648,
+        512
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "**Export and Archive as PDF**  \n   Convert the Google Doc to a PDF file, then upload it to your chosen Google Drive folder for storage and record-keeping.",
+        "height": 480,
+        "width": 384,
+        "color": 4
+      },
+      "id": "a6020a17-43b1-4928-b6a5-1e401bbe543f",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2112,
+        512
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "**Share the PDF via Slack**  \n   Download the archived PDF and post it to a Slack channel with a message and links for quick access.",
+        "height": 480,
+        "width": 400,
+        "color": 4
+      },
+      "id": "d3db8235-6f6f-4e0f-bbe7-0b929ebd3bee",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2544,
+        512
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "![Alt text](https://wisestackai.s3.ap-southeast-1.amazonaws.com/pdf-1.png \"Optional title text\")",
+        "height": 528,
+        "width": 768
+      },
+      "id": "54313fc8-d826-4933-a586-c155bf6a68b6",
+      "name": "Sticky Note7",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3024,
+        480
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "![Alt text](https://wisestackai.s3.ap-southeast-1.amazonaws.com/pdf-2.png \"Optional title text\")",
+        "height": 992,
+        "width": 768
+      },
+      "id": "ad095792-79cf-4407-afd6-c813b77934c8",
+      "name": "Sticky Note8",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        976,
+        1072
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "![Alt text](https://wisestackai.s3.ap-southeast-1.amazonaws.com/pdf-3.png \"Optional title text\")",
+        "height": 992,
+        "width": 768
+      },
+      "id": "3416adc6-3c2a-4cee-8ddc-de4d9cda1eef",
+      "name": "Sticky Note9",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1760,
+        1072
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "![Alt text](https://wisestackai.s3.ap-southeast-1.amazonaws.com/pdf-4.png \"Optional title text\")",
+        "height": 992,
+        "width": 768
+      },
+      "id": "8d0613a0-7534-4e8d-9764-b60b3b7109d5",
+      "name": "Sticky Note10",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2544,
+        1072
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "![Alt text](https://wisestackai.s3.ap-southeast-1.amazonaws.com/pdf-5.png \"Optional title text\")",
+        "height": 992,
+        "width": 768
+      },
+      "id": "12690d83-4235-41af-b8bf-dfe31140b6fd",
+      "name": "Sticky Note11",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3328,
+        1072
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Generate sample markdown document",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Archiving PDF File": {
+      "main": [
+        [
+          {
+            "node": "Download attachment file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create document file": {
+      "main": [
+        [
+          {
+            "node": "Convert document to PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert document to PDF": {
+      "main": [
+        [
+          {
+            "node": "Archiving PDF File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download attachment file": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Configure Google Drive Folder ": {
+      "main": [
+        [
+          {
+            "node": "Create document file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate sample markdown document": {
+      "main": [
+        [
+          {
+            "node": "Configure Google Drive Folder ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Generate sample markdown document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "54416f76-ad9f-4a66-a3d3-4fcb132f02e2",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-12-18T19:44:06.951Z",
+      "createdAt": "2025-12-18T19:44:06.951Z",
+      "role": "workflow:owner",
+      "workflowId": "u278JKmdXYPNHigd",
+      "projectId": "jnu5GnxkoXUPZEif"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
