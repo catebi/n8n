@@ -1,30 +1,11 @@
 {
-  "updatedAt": "2025-12-18T19:44:06.936Z",
+  "updatedAt": "2025-12-19T18:49:36.860Z",
   "createdAt": "2025-12-18T19:44:06.936Z",
   "id": "u278JKmdXYPNHigd",
   "name": "Free PDF Generator in n8n – No External Libraries or Paid Services",
   "active": false,
   "isArchived": false,
   "nodes": [
-    {
-      "parameters": {
-        "model": {
-          "__rl": true,
-          "mode": "list",
-          "value": "gpt-4.1",
-          "cachedResultName": "gpt-4.1"
-        },
-        "options": {}
-      },
-      "id": "334ed026-cd65-4389-9fb2-222c3bb4f9fc",
-      "name": "OpenAI Chat Model",
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "position": [
-        1392,
-        864
-      ],
-      "typeVersion": 1.2
-    },
     {
       "parameters": {
         "name": "={{ $json.name }}.pdf",
@@ -49,7 +30,13 @@
         2368,
         640
       ],
-      "typeVersion": 3
+      "typeVersion": 3,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "uz1hcewHG8nZvkk3",
+          "name": "Google Drive account"
+        }
+      }
     },
     {
       "parameters": {
@@ -68,7 +55,13 @@
         2592,
         640
       ],
-      "typeVersion": 3
+      "typeVersion": 3,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "uz1hcewHG8nZvkk3",
+          "name": "Google Drive account"
+        }
+      }
     },
     {
       "parameters": {
@@ -111,7 +104,13 @@
         1920,
         640
       ],
-      "typeVersion": 4.2
+      "typeVersion": 4.2,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "uz1hcewHG8nZvkk3",
+          "name": "Google Drive account"
+        }
+      }
     },
     {
       "parameters": {
@@ -136,7 +135,13 @@
         2144,
         640
       ],
-      "typeVersion": 3
+      "typeVersion": 3,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "uz1hcewHG8nZvkk3",
+          "name": "Google Drive account"
+        }
+      }
     },
     {
       "parameters": {},
@@ -194,7 +199,7 @@
               "id": "1ff0b9a4-7d60-44ec-b047-e49252f1ace9",
               "name": "Drive Folder ID",
               "type": "string",
-              "value": "1IPcko8bzogO3W4mxhrW2Q017QA0Lc5MI"
+              "value": "1YwyZ8bhbRUBu97jvzTKfFVE3oxmstUUo"
             },
             {
               "id": "d64a1ac4-15db-4c84-a1db-fbd6b48084f5",
@@ -384,20 +389,29 @@
         1072
       ],
       "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1168,
+        848
+      ],
+      "id": "3c497780-94cc-4f15-971b-42acdbd51f78",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "82kFMSuErz4YBXNW",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
     }
   ],
   "connections": {
-    "OpenAI Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "Generate sample markdown document",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Archiving PDF File": {
       "main": [
         [
@@ -474,6 +488,17 @@
           }
         ]
       ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Generate sample markdown document",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -482,7 +507,7 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "54416f76-ad9f-4a66-a3d3-4fcb132f02e2",
+  "versionId": "d7bac24d-9fa8-4a68-8b9a-83399f8f26f8",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [
