@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-18T19:43:45.401Z",
+  "updatedAt": "2025-12-18T20:10:10.075Z",
   "createdAt": "2025-12-18T07:09:13.049Z",
   "id": "xJDmCc9db0iDa99P",
   "name": "SMM Post Ideas",
@@ -187,40 +187,75 @@
     },
     {
       "parameters": {
-        "operation": "createFromText",
-        "content": "={{ $json.output.text }}",
-        "name": "=Media Summary from {{ $node['Schedule Trigger'].json['timestamp'].toDateTime().format('yyyy-MM-dd') }}",
-        "driveId": {
-          "__rl": true,
-          "mode": "list",
-          "value": "My Drive"
+        "method": "POST",
+        "url": "https://www.googleapis.com/upload/drive/v3/files",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "uploadType",
+              "value": "multipart"
+            },
+            {
+              "name": "supportsAllDrives",
+              "value": "true"
+            }
+          ]
         },
-        "folderId": {
-          "__rl": true,
-          "value": "1YwyZ8bhbRUBu97jvzTKfFVE3oxmstUUo",
-          "mode": "list",
-          "cachedResultName": "Chat Updates",
-          "cachedResultUrl": "https://drive.google.com/drive/folders/1YwyZ8bhbRUBu97jvzTKfFVE3oxmstUUo"
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "boundary",
+              "value": "foo_bar_baz"
+            }
+          ]
         },
-        "options": {
-          "useContentAsIndexableText": true,
-          "convertToGoogleDocument": true
-        }
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "multipart/related; boundary=foo_bar_baz",
+        "body": "=--foo_bar_baz\n\nContent-Type: application/json; charset=UTF-8  \n{   \"name\": \"Media Summary from {{ $today.minus(3, 'days').format('yyyy-MM-dd') }}\",   \n\"mimeType\": \"application/vnd.google-apps.document\",  \n\"parents\": [\"{{ $json['Drive Folder ID'] }}\"] }\n\n--foo_bar_baz \n\nContent-Type: text/markdown; charset=UTF-8  \n\n{{ $('Topic Extraction').item.json.output.text }} \n\n--foo_bar_baz--",
+        "options": {}
       },
-      "type": "n8n-nodes-base.googleDrive",
-      "typeVersion": 3,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
       "position": [
-        1488,
-        -208
+        1584,
+        -144
       ],
-      "id": "1974d2ec-15f2-4fcf-8909-d12aa2120dec",
-      "name": "Create file from text",
+      "id": "36a25dba-2deb-461a-91ff-1044eed8d87c",
+      "name": "HTTP Request",
       "credentials": {
         "googleDriveOAuth2Api": {
           "id": "uz1hcewHG8nZvkk3",
           "name": "Google Drive account"
         }
       }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "57b40f54-55db-4e9a-87a6-e123e5174541",
+              "name": "Drive Folder ID",
+              "value": "1YwyZ8bhbRUBu97jvzTKfFVE3oxmstUUo",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1280,
+        -128
+      ],
+      "id": "c60d560e-f2a8-4804-afe0-fb34cd035cb4",
+      "name": "Drive Folder ID"
     }
   ],
   "connections": {
@@ -299,7 +334,7 @@
             "index": 0
           },
           {
-            "node": "Create file from text",
+            "node": "Drive Folder ID",
             "type": "main",
             "index": 0
           }
@@ -309,6 +344,22 @@
     "Super-summary": {
       "main": [
         []
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        []
+      ]
+    },
+    "Drive Folder ID": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
@@ -320,7 +371,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "5f7cacd7-eef4-4cf2-b64a-efb001f1fd34",
+  "versionId": "1cf0712f-01be-4053-83fb-cd235031a9f1",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [
