@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-13T21:43:59.452Z",
+  "updatedAt": "2025-12-23T20:03:21.918Z",
   "createdAt": "2025-12-09T07:01:52.897Z",
   "id": "JUsbCQX9ptL9iGiv",
   "name": "Catebi Feedback",
@@ -227,7 +227,7 @@
     {
       "parameters": {
         "chatId": "-1001938190303",
-        "text": "Как вам сегодня волонтёрилось?",
+        "text": "Как вам сегодня волонтёрилось?\n\nНапишите анонимный отзыв мне в личку или выберите оценку ниже:",
         "replyMarkup": "inlineKeyboard",
         "inlineKeyboard": {
           "rows": [
@@ -269,7 +269,9 @@
             }
           ]
         },
-        "additionalFields": {}
+        "additionalFields": {
+          "appendAttribution": false
+        }
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
@@ -1246,8 +1248,8 @@
       }
     ]
   },
-  "versionId": "2d280a08-cad6-4657-b6fb-4f08dd1b2066",
-  "activeVersionId": "2d280a08-cad6-4657-b6fb-4f08dd1b2066",
+  "versionId": "542445c6-5f2d-4053-a2be-e1604b4b27a3",
+  "activeVersionId": "542445c6-5f2d-4053-a2be-e1604b4b27a3",
   "triggerCount": 3,
   "shared": [
     {
@@ -1259,9 +1261,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2025-12-13T21:43:59.456Z",
-    "createdAt": "2025-12-13T21:43:59.456Z",
-    "versionId": "2d280a08-cad6-4657-b6fb-4f08dd1b2066",
+    "updatedAt": "2025-12-23T20:03:40.000Z",
+    "createdAt": "2025-12-23T20:03:21.961Z",
+    "versionId": "542445c6-5f2d-4053-a2be-e1604b4b27a3",
     "workflowId": "JUsbCQX9ptL9iGiv",
     "nodes": [
       {
@@ -1485,7 +1487,7 @@
       {
         "parameters": {
           "chatId": "-1001938190303",
-          "text": "Как вам сегодня волонтёрилось?",
+          "text": "Как вам сегодня волонтёрилось?\n\nНапишите анонимный отзыв мне в личку или выберите оценку ниже:",
           "replyMarkup": "inlineKeyboard",
           "inlineKeyboard": {
             "rows": [
@@ -1527,7 +1529,9 @@
               }
             ]
           },
-          "additionalFields": {}
+          "additionalFields": {
+            "appendAttribution": false
+          }
         },
         "type": "n8n-nodes-base.telegram",
         "typeVersion": 1.2,
@@ -2381,8 +2385,8 @@
       }
     },
     "authors": "Alexandra Ershova",
-    "name": null,
-    "description": null
+    "name": "Version 542445c6",
+    "description": "added text feedback prompt"
   },
   "tags": []
 }
