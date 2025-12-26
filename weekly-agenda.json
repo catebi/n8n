@@ -1,9 +1,9 @@
 {
-  "updatedAt": "2025-12-25T11:52:28.684Z",
+  "updatedAt": "2025-12-26T06:21:14.462Z",
   "createdAt": "2025-12-25T11:47:06.544Z",
   "id": "j1yNwymKYw4gr4lh",
   "name": "Weekly Agenda",
-  "active": false,
+  "active": true,
   "isArchived": false,
   "nodes": [
     {
@@ -117,7 +117,13 @@
         228
       ],
       "id": "882bcf77-566e-4a6f-a6bd-a36e989044c8",
-      "name": "Google Gemini Chat Model"
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "82kFMSuErz4YBXNW",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
     },
     {
       "parameters": {
@@ -131,7 +137,13 @@
         376
       ],
       "id": "179be95c-9caa-4929-b13e-faeb2103e237",
-      "name": "Google Gemini Chat Model1"
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "82kFMSuErz4YBXNW",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
     },
     {
       "parameters": {
@@ -434,8 +446,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "20e31da3-a34c-4787-992e-8bd36cf5dc6a",
-  "activeVersionId": null,
+  "versionId": "08c87a38-f1f1-41bc-acf3-08946acfc299",
+  "activeVersionId": "08c87a38-f1f1-41bc-acf3-08946acfc299",
   "triggerCount": 1,
   "shared": [
     {
@@ -446,6 +458,437 @@
       "projectId": "jnu5GnxkoXUPZEif"
     }
   ],
-  "activeVersion": null,
+  "activeVersion": {
+    "updatedAt": "2025-12-26T06:21:17.000Z",
+    "createdAt": "2025-12-26T06:21:14.465Z",
+    "versionId": "08c87a38-f1f1-41bc-acf3-08946acfc299",
+    "workflowId": "j1yNwymKYw4gr4lh",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "weeks",
+                "triggerAtDay": [
+                  4
+                ],
+                "triggerAtHour": 16
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          0,
+          4
+        ],
+        "id": "3b270ce3-9b41-4060-b8ee-55521df6db81",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "s5U6BsVmCURL1OFC",
+            "mode": "list",
+            "cachedResultName": "catebi_chat_summaries",
+            "cachedResultUrl": "/projects/jnu5GnxkoXUPZEif/datatables/s5U6BsVmCURL1OFC"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "summary_date",
+                "condition": "gte",
+                "keyValue": "={{ $today.startOf('day').minus(6, 'days') }}"
+              },
+              {
+                "keyName": "type",
+                "keyValue": "daily"
+              }
+            ]
+          },
+          "returnAll": true
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1,
+        "position": [
+          224,
+          4
+        ],
+        "id": "1cbd97c2-f3d3-449c-b04a-33fa1c8fcef4",
+        "name": "Get row(s)"
+      },
+      {
+        "parameters": {
+          "sortFieldsUi": {
+            "sortField": [
+              {
+                "fieldName": "summary_date"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.sort",
+        "typeVersion": 1,
+        "position": [
+          448,
+          4
+        ],
+        "id": "7fe4bd50-dc19-4046-84b6-eb37b8e68ca5",
+        "name": "Sort"
+      },
+      {
+        "parameters": {
+          "fieldsToSummarize": {
+            "values": [
+              {
+                "aggregation": "concatenate",
+                "field": "text",
+                "separateBy": "\n"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.summarize",
+        "typeVersion": 1.1,
+        "position": [
+          672,
+          4
+        ],
+        "id": "06c1560f-5db3-42e8-a15f-ca535c669210",
+        "name": "Summarize"
+      },
+      {
+        "parameters": {
+          "modelName": "models/gemini-3-pro-preview",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          968,
+          228
+        ],
+        "id": "882bcf77-566e-4a6f-a6bd-a36e989044c8",
+        "name": "Google Gemini Chat Model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "82kFMSuErz4YBXNW",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "modelName": "models/gemini-3-pro-preview",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          1544,
+          376
+        ],
+        "id": "179be95c-9caa-4929-b13e-faeb2103e237",
+        "name": "Google Gemini Chat Model1",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "82kFMSuErz4YBXNW",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "chunkSize": 2000,
+          "options": {
+            "summarizationMethodAndPrompts": {
+              "values": {
+                "summarizationMethod": "stuff",
+                "prompt": "Extract topics with concise summaries on each out of the following, write in Russian, then select topics that should be brought up on a weekly TNR meeting:\n- unanswered questions from previous days\n- emergencies\n- plans\n- changes in organization structure and/or operations, especially those relevant to requestors\n- events organized by the organization\n- something that requires extra money\n- change of laws and regulations in Georgia related to pets\n\nreturn markdown that will be rendered nicely if written in a file\ndon't use emoji\ndon't use the word приют to describe TNR organization, just say TNR\n\n\"{text}\"\n\n\nTOPICS FOR A WEEKLY MEETING:"
+              }
+            },
+            "batching": {
+              "batchSize": 5
+            }
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainSummarization",
+        "typeVersion": 2.1,
+        "position": [
+          896,
+          4
+        ],
+        "id": "8632d043-cc6e-4d7d-988d-b378b89f1c34",
+        "name": "Topic Extraction"
+      },
+      {
+        "parameters": {
+          "options": {
+            "summarizationMethodAndPrompts": {
+              "values": {
+                "summarizationMethod": "stuff",
+                "prompt": "Select the most urgent and/or interesting topics from the following, try keeping the output under 200 tokens, write in Russian:\n\n\n\"{text}\"\n\nDon't refer to TNR organization as a shelter. КК refers to котоквартира -- an apartment where cats heal after castration. Don't escape @usernames with ``.\n\nCONCISE SUMMARY:"
+              }
+            }
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainSummarization",
+        "typeVersion": 2.1,
+        "position": [
+          1472,
+          152
+        ],
+        "id": "401e870c-1f64-49f8-bb51-7eacbb825d8d",
+        "name": "Super-summary"
+      },
+      {
+        "parameters": {
+          "htmlInput": "={{ $json.data }}"
+        },
+        "type": "@custom-js/n8n-nodes-pdf-toolkit.html2Pdf",
+        "typeVersion": 1,
+        "position": [
+          1536,
+          -144
+        ],
+        "id": "143c5a4e-a88f-4d87-80a5-3a76c2106452",
+        "name": "HTML to PDF",
+        "credentials": {
+          "customJsApi": {
+            "id": "lb3S0k0du5N7VUtS",
+            "name": "CustomJS account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "markdownToHtml",
+          "markdown": "={{ $json.output.text }}",
+          "options": {
+            "simplifiedAutoLink": true,
+            "excludeTrailingPunctuationFromURLs": true,
+            "headerLevelStart": 1,
+            "literalMidWordUnderscores": true,
+            "simpleLineBreaks": true,
+            "smartIndentationFix": true
+          }
+        },
+        "type": "n8n-nodes-base.markdown",
+        "typeVersion": 1,
+        "position": [
+          1248,
+          -144
+        ],
+        "id": "a36e6666-59a7-4e95-ac8e-fc196c7eab43",
+        "name": "Markdown"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineByPosition",
+          "options": {
+            "includeUnpaired": true
+          }
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          1824,
+          4
+        ],
+        "id": "c23ac166-0d65-4348-adbf-a0876ff4c791",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "markdownText": "={{ $json.output.text }}",
+          "unsupportedTagsStrategy": "keep"
+        },
+        "type": "@aotoki/n8n-nodes-telegramify-markdown.telegramifyMarkdown",
+        "typeVersion": 1,
+        "position": [
+          2048,
+          4
+        ],
+        "id": "52ce1af2-addc-423f-a767-f1be9ab083d1",
+        "name": "Telegramify Markdown"
+      },
+      {
+        "parameters": {
+          "operation": "sendDocument",
+          "chatId": "113754494",
+          "binaryData": true,
+          "additionalFields": {
+            "caption": "=*Адженда для викли*\n\n{{ $json.markdownText }}",
+            "fileName": "=agenda-{{ $today.format('yyyy-MM-dd') }}.pdf",
+            "parse_mode": "MarkdownV2"
+          }
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          2272,
+          4
+        ],
+        "id": "68280102-7266-46e6-87d7-38a71be025c5",
+        "name": "Send agenda to the head",
+        "webhookId": "f339ed95-1b12-4790-8f0b-55c06a16afc5",
+        "credentials": {
+          "telegramApi": {
+            "id": "tcX20TpSwtOgHBGq",
+            "name": "Peredast"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s)": {
+        "main": [
+          [
+            {
+              "node": "Sort",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Sort": {
+        "main": [
+          [
+            {
+              "node": "Summarize",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Summarize": {
+        "main": [
+          [
+            {
+              "node": "Topic Extraction",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Topic Extraction",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model1": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Super-summary",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Topic Extraction": {
+        "main": [
+          [
+            {
+              "node": "Super-summary",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Markdown",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Super-summary": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Markdown": {
+        "main": [
+          [
+            {
+              "node": "HTML to PDF",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTML to PDF": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Telegramify Markdown",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Telegramify Markdown": {
+        "main": [
+          [
+            {
+              "node": "Send agenda to the head",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Alexandra Ershova",
+    "name": "Version 08c87a38",
+    "description": ""
+  },
   "tags": []
 }
