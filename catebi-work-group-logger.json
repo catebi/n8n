@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-13T17:48:27.884Z",
+  "updatedAt": "2025-12-26T16:54:48.724Z",
   "createdAt": "2025-11-28T05:51:29.120Z",
   "id": "ruk1fJ3VKzawxKOD",
   "name": "Catebi Work Group Logger",
@@ -19,7 +19,7 @@
       "typeVersion": 1.2,
       "position": [
         0,
-        0
+        -16
       ],
       "id": "6f9d9102-407a-4a94-aa08-abe84e0bb13f",
       "name": "Telegram Trigger",
@@ -138,7 +138,7 @@
       "typeVersion": 2.6,
       "position": [
         224,
-        0
+        -16
       ],
       "id": "b15c2aad-4f38-4c79-942b-16a40d55294b",
       "name": "Upsert chat",
@@ -267,7 +267,7 @@
       "typeVersion": 2.6,
       "position": [
         448,
-        0
+        -16
       ],
       "id": "ca25408e-5936-4876-908a-847bd73d2295",
       "name": "Upsert user",
@@ -378,8 +378,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        832,
-        0
+        672,
+        -16
       ],
       "id": "2197de9c-3dc0-4d5e-bc6b-58516cc45788",
       "name": "Insert topic",
@@ -426,7 +426,7 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        1152,
+        896,
         -16
       ],
       "id": "d7fed031-b699-48f7-93b2-997ae4efd4f2",
@@ -593,8 +593,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        1776,
-        0
+        1120,
+        -16
       ],
       "id": "e228435c-6e11-4f14-8d50-c444d41bea9c",
       "name": "Insert message",
@@ -705,7 +705,7 @@
       }
     ]
   },
-  "versionId": "d30565e1-e1b0-47e4-b265-35e20d52d1b7",
+  "versionId": "f3b3782a-8d36-4608-a2c3-5ddd8ec89e77",
   "activeVersionId": "d30565e1-e1b0-47e4-b265-35e20d52d1b7",
   "triggerCount": 1,
   "shared": [
