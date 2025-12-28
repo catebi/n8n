@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-23T20:03:21.918Z",
+  "updatedAt": "2025-12-27T20:07:00.515Z",
   "createdAt": "2025-12-09T07:01:52.897Z",
   "id": "JUsbCQX9ptL9iGiv",
   "name": "Catebi Feedback",
@@ -180,7 +180,7 @@
     },
     {
       "parameters": {
-        "chatId": "={{ $('Private Text Feedback').item.json.message.chat.id }}",
+        "chatId": "={{ $node['Evaluation'].json.message.chat.id }}",
         "text": "Спасибо большое за обратную связь!",
         "additionalFields": {}
       },
@@ -195,8 +195,8 @@
       "webhookId": "ef11edb8-f4e0-4c59-b5f5-a7682bf28f63",
       "credentials": {
         "telegramApi": {
-          "id": "zXO69l0C0QyO3V7k",
-          "name": "Telegram account 2"
+          "id": "tcX20TpSwtOgHBGq",
+          "name": "Peredast"
         }
       }
     },
@@ -326,7 +326,7 @@
     {
       "parameters": {
         "resource": "callback",
-        "queryId": "={{ $('Evaluation').item.json.callback_query.id }}",
+        "queryId": "={{ $node['Evaluation'].json.callback_query.id }}",
         "additionalFields": {
           "show_alert": true,
           "text": "Спасибо за ответ!"
@@ -1142,83 +1142,6 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {
-    "Evaluation": [
-      {
-        "json": {
-          "update_id": 19974521,
-          "callback_query": {
-            "id": "3237476083395397779",
-            "from": {
-              "id": 753783640,
-              "is_bot": false,
-              "first_name": "Mariam",
-              "last_name": "Avazashvili",
-              "username": "mariamvaza",
-              "language_code": "ru"
-            },
-            "message": {
-              "message_id": 470589,
-              "from": {
-                "id": 8540100616,
-                "is_bot": true,
-                "first_name": "Catebi Feedback",
-                "username": "catebi_feedback_bot"
-              },
-              "chat": {
-                "id": -1001938190303,
-                "title": "CATEBI. Рабочий чат",
-                "is_forum": true,
-                "type": "supergroup"
-              },
-              "date": 1765306954,
-              "text": "Как вам сегодня волонтёрилось?\n\nThis message was sent automatically with n8n",
-              "entities": [
-                {
-                  "offset": 32,
-                  "length": 41,
-                  "type": "italic"
-                },
-                {
-                  "offset": 73,
-                  "length": 3,
-                  "type": "text_link",
-                  "url": "https://n8n.io/?utm_source=n8n-internal&utm_medium=powered_by&utm_campaign=n8n-nodes-base.telegram_92884aadccf56fbf788c9a20300e9ab48e6b030ed4ef5174365f1554550618a5"
-                }
-              ],
-              "link_preview_options": {
-                "is_disabled": true
-              },
-              "reply_markup": {
-                "inline_keyboard": [
-                  [
-                    {
-                      "text": "Хорошо",
-                      "callback_data": "5"
-                    },
-                    {
-                      "text": "Плохо",
-                      "callback_data": "1"
-                    }
-                  ],
-                  [
-                    {
-                      "text": "Нормально",
-                      "callback_data": "3"
-                    },
-                    {
-                      "text": "Я ничего не делал:а",
-                      "callback_data": "-1"
-                    }
-                  ]
-                ]
-              }
-            },
-            "chat_instance": "3566923692309692588",
-            "data": "3"
-          }
-        }
-      }
-    ],
     "Yesterday Mark Summary": [
       {
         "json": {
@@ -1246,10 +1169,64 @@
           "item": 0
         }
       }
+    ],
+    "Evaluation": [
+      {
+        "json": {
+          "update_id": 19989050,
+          "message": {
+            "message_id": 485487,
+            "from": {
+              "id": 269068640,
+              "is_bot": false,
+              "first_name": "вика",
+              "username": "victoriazotova",
+              "language_code": "ru",
+              "is_premium": true
+            },
+            "chat": {
+              "id": -1001938190303,
+              "title": "CATEBI. Рабочий чат",
+              "is_forum": true,
+              "type": "supergroup"
+            },
+            "date": 1766865955,
+            "message_thread_id": 7270,
+            "reply_to_message": {
+              "message_id": 7270,
+              "from": {
+                "id": 422735299,
+                "is_bot": false,
+                "first_name": "Leila",
+                "username": "BabaLeila",
+                "is_premium": true
+              },
+              "chat": {
+                "id": -1001938190303,
+                "title": "CATEBI. Рабочий чат",
+                "is_forum": true,
+                "type": "supergroup"
+              },
+              "date": 1688142937,
+              "message_thread_id": 7270,
+              "forum_topic_created": {
+                "name": "Наши котики",
+                "icon_color": 16766590
+              },
+              "is_topic_message": true
+            },
+            "text": "Как же я её ненавижу",
+            "is_topic_message": true
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
     ]
   },
-  "versionId": "542445c6-5f2d-4053-a2be-e1604b4b27a3",
-  "activeVersionId": "542445c6-5f2d-4053-a2be-e1604b4b27a3",
+  "versionId": "72c46414-906a-46be-b3a7-f5b0454c0554",
+  "activeVersionId": "72c46414-906a-46be-b3a7-f5b0454c0554",
   "triggerCount": 3,
   "shared": [
     {
@@ -1261,9 +1238,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2025-12-23T20:03:40.000Z",
-    "createdAt": "2025-12-23T20:03:21.961Z",
-    "versionId": "542445c6-5f2d-4053-a2be-e1604b4b27a3",
+    "updatedAt": "2025-12-27T20:05:04.000Z",
+    "createdAt": "2025-12-27T20:04:59.495Z",
+    "versionId": "72c46414-906a-46be-b3a7-f5b0454c0554",
     "workflowId": "JUsbCQX9ptL9iGiv",
     "nodes": [
       {
@@ -1440,7 +1417,7 @@
       },
       {
         "parameters": {
-          "chatId": "={{ $('Private Text Feedback').item.json.message.chat.id }}",
+          "chatId": "={{ $node['Evaluation'].json.message.chat.id }}",
           "text": "Спасибо большое за обратную связь!",
           "additionalFields": {}
         },
@@ -1455,8 +1432,8 @@
         "webhookId": "ef11edb8-f4e0-4c59-b5f5-a7682bf28f63",
         "credentials": {
           "telegramApi": {
-            "id": "zXO69l0C0QyO3V7k",
-            "name": "Telegram account 2"
+            "id": "tcX20TpSwtOgHBGq",
+            "name": "Peredast"
           }
         }
       },
@@ -1586,7 +1563,7 @@
       {
         "parameters": {
           "resource": "callback",
-          "queryId": "={{ $('Evaluation').item.json.callback_query.id }}",
+          "queryId": "={{ $node['Evaluation'].json.callback_query.id }}",
           "additionalFields": {
             "show_alert": true,
             "text": "Спасибо за ответ!"
@@ -2385,8 +2362,8 @@
       }
     },
     "authors": "Alexandra Ershova",
-    "name": "Version 542445c6",
-    "description": "added text feedback prompt"
+    "name": "Version 72c46414",
+    "description": ""
   },
   "tags": []
 }
