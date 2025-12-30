@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-27T20:07:00.515Z",
+  "updatedAt": "2025-12-29T20:02:06.039Z",
   "createdAt": "2025-12-09T07:01:52.897Z",
   "id": "JUsbCQX9ptL9iGiv",
   "name": "Catebi Feedback",
@@ -195,8 +195,8 @@
       "webhookId": "ef11edb8-f4e0-4c59-b5f5-a7682bf28f63",
       "credentials": {
         "telegramApi": {
-          "id": "tcX20TpSwtOgHBGq",
-          "name": "Peredast"
+          "id": "MaTjujU76kc0Yc86",
+          "name": "Feedback Bot"
         }
       }
     },
@@ -1225,8 +1225,8 @@
       }
     ]
   },
-  "versionId": "72c46414-906a-46be-b3a7-f5b0454c0554",
-  "activeVersionId": "72c46414-906a-46be-b3a7-f5b0454c0554",
+  "versionId": "4575071f-bb78-45cc-82d4-4a2bbf884e94",
+  "activeVersionId": "4575071f-bb78-45cc-82d4-4a2bbf884e94",
   "triggerCount": 3,
   "shared": [
     {
@@ -1238,9 +1238,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2025-12-27T20:05:04.000Z",
-    "createdAt": "2025-12-27T20:04:59.495Z",
-    "versionId": "72c46414-906a-46be-b3a7-f5b0454c0554",
+    "updatedAt": "2025-12-29T20:02:10.000Z",
+    "createdAt": "2025-12-29T20:02:06.042Z",
+    "versionId": "4575071f-bb78-45cc-82d4-4a2bbf884e94",
     "workflowId": "JUsbCQX9ptL9iGiv",
     "nodes": [
       {
@@ -1432,8 +1432,8 @@
         "webhookId": "ef11edb8-f4e0-4c59-b5f5-a7682bf28f63",
         "credentials": {
           "telegramApi": {
-            "id": "tcX20TpSwtOgHBGq",
-            "name": "Peredast"
+            "id": "MaTjujU76kc0Yc86",
+            "name": "Feedback Bot"
           }
         }
       },
@@ -2362,7 +2362,7 @@
       }
     },
     "authors": "Alexandra Ershova",
-    "name": "Version 72c46414",
+    "name": "Version 4575071f",
     "description": ""
   },
   "tags": []
