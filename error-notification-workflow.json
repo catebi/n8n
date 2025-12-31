@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-12T08:46:36.466Z",
+  "updatedAt": "2025-12-31T14:18:52.600Z",
   "createdAt": "2025-11-25T14:46:39.204Z",
   "id": "uxiU7FOABx5M1moL",
   "name": "Error Notification workflow",
@@ -67,6 +67,8 @@
       ],
       "webhookId": "13c616bf-a3ad-4035-998a-1dfe6021b89f",
       "typeVersion": 1,
+      "retryOnFail": true,
+      "maxTries": 5,
       "credentials": {
         "telegramApi": {
           "id": "tcX20TpSwtOgHBGq",
@@ -130,201 +132,102 @@
       {
         "json": {
           "execution": {
-            "id": "7543",
-            "url": "https://n8n.religofsil.space/workflow/ruk1fJ3VKzawxKOD/executions/7543",
+            "id": "61279",
+            "url": "https://n8n.religofsil.space/workflow/JUsbCQX9ptL9iGiv/executions/61279",
             "error": {
               "level": "warning",
               "tags": {},
-              "description": "Key (topic_id)=(3016) is not present in table \"tg_topic\".",
-              "timestamp": 1765528366075,
+              "timestamp": 1767124958961,
               "context": {},
               "functionality": "regular",
-              "name": "NodeOperationError",
+              "name": "NodeApiError",
               "node": {
                 "parameters": {
-                  "resource": "database",
-                  "operation": "insert",
-                  "schema": {
-                    "__rl": true,
-                    "mode": "list",
-                    "value": "public"
-                  },
-                  "table": {
-                    "__rl": true,
-                    "value": "tg_message",
-                    "mode": "list",
-                    "cachedResultName": "tg_message"
-                  },
-                  "columns": {
-                    "mappingMode": "defineBelow",
-                    "value": {
-                      "has_attachments": "={{ !!($node[\"Telegram Trigger\"].json[\"message\"][\"photo\"] || $node[\"Telegram Trigger\"].json[\"message\"][\"document\"]) }}",
-                      "tg_message_id": "={{ $node['Telegram Trigger'].json.message.message_id }}",
-                      "chat_id": "={{ $node['Upsert chat'].json.id }}",
-                      "from_user_id": "={{ $node['Upsert user'].json.id }}",
-                      "reply_to_tg_message_id": "={{ $node['Telegram Trigger'].json.message.reply_to_message?.message_id || null}}",
-                      "topic_id": "={{\n  $node[\"Get topic id\"].json?.id\n    ?? $node[\"Select General\"].json?.id\n    ?? null\n}}",
-                      "date": "={{ new Date($node[\"Telegram Trigger\"].json[\"message\"][\"date\"] * 1000)\n    .toLocaleString(\"sv-SE\", { timeZone: \"Asia/Tbilisi\" }) }}",
-                      "text": "={{ $node['Telegram Trigger'].json['message']['text'] || $node['Telegram Trigger'].json['message']['caption'] || '' }}",
-                      "raw_json": "={{ JSON.stringify($node[\"Telegram Trigger\"].json) }}"
-                    },
-                    "matchingColumns": [
-                      "id"
-                    ],
-                    "schema": [
+                  "preBuiltAgentsCalloutTelegram": "",
+                  "resource": "message",
+                  "operation": "sendMessage",
+                  "chatId": "-1001938190303",
+                  "text": "Как вам сегодня волонтёрилось?\n\nНапишите анонимный отзыв мне в личку или выберите оценку ниже:",
+                  "replyMarkup": "inlineKeyboard",
+                  "inlineKeyboard": {
+                    "rows": [
                       {
-                        "id": "id",
-                        "displayName": "id",
-                        "required": false,
-                        "defaultMatch": true,
-                        "display": true,
-                        "type": "number",
-                        "canBeUsedToMatch": true,
-                        "removed": true
+                        "row": {
+                          "buttons": [
+                            {
+                              "text": "Хорошо",
+                              "additionalFields": {
+                                "callback_data": "5"
+                              }
+                            },
+                            {
+                              "text": "Плохо",
+                              "additionalFields": {
+                                "callback_data": "1"
+                              }
+                            }
+                          ]
+                        }
                       },
                       {
-                        "id": "tg_message_id",
-                        "displayName": "tg_message_id",
-                        "required": true,
-                        "defaultMatch": false,
-                        "display": true,
-                        "type": "number",
-                        "canBeUsedToMatch": true
-                      },
-                      {
-                        "id": "chat_id",
-                        "displayName": "chat_id",
-                        "required": true,
-                        "defaultMatch": false,
-                        "display": true,
-                        "type": "number",
-                        "canBeUsedToMatch": true
-                      },
-                      {
-                        "id": "topic_id",
-                        "displayName": "topic_id",
-                        "required": false,
-                        "defaultMatch": false,
-                        "display": true,
-                        "type": "number",
-                        "canBeUsedToMatch": true
-                      },
-                      {
-                        "id": "from_user_id",
-                        "displayName": "from_user_id",
-                        "required": false,
-                        "defaultMatch": false,
-                        "display": true,
-                        "type": "number",
-                        "canBeUsedToMatch": true
-                      },
-                      {
-                        "id": "date",
-                        "displayName": "date",
-                        "required": true,
-                        "defaultMatch": false,
-                        "display": true,
-                        "type": "dateTime",
-                        "canBeUsedToMatch": true
-                      },
-                      {
-                        "id": "text",
-                        "displayName": "text",
-                        "required": false,
-                        "defaultMatch": false,
-                        "display": true,
-                        "type": "string",
-                        "canBeUsedToMatch": true
-                      },
-                      {
-                        "id": "reply_to_tg_message_id",
-                        "displayName": "reply_to_tg_message_id",
-                        "required": false,
-                        "defaultMatch": false,
-                        "display": true,
-                        "type": "number",
-                        "canBeUsedToMatch": true
-                      },
-                      {
-                        "id": "reply_to_internal_id",
-                        "displayName": "reply_to_internal_id",
-                        "required": false,
-                        "defaultMatch": false,
-                        "display": true,
-                        "type": "number",
-                        "canBeUsedToMatch": true,
-                        "removed": true
-                      },
-                      {
-                        "id": "has_attachments",
-                        "displayName": "has_attachments",
-                        "required": false,
-                        "defaultMatch": false,
-                        "display": true,
-                        "type": "boolean",
-                        "canBeUsedToMatch": true
-                      },
-                      {
-                        "id": "raw_json",
-                        "displayName": "raw_json",
-                        "required": false,
-                        "defaultMatch": false,
-                        "display": true,
-                        "type": "object",
-                        "canBeUsedToMatch": true
-                      },
-                      {
-                        "id": "created_at",
-                        "displayName": "created_at",
-                        "required": false,
-                        "defaultMatch": false,
-                        "display": true,
-                        "type": "dateTime",
-                        "canBeUsedToMatch": true,
-                        "removed": true
+                        "row": {
+                          "buttons": [
+                            {
+                              "text": "Нормально",
+                              "additionalFields": {
+                                "callback_data": "3"
+                              }
+                            },
+                            {
+                              "text": "Я ничего не делал:а",
+                              "additionalFields": {
+                                "callback_data": "-1"
+                              }
+                            }
+                          ]
+                        }
                       }
-                    ],
-                    "attemptToConvertTypes": false,
-                    "convertFieldsToString": false
+                    ]
                   },
-                  "options": {
-                    "outputColumns": [
-                      "*"
-                    ],
-                    "skipOnConflict": true
+                  "additionalFields": {
+                    "appendAttribution": false
                   }
                 },
-                "type": "n8n-nodes-base.postgres",
-                "typeVersion": 2.6,
+                "type": "n8n-nodes-base.telegram",
+                "typeVersion": 1.2,
                 "position": [
-                  1568,
+                  64,
                   0
                 ],
-                "id": "e228435c-6e11-4f14-8d50-c444d41bea9c",
-                "name": "Insert message",
+                "id": "90e0b52d-831e-4feb-882f-33469da1daa2",
+                "name": "Daily Feedback Prompt",
+                "webhookId": "0dcb140a-90ac-4f7b-8677-d661153b8028",
                 "credentials": {
-                  "postgres": {
-                    "id": "u5hzEAvZADCVqBIT",
-                    "name": "Postgres account"
+                  "telegramApi": {
+                    "id": "MaTjujU76kc0Yc86",
+                    "name": "Feedback Bot"
                   }
                 }
               },
-              "messages": [],
-              "message": "insert or update on table \"tg_message\" violates foreign key constraint \"tg_message_topic_id_fkey\"",
-              "stack": "NodeOperationError: insert or update on table \"tg_message\" violates foreign key constraint \"tg_message_topic_id_fkey\"\n    at parsePostgresError (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-nodes-base@file+packages+nodes-base_@aws-sdk+credential-providers@3.808.0_asn1.js@5_8da18263ca0574b0db58d4fefd8173ce/node_modules/n8n-nodes-base/nodes/Postgres/v2/helpers/utils.ts:124:9)\n    at /usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-nodes-base@file+packages+nodes-base_@aws-sdk+credential-providers@3.808.0_asn1.js@5_8da18263ca0574b0db58d4fefd8173ce/node_modules/n8n-nodes-base/nodes/Postgres/v2/helpers/utils.ts:279:19\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at ExecuteContext.execute (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-nodes-base@file+packages+nodes-base_@aws-sdk+credential-providers@3.808.0_asn1.js@5_8da18263ca0574b0db58d4fefd8173ce/node_modules/n8n-nodes-base/nodes/Postgres/v2/actions/database/insert.operation.ts:253:9)\n    at ExecuteContext.router (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-nodes-base@file+packages+nodes-base_@aws-sdk+credential-providers@3.808.0_asn1.js@5_8da18263ca0574b0db58d4fefd8173ce/node_modules/n8n-nodes-base/nodes/Postgres/v2/actions/router.ts:41:17)\n    at ExecuteContext.execute (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-nodes-base@file+packages+nodes-base_@aws-sdk+credential-providers@3.808.0_asn1.js@5_8da18263ca0574b0db58d4fefd8173ce/node_modules/n8n-nodes-base/nodes/Postgres/v2/PostgresV2.node.ts:26:10)\n    at WorkflowExecute.executeNode (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_ec37920eb95917b28efaa783206b20f3/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:1045:8)\n    at WorkflowExecute.runNode (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_ec37920eb95917b28efaa783206b20f3/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:1226:11)\n    at /usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_ec37920eb95917b28efaa783206b20f3/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:1662:27\n    at /usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_ec37920eb95917b28efaa783206b20f3/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:2274:11"
+              "messages": [
+                "connect ETIMEDOUT 149.154.167.220:443",
+                "connect ETIMEDOUT 149.154.167.220:443"
+              ],
+              "httpCode": "ETIMEDOUT",
+              "message": "The connection timed out, consider setting the 'Retry on Fail' option in the node settings",
+              "stack": "NodeApiError: The connection timed out, consider setting the 'Retry on Fail' option in the node settings\n    at ExecuteContext.apiRequest (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-nodes-base@file+packages+nodes-base_@aws-sdk+credential-providers@3.808.0_asn1.js@5_8da18263ca0574b0db58d4fefd8173ce/node_modules/n8n-nodes-base/nodes/Telegram/GenericFunctions.ts:230:9)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at ExecuteContext.execute (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-nodes-base@file+packages+nodes-base_@aws-sdk+credential-providers@3.808.0_asn1.js@5_8da18263ca0574b0db58d4fefd8173ce/node_modules/n8n-nodes-base/nodes/Telegram/Telegram.node.ts:2198:21)\n    at WorkflowExecute.executeNode (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_ec37920eb95917b28efaa783206b20f3/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:1045:8)\n    at WorkflowExecute.runNode (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_ec37920eb95917b28efaa783206b20f3/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:1226:11)\n    at /usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_ec37920eb95917b28efaa783206b20f3/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:1662:27\n    at /usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_ec37920eb95917b28efaa783206b20f3/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:2274:11"
             },
-            "lastNodeExecuted": "Insert message",
-            "mode": "retry",
-            "retryOf": "7519",
+            "lastNodeExecuted": "Daily Feedback Prompt",
+            "mode": "trigger",
             "executionContext": {
               "version": 1,
-              "establishedAt": 1765523897966,
-              "source": "webhook"
+              "establishedAt": 1767124824137,
+              "source": "trigger"
             }
           },
           "workflow": {
-            "id": "ruk1fJ3VKzawxKOD",
-            "name": "Catebi Work Group Logger"
+            "id": "JUsbCQX9ptL9iGiv",
+            "name": "Catebi Feedback"
           }
         },
         "pairedItem": {
@@ -333,8 +236,8 @@
       }
     ]
   },
-  "versionId": "709402b4-63b4-473b-80b3-65809d9d171d",
-  "activeVersionId": "709402b4-63b4-473b-80b3-65809d9d171d",
+  "versionId": "6ae40dd0-d935-4d5c-9459-bf49ff391f95",
+  "activeVersionId": "6ae40dd0-d935-4d5c-9459-bf49ff391f95",
   "triggerCount": 0,
   "shared": [
     {
@@ -346,9 +249,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2025-12-12T08:46:36.470Z",
-    "createdAt": "2025-12-12T08:46:36.470Z",
-    "versionId": "709402b4-63b4-473b-80b3-65809d9d171d",
+    "updatedAt": "2025-12-31T14:18:58.000Z",
+    "createdAt": "2025-12-31T14:18:52.603Z",
+    "versionId": "6ae40dd0-d935-4d5c-9459-bf49ff391f95",
     "workflowId": "uxiU7FOABx5M1moL",
     "nodes": [
       {
@@ -412,6 +315,8 @@
         ],
         "webhookId": "13c616bf-a3ad-4035-998a-1dfe6021b89f",
         "typeVersion": 1,
+        "retryOnFail": true,
+        "maxTries": 5,
         "credentials": {
           "telegramApi": {
             "id": "tcX20TpSwtOgHBGq",
@@ -466,8 +371,8 @@
       }
     },
     "authors": "Alexandra Ershova",
-    "name": null,
-    "description": null
+    "name": "Version 6ae40dd0",
+    "description": ""
   },
   "tags": []
 }
