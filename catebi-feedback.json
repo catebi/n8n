@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-29T20:02:06.039Z",
+  "updatedAt": "2025-12-31T14:20:47.521Z",
   "createdAt": "2025-12-09T07:01:52.897Z",
   "id": "JUsbCQX9ptL9iGiv",
   "name": "Catebi Feedback",
@@ -282,6 +282,8 @@
       "id": "90e0b52d-831e-4feb-882f-33469da1daa2",
       "name": "Daily Feedback Prompt",
       "webhookId": "0dcb140a-90ac-4f7b-8677-d661153b8028",
+      "retryOnFail": true,
+      "maxTries": 5,
       "credentials": {
         "telegramApi": {
           "id": "MaTjujU76kc0Yc86",
@@ -1223,10 +1225,30 @@
           "item": 0
         }
       }
+    ],
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2025-12-31T00:00:24.060+04:00",
+          "Readable date": "December 31st 2025, 12:00:24 am",
+          "Readable time": "12:00:24 am",
+          "Day of week": "Wednesday",
+          "Year": "2025",
+          "Month": "December",
+          "Day of month": "31",
+          "Hour": "00",
+          "Minute": "00",
+          "Second": "24",
+          "Timezone": "Asia/Tbilisi (UTC+04:00)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
     ]
   },
-  "versionId": "4575071f-bb78-45cc-82d4-4a2bbf884e94",
-  "activeVersionId": "4575071f-bb78-45cc-82d4-4a2bbf884e94",
+  "versionId": "79a59d31-4994-43aa-8cf9-a3020210c921",
+  "activeVersionId": "79a59d31-4994-43aa-8cf9-a3020210c921",
   "triggerCount": 3,
   "shared": [
     {
@@ -1238,9 +1260,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2025-12-29T20:02:10.000Z",
-    "createdAt": "2025-12-29T20:02:06.042Z",
-    "versionId": "4575071f-bb78-45cc-82d4-4a2bbf884e94",
+    "updatedAt": "2025-12-31T14:20:50.000Z",
+    "createdAt": "2025-12-31T14:20:47.527Z",
+    "versionId": "79a59d31-4994-43aa-8cf9-a3020210c921",
     "workflowId": "JUsbCQX9ptL9iGiv",
     "nodes": [
       {
@@ -1519,6 +1541,8 @@
         "id": "90e0b52d-831e-4feb-882f-33469da1daa2",
         "name": "Daily Feedback Prompt",
         "webhookId": "0dcb140a-90ac-4f7b-8677-d661153b8028",
+        "retryOnFail": true,
+        "maxTries": 5,
         "credentials": {
           "telegramApi": {
             "id": "MaTjujU76kc0Yc86",
@@ -2362,7 +2386,7 @@
       }
     },
     "authors": "Alexandra Ershova",
-    "name": "Version 4575071f",
+    "name": "Version 79a59d31",
     "description": ""
   },
   "tags": []
