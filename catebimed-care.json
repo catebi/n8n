@@ -1,0 +1,195 @@
+{
+  "updatedAt": "2026-01-02T18:19:38.517Z",
+  "createdAt": "2026-01-02T17:13:46.439Z",
+  "id": "TKqxD98ixz8Vm61h",
+  "name": "CatebiMed care",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {}
+          ]
+        },
+        "authentication": "airtableTokenApi",
+        "baseId": {
+          "__rl": true,
+          "value": "https://airtable.com/app9k7MbtZfplJvDC/tblNPJcoWANEig2tZ/viw2lj21fFtn870Jm?blocks=hide",
+          "mode": "url"
+        },
+        "tableId": {
+          "__rl": true,
+          "value": "https://airtable.com/app9k7MbtZfplJvDC/tblNPJcoWANEig2tZ/viw2lj21fFtn870Jm?blocks=hide",
+          "mode": "url"
+        },
+        "triggerField": "created_at",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.airtableTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1137bfbc-0d18-41a1-88ce-0e9917857613",
+      "name": "Airtable Trigger",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "7SzRNig5Rr7LRSsj",
+          "name": "Airtable account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "-1001938190303",
+        "text": "=Назначен новый медуход \nКошка: {{ $json.fields.cat_number_txt }}\nКомната: {{ $json.fields['Комната'][0] }}\nКоммент: {{ $json.fields['Коммент (общий)'] }}\n\nЛекарство: {{ $json.fields.med_txt }}\nРасположение: {{ $json.fields.Med_location[0] }}\n\nДата начала приема: {{ $json.fields['Дата начала приема'] }}\nДата окончания приема: {{ $json.fields['Дата окончания приема'] }}\n\nТип: {{ $json.fields['Тип'] }}",
+        "additionalFields": {
+          "reply_to_message_id": 114445
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "9a6adcd9-15d2-4d53-be9f-8ad531b4342f",
+      "name": "Send a text message",
+      "webhookId": "bb281ad0-c6d6-45d0-b7ca-fc7ddb6bb525",
+      "credentials": {
+        "telegramApi": {
+          "id": "jxMY2QGKg0jS5vUN",
+          "name": "Telegram account 2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Airtable Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": {
+    "node:Airtable Trigger": {
+      "lastTimeChecked": "2026-01-02T18:20:03Z"
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "6e66fada-102f-4076-a443-cbd75a911e67",
+  "activeVersionId": "6e66fada-102f-4076-a443-cbd75a911e67",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-01-02T17:13:46.462Z",
+      "createdAt": "2026-01-02T17:13:46.462Z",
+      "role": "workflow:owner",
+      "workflowId": "TKqxD98ixz8Vm61h",
+      "projectId": "ZJyso94CaJPPWQxE"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-01-02T18:20:04.000Z",
+    "createdAt": "2026-01-02T18:19:38.520Z",
+    "versionId": "6e66fada-102f-4076-a443-cbd75a911e67",
+    "workflowId": "TKqxD98ixz8Vm61h",
+    "nodes": [
+      {
+        "parameters": {
+          "pollTimes": {
+            "item": [
+              {}
+            ]
+          },
+          "authentication": "airtableTokenApi",
+          "baseId": {
+            "__rl": true,
+            "value": "https://airtable.com/app9k7MbtZfplJvDC/tblNPJcoWANEig2tZ/viw2lj21fFtn870Jm?blocks=hide",
+            "mode": "url"
+          },
+          "tableId": {
+            "__rl": true,
+            "value": "https://airtable.com/app9k7MbtZfplJvDC/tblNPJcoWANEig2tZ/viw2lj21fFtn870Jm?blocks=hide",
+            "mode": "url"
+          },
+          "triggerField": "created_at",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.airtableTrigger",
+        "typeVersion": 1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "1137bfbc-0d18-41a1-88ce-0e9917857613",
+        "name": "Airtable Trigger",
+        "credentials": {
+          "airtableTokenApi": {
+            "id": "7SzRNig5Rr7LRSsj",
+            "name": "Airtable account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "chatId": "-1001938190303",
+          "text": "=Назначен новый медуход \nКошка: {{ $json.fields.cat_number_txt }}\nКомната: {{ $json.fields['Комната'][0] }}\nКоммент: {{ $json.fields['Коммент (общий)'] }}\n\nЛекарство: {{ $json.fields.med_txt }}\nРасположение: {{ $json.fields.Med_location[0] }}\n\nДата начала приема: {{ $json.fields['Дата начала приема'] }}\nДата окончания приема: {{ $json.fields['Дата окончания приема'] }}\n\nТип: {{ $json.fields['Тип'] }}",
+          "additionalFields": {
+            "reply_to_message_id": 114445
+          }
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          208,
+          0
+        ],
+        "id": "9a6adcd9-15d2-4d53-be9f-8ad531b4342f",
+        "name": "Send a text message",
+        "webhookId": "bb281ad0-c6d6-45d0-b7ca-fc7ddb6bb525",
+        "credentials": {
+          "telegramApi": {
+            "id": "jxMY2QGKg0jS5vUN",
+            "name": "Telegram account 2"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Airtable Trigger": {
+        "main": [
+          [
+            {
+              "node": "Send a text message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "alena tiamchik",
+    "name": "Version 6e66fada",
+    "description": "polling settings updated"
+  },
+  "tags": []
+}
