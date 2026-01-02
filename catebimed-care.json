@@ -88,7 +88,7 @@
   },
   "staticData": {
     "node:Airtable Trigger": {
-      "lastTimeChecked": "2026-01-02T18:20:03Z"
+      "lastTimeChecked": "2026-01-02T19:40:31Z"
     }
   },
   "meta": {
@@ -189,7 +189,8 @@
     },
     "authors": "alena tiamchik",
     "name": "Version 6e66fada",
-    "description": "polling settings updated"
+    "description": "polling settings updated",
+    "autosaved": false
   },
   "tags": []
 }
