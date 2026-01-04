@@ -1,0 +1,31 @@
+{
+  "updatedAt": "2026-01-04T19:08:02.829Z",
+  "createdAt": "2026-01-04T19:08:02.829Z",
+  "id": "FbNxS6d6aZALI9OV",
+  "name": "Adoption Auto-reply",
+  "active": false,
+  "isArchived": false,
+  "nodes": [],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "4c47ec4d-48c8-4eb7-ae45-b03315a539ef",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-04T19:08:02.839Z",
+      "createdAt": "2026-01-04T19:08:02.839Z",
+      "role": "workflow:owner",
+      "workflowId": "FbNxS6d6aZALI9OV",
+      "projectId": "jnu5GnxkoXUPZEif"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
