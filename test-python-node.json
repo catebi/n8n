@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-02T19:42:11.475Z",
+  "updatedAt": "2026-01-03T20:32:04.899Z",
   "createdAt": "2026-01-02T17:16:18.261Z",
   "id": "ogDJfYnQgUjasWnQ",
   "name": "Test Python node",
@@ -20,7 +20,7 @@
     {
       "parameters": {
         "language": "pythonNative",
-        "pythonCode": "import re\nreturn 1"
+        "pythonCode": "import re\nreturn {\"i\": 1}"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -51,7 +51,7 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "bccf47ce-5013-4299-ba49-ce904ea699d2",
+  "versionId": "75a8153b-b623-4c8b-b9e5-33997f94377e",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [
