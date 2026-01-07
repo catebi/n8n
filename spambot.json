@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-12T11:00:38.824Z",
+  "updatedAt": "2026-01-07T13:48:18.268Z",
   "createdAt": "2025-11-25T07:08:56.490Z",
   "id": "BzPT7nQWQllqpcsO",
   "name": "Spambot",
@@ -414,7 +414,10 @@
         288
       ],
       "id": "37b5079e-531f-492a-a6f1-28a6ec2b9b32",
-      "name": "Text Classifier"
+      "name": "Text Classifier",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "maxTries": 5
     }
   ],
   "connections": {
@@ -662,8 +665,8 @@
       }
     ]
   },
-  "versionId": "d7e86360-3f4e-4804-8f52-5764b81db250",
-  "activeVersionId": "d7e86360-3f4e-4804-8f52-5764b81db250",
+  "versionId": "94fc8694-ca99-459e-ac64-0b7ebdd06a4e",
+  "activeVersionId": "94fc8694-ca99-459e-ac64-0b7ebdd06a4e",
   "triggerCount": 1,
   "shared": [
     {
@@ -675,9 +678,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2025-12-12T11:00:38.827Z",
-    "createdAt": "2025-12-12T11:00:38.827Z",
-    "versionId": "d7e86360-3f4e-4804-8f52-5764b81db250",
+    "updatedAt": "2026-01-07T13:48:28.000Z",
+    "createdAt": "2026-01-07T13:48:18.274Z",
+    "versionId": "94fc8694-ca99-459e-ac64-0b7ebdd06a4e",
     "workflowId": "BzPT7nQWQllqpcsO",
     "nodes": [
       {
@@ -1088,7 +1091,10 @@
           288
         ],
         "id": "37b5079e-531f-492a-a6f1-28a6ec2b9b32",
-        "name": "Text Classifier"
+        "name": "Text Classifier",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "maxTries": 5
       }
     ],
     "connections": {
@@ -1268,8 +1274,8 @@
       }
     },
     "authors": "Alexandra Ershova",
-    "name": null,
-    "description": null,
+    "name": "Version 94fc8694",
+    "description": "set up retry",
     "autosaved": false
   },
   "tags": [
