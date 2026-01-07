@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-06T06:07:29.731Z",
+  "updatedAt": "2026-01-07T08:59:40.523Z",
   "createdAt": "2025-12-14T10:31:39.535Z",
   "id": "ki83AovnVbBGdtXO",
   "name": "Catebi Daily Summary",
@@ -137,7 +137,7 @@
     },
     {
       "parameters": {
-        "modelName": "models/gemini-3-pro-preview",
+        "modelName": "models/gemini-3-flash-preview",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -192,7 +192,7 @@
     },
     {
       "parameters": {
-        "modelName": "models/gemini-3-pro-preview",
+        "modelName": "models/gemini-3-flash-preview",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -1110,8 +1110,8 @@
       }
     ]
   },
-  "versionId": "39c75017-692e-4a88-b905-2adf743b38af",
-  "activeVersionId": "39c75017-692e-4a88-b905-2adf743b38af",
+  "versionId": "07266189-f2e3-4bba-bb77-699b49a1f01d",
+  "activeVersionId": "07266189-f2e3-4bba-bb77-699b49a1f01d",
   "triggerCount": 1,
   "shared": [
     {
@@ -1123,9 +1123,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-01-06T06:07:32.000Z",
-    "createdAt": "2026-01-06T06:07:29.736Z",
-    "versionId": "39c75017-692e-4a88-b905-2adf743b38af",
+    "updatedAt": "2026-01-07T09:00:05.000Z",
+    "createdAt": "2026-01-07T08:59:40.544Z",
+    "versionId": "07266189-f2e3-4bba-bb77-699b49a1f01d",
     "workflowId": "ki83AovnVbBGdtXO",
     "nodes": [
       {
@@ -1259,7 +1259,7 @@
       },
       {
         "parameters": {
-          "modelName": "models/gemini-3-pro-preview",
+          "modelName": "models/gemini-3-flash-preview",
           "options": {}
         },
         "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -1314,7 +1314,7 @@
       },
       {
         "parameters": {
-          "modelName": "models/gemini-3-pro-preview",
+          "modelName": "models/gemini-3-flash-preview",
           "options": {}
         },
         "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -2196,8 +2196,8 @@
       }
     },
     "authors": "Alexandra Ershova",
-    "name": "Version 39c75017",
-    "description": "",
+    "name": "Version 07266189",
+    "description": "replaced pro with flash to avoid costs",
     "autosaved": false
   },
   "tags": []
