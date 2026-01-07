@@ -1,33 +1,33 @@
 {
-  "updatedAt": "2025-11-25T08:29:57.000Z",
-  "createdAt": "2025-11-25T08:23:20.142Z",
-  "id": "Xr6vFvOT2Cr0tjnG",
+  "updatedAt": "2025-11-25T08:30:11.000Z",
+  "createdAt": "2025-09-28T19:26:41.326Z",
+  "id": "Q8FmvVkpxO1rjPdI",
   "name": "My workflow 2",
   "active": false,
   "isArchived": true,
   "nodes": [
     {
       "parameters": {
-        "updates": [
-          "message"
-        ],
-        "additionalFields": {}
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            },
+            {
+              "field": "hours",
+              "triggerAtMinute": 30
+            }
+          ]
+        }
       },
-      "type": "n8n-nodes-base.telegramTrigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
         0,
         0
       ],
-      "id": "ea685ae6-af32-4f35-be91-3883ae191796",
-      "name": "Telegram Trigger",
-      "webhookId": "24e8b9a6-eb0c-48a5-a3d0-f573e177acea",
-      "credentials": {
-        "telegramApi": {
-          "id": "tcX20TpSwtOgHBGq",
-          "name": "Peredast"
-        }
-      }
+      "id": "49775a9e-d635-4819-8cfc-57f90b6d028b",
+      "name": "Schedule Trigger"
     }
   ],
   "connections": {},
@@ -35,19 +35,17 @@
     "executionOrder": "v1"
   },
   "staticData": null,
-  "meta": {
-    "templateCredsSetupCompleted": true
-  },
+  "meta": null,
   "pinData": {},
-  "versionId": "1593cd3b-1f8a-4045-b0e4-56622bd9e172",
+  "versionId": "435236c6-ead4-4119-844d-9c00ad3b4f79",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [
     {
-      "updatedAt": "2025-11-25T08:23:20.153Z",
-      "createdAt": "2025-11-25T08:23:20.153Z",
+      "updatedAt": "2025-09-28T19:26:41.340Z",
+      "createdAt": "2025-09-28T19:26:41.340Z",
       "role": "workflow:owner",
-      "workflowId": "Xr6vFvOT2Cr0tjnG",
+      "workflowId": "Q8FmvVkpxO1rjPdI",
       "projectId": "jnu5GnxkoXUPZEif"
     }
   ],
