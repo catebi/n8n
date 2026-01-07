@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-03T06:06:14.146Z",
+  "updatedAt": "2026-01-06T06:07:29.731Z",
   "createdAt": "2025-12-14T10:31:39.535Z",
   "id": "ki83AovnVbBGdtXO",
   "name": "Catebi Daily Summary",
@@ -121,7 +121,7 @@
           "summarizationMethodAndPrompts": {
             "values": {
               "summarizationMethod": "stuff",
-              "prompt": "Write a concise summary of the following in Russian:\n\n\n\"{text}\"\n\nRefer to each participant as their @username.\nExtract actionables and responsible individuals, list it separately under summary.\nList questions that were not answered.\nDon't refer to TNR organization as a shelter. КК refers to котоквартира -- an apartment where cats heal after castration.\n\nCONCISE SUMMARY:"
+              "prompt": "Write a concise summary of the following in Russian:\n\n\n\"{text}\"\n\nRefer to each participant as their @username.\nExtract actionables and responsible individuals, list it separately under summary.\nList questions that were not answered.\nDon't refer to TNR organization as a shelter. КК refers to котоквартира -- an apartment where cats heal after castration.\nList cats that found their homes.\n\nCONCISE SUMMARY:"
             }
           }
         }
@@ -1110,8 +1110,8 @@
       }
     ]
   },
-  "versionId": "37b5722a-e5cc-42e6-9023-2df59f358e2a",
-  "activeVersionId": "37b5722a-e5cc-42e6-9023-2df59f358e2a",
+  "versionId": "39c75017-692e-4a88-b905-2adf743b38af",
+  "activeVersionId": "39c75017-692e-4a88-b905-2adf743b38af",
   "triggerCount": 1,
   "shared": [
     {
@@ -1123,9 +1123,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-01-03T06:06:22.000Z",
-    "createdAt": "2026-01-03T06:06:14.169Z",
-    "versionId": "37b5722a-e5cc-42e6-9023-2df59f358e2a",
+    "updatedAt": "2026-01-06T06:07:32.000Z",
+    "createdAt": "2026-01-06T06:07:29.736Z",
+    "versionId": "39c75017-692e-4a88-b905-2adf743b38af",
     "workflowId": "ki83AovnVbBGdtXO",
     "nodes": [
       {
@@ -1243,7 +1243,7 @@
             "summarizationMethodAndPrompts": {
               "values": {
                 "summarizationMethod": "stuff",
-                "prompt": "Write a concise summary of the following in Russian:\n\n\n\"{text}\"\n\nRefer to each participant as their @username.\nExtract actionables and responsible individuals, list it separately under summary.\nList questions that were not answered.\nDon't refer to TNR organization as a shelter. КК refers to котоквартира -- an apartment where cats heal after castration.\n\nCONCISE SUMMARY:"
+                "prompt": "Write a concise summary of the following in Russian:\n\n\n\"{text}\"\n\nRefer to each participant as their @username.\nExtract actionables and responsible individuals, list it separately under summary.\nList questions that were not answered.\nDon't refer to TNR organization as a shelter. КК refers to котоквартира -- an apartment where cats heal after castration.\nList cats that found their homes.\n\nCONCISE SUMMARY:"
               }
             }
           }
@@ -2196,7 +2196,7 @@
       }
     },
     "authors": "Alexandra Ershova",
-    "name": "Version 37b5722a",
+    "name": "Version 39c75017",
     "description": "",
     "autosaved": false
   },
