@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-07T13:48:18.268Z",
+  "updatedAt": "2026-01-08T06:58:18.303Z",
   "createdAt": "2025-11-25T07:08:56.490Z",
   "id": "BzPT7nQWQllqpcsO",
   "name": "Spambot",
@@ -12,7 +12,7 @@
           "message"
         ],
         "additionalFields": {
-          "chatIds": "-1001247053710, -1002113323185, -1001999193889"
+          "chatIds": "-1001247053710, -1002113323185, -1001999193889, -1001870831470"
         }
       },
       "type": "n8n-nodes-base.telegramTrigger",
@@ -274,7 +274,7 @@
           "parameters": [
             {
               "name": "chat_id",
-              "value": "={{ $('Telegram Trigger').item.json.message.chat.id }}"
+              "value": "={{ $node['Get chats'].json.chat_id }}"
             },
             {
               "name": "user_id",
@@ -287,11 +287,12 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        1920,
+        2144,
         240
       ],
       "id": "1862a28d-0e5e-4126-84cd-2de681ff8a8f",
-      "name": "HTTP Request"
+      "name": "HTTP Request",
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -355,7 +356,7 @@
       "type": "n8n-nodes-base.executionData",
       "typeVersion": 1.1,
       "position": [
-        2144,
+        2368,
         240
       ],
       "id": "ea1b7fb1-5871-42c1-a37d-8413d077bf69",
@@ -418,6 +419,27 @@
       "retryOnFail": true,
       "waitBetweenTries": 5000,
       "maxTries": 5
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "japQZ3uw0Xawsx8L",
+          "mode": "list",
+          "cachedResultName": "Telegram creds",
+          "cachedResultUrl": "/projects/jnu5GnxkoXUPZEif/datatables/japQZ3uw0Xawsx8L"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1920,
+        240
+      ],
+      "id": "fd4d85ec-4342-4f22-bd43-907db3696bea",
+      "name": "Get chats"
     }
   ],
   "connections": {
@@ -527,7 +549,7 @@
       "main": [
         [
           {
-            "node": "HTTP Request",
+            "node": "Get chats",
             "type": "main",
             "index": 0
           }
@@ -594,6 +616,17 @@
           }
         ]
       ]
+    },
+    "Get chats": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -613,47 +646,28 @@
     "Telegram Trigger": [
       {
         "json": {
-          "update_id": 833038839,
+          "update_id": 833073345,
           "message": {
-            "message_id": 47692,
+            "message_id": 7329,
             "from": {
-              "id": 5137881999,
+              "id": 8366731730,
               "is_bot": false,
-              "first_name": "Анатолий",
-              "is_premium": true
+              "first_name": "Tara",
+              "last_name": "Gutierrez"
             },
             "chat": {
-              "id": -1001247053710,
-              "title": "CATEBI Chat",
-              "username": "catebichat",
+              "id": -1001999193889,
+              "title": "везём кошачью и собачью кровь 😼",
+              "username": "titers_tbi",
+              "is_forum": true,
               "type": "supergroup"
             },
-            "date": 1765536172,
-            "text": "Возьму в команду нескольких человек для заработка\nЗанятость до 1 часа в день. Задачи простые, связаны с обработкой сделок. Возраст 18+. Доход от 100$ в день. Опыт не требуется, обучаем. \nПо всем вопросам — обращайтесь @Hatuhina_K",
+            "date": 1767852007,
+            "text": "Требуются два человека на сегодня и завтра.\nПомощь по делам на несколько часов, работа простая.\nОплата 7 000 ₽ на руки каждому после выполнения.\nКому интересно — пишите в ЛС.",
             "entities": [
               {
                 "offset": 0,
-                "length": 49,
-                "type": "bold"
-              },
-              {
-                "offset": 205,
-                "length": 13,
-                "type": "bold"
-              },
-              {
-                "offset": 205,
-                "length": 13,
-                "type": "underline"
-              },
-              {
-                "offset": 218,
-                "length": 11,
-                "type": "mention"
-              },
-              {
-                "offset": 218,
-                "length": 11,
+                "length": 174,
                 "type": "bold"
               }
             ]
@@ -665,8 +679,8 @@
       }
     ]
   },
-  "versionId": "94fc8694-ca99-459e-ac64-0b7ebdd06a4e",
-  "activeVersionId": "94fc8694-ca99-459e-ac64-0b7ebdd06a4e",
+  "versionId": "cb6c250f-8aa6-4fb3-9b9e-6d78e81b742b",
+  "activeVersionId": "cb6c250f-8aa6-4fb3-9b9e-6d78e81b742b",
   "triggerCount": 1,
   "shared": [
     {
@@ -678,9 +692,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-01-07T13:48:28.000Z",
-    "createdAt": "2026-01-07T13:48:18.274Z",
-    "versionId": "94fc8694-ca99-459e-ac64-0b7ebdd06a4e",
+    "updatedAt": "2026-01-08T06:58:30.000Z",
+    "createdAt": "2026-01-08T06:58:18.306Z",
+    "versionId": "cb6c250f-8aa6-4fb3-9b9e-6d78e81b742b",
     "workflowId": "BzPT7nQWQllqpcsO",
     "nodes": [
       {
@@ -689,7 +703,7 @@
             "message"
           ],
           "additionalFields": {
-            "chatIds": "-1001247053710, -1002113323185, -1001999193889"
+            "chatIds": "-1001247053710, -1002113323185, -1001999193889, -1001870831470"
           }
         },
         "type": "n8n-nodes-base.telegramTrigger",
@@ -951,7 +965,7 @@
             "parameters": [
               {
                 "name": "chat_id",
-                "value": "={{ $('Telegram Trigger').item.json.message.chat.id }}"
+                "value": "={{ $node['Get chats'].json.chat_id }}"
               },
               {
                 "name": "user_id",
@@ -964,11 +978,12 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          1920,
+          2144,
           240
         ],
         "id": "1862a28d-0e5e-4126-84cd-2de681ff8a8f",
-        "name": "HTTP Request"
+        "name": "HTTP Request",
+        "onError": "continueRegularOutput"
       },
       {
         "parameters": {
@@ -1032,7 +1047,7 @@
         "type": "n8n-nodes-base.executionData",
         "typeVersion": 1.1,
         "position": [
-          2144,
+          2368,
           240
         ],
         "id": "ea1b7fb1-5871-42c1-a37d-8413d077bf69",
@@ -1095,6 +1110,27 @@
         "retryOnFail": true,
         "waitBetweenTries": 5000,
         "maxTries": 5
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "japQZ3uw0Xawsx8L",
+            "mode": "list",
+            "cachedResultName": "Telegram creds",
+            "cachedResultUrl": "/projects/jnu5GnxkoXUPZEif/datatables/japQZ3uw0Xawsx8L"
+          },
+          "returnAll": true
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          1920,
+          240
+        ],
+        "id": "fd4d85ec-4342-4f22-bd43-907db3696bea",
+        "name": "Get chats"
       }
     ],
     "connections": {
@@ -1204,7 +1240,7 @@
         "main": [
           [
             {
-              "node": "HTTP Request",
+              "node": "Get chats",
               "type": "main",
               "index": 0
             }
@@ -1271,11 +1307,22 @@
             }
           ]
         ]
+      },
+      "Get chats": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Alexandra Ershova",
-    "name": "Version 94fc8694",
-    "description": "set up retry",
+    "name": "Version cb6c250f",
+    "description": "ban across all chats",
     "autosaved": false
   },
   "tags": [
