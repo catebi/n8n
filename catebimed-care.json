@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-02T18:19:38.517Z",
+  "updatedAt": "2026-01-09T10:22:39.158Z",
   "createdAt": "2026-01-02T17:13:46.439Z",
   "id": "TKqxD98ixz8Vm61h",
   "name": "CatebiMed care",
@@ -8,44 +8,8 @@
   "nodes": [
     {
       "parameters": {
-        "pollTimes": {
-          "item": [
-            {}
-          ]
-        },
-        "authentication": "airtableTokenApi",
-        "baseId": {
-          "__rl": true,
-          "value": "https://airtable.com/app9k7MbtZfplJvDC/tblNPJcoWANEig2tZ/viw2lj21fFtn870Jm?blocks=hide",
-          "mode": "url"
-        },
-        "tableId": {
-          "__rl": true,
-          "value": "https://airtable.com/app9k7MbtZfplJvDC/tblNPJcoWANEig2tZ/viw2lj21fFtn870Jm?blocks=hide",
-          "mode": "url"
-        },
-        "triggerField": "created_at",
-        "additionalFields": {}
-      },
-      "type": "n8n-nodes-base.airtableTrigger",
-      "typeVersion": 1,
-      "position": [
-        0,
-        0
-      ],
-      "id": "1137bfbc-0d18-41a1-88ce-0e9917857613",
-      "name": "Airtable Trigger",
-      "credentials": {
-        "airtableTokenApi": {
-          "id": "7SzRNig5Rr7LRSsj",
-          "name": "Airtable account"
-        }
-      }
-    },
-    {
-      "parameters": {
         "chatId": "-1001938190303",
-        "text": "=Назначен новый медуход \nКошка: {{ $json.fields.cat_number_txt }}\nКомната: {{ $json.fields['Комната'][0] }}\nКоммент: {{ $json.fields['Коммент (общий)'] }}\n\nЛекарство: {{ $json.fields.med_txt }}\nРасположение: {{ $json.fields.Med_location[0] }}\n\nДата начала приема: {{ $json.fields['Дата начала приема'] }}\nДата окончания приема: {{ $json.fields['Дата окончания приема'] }}\n\nТип: {{ $json.fields['Тип'] }}",
+        "text": "={{ (function() {\n  try {\n    const input = $(\"Aggregate\").item.json.data;\n    if (!input || !Array.isArray(input)) return \"⚠️ Данные не найдены\";\n\n    const treatment = input.filter(i => i['Тип'] === 'лечение');\n    const check = input.filter(i => i['Тип'] === 'проверка');\n\n    let message = \"📋 **ЕЖЕДНЕВНЫЙ ОТЧЕТ ПО МЕДУХОДУ**\\n\\n\";\n\n    if (treatment.length > 0) {\n      message += \"💊 **ТЕКУЩЕЕ ЛЕЧЕНИЕ:**\\n\";\n      message += treatment.map(item => {\n        const cat = item['cat_number_txt'] || '---';\n        const room = Array.isArray(item['Комната']) ? item['Комната'][0] : (item['Комната'] || '---');\n        const med = Array.isArray(item['Name (from Лекарство+срок годности)']) ? item['Name (from Лекарство+срок годности)'][0] : (item['med_txt'] || 'манипуляция');\n        const loc = Array.isArray(item['Med_location']) ? item['Med_location'][0] : '---';\n        \n        // .trim() убирает лишние переносы из самой базы данных\n        const log = (item['Коммент (общий)'] || '-').toString().trim();\n        const dateEnd = item['Дата окончания приема'] || '---';\n\n        return `\\n🐱 **Кошка:** ${cat} (комн. ${room})\\n` +\n               `💊 **Лекарство:** ${med}\\n` +\n               `📦 **Расположение:** ${loc}\\n` +\n               `💬 **Коммент:** ${log}\\n` +\n               `⌛ **Окончание:** ${dateEnd}\\n` +\n               `──────────────────`;\n      }).join('\\n'); // Соединяем записи без лишних пустых строк\n    }\n\n    if (check.length > 0) {\n      if (treatment.length > 0) message += \"\\n\\n\"; // Отступ только между блоками\n      const catNumbers = check.map(item => {\n        const num = item['cat_number_txt'];\n        return Array.isArray(num) ? num[0] : num;\n      }).filter(n => n).join(', ');\n      \n      if (catNumbers) message += `🧵 **ПРОВЕРКА ШВОВ (номера):**\\n${catNumbers}`;\n    }\n\n    return message;\n  } catch (e) {\n    return \"❌ Ошибка: \" + e.message;\n  }\n})() }}",
         "additionalFields": {
           "reply_to_message_id": 114445
         }
@@ -53,7 +17,7 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        208,
+        832,
         0
       ],
       "id": "9a6adcd9-15d2-4d53-be9f-8ad531b4342f",
@@ -65,10 +29,117 @@
           "name": "Telegram account 2"
         }
       }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 11
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "fa2e053a-d0ee-41bb-8c0c-53969a33e8c5",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app9k7MbtZfplJvDC",
+          "mode": "list",
+          "cachedResultName": "sterilization_main",
+          "cachedResultUrl": "https://airtable.com/app9k7MbtZfplJvDC"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblNPJcoWANEig2tZ",
+          "mode": "list",
+          "cachedResultName": "MedicalCare",
+          "cachedResultUrl": "https://airtable.com/app9k7MbtZfplJvDC/tblNPJcoWANEig2tZ"
+        },
+        "options": {
+          "view": {
+            "__rl": true,
+            "value": "viw2lj21fFtn870Jm",
+            "mode": "list",
+            "cachedResultName": "Активные назначения",
+            "cachedResultUrl": "https://airtable.com/app9k7MbtZfplJvDC/tblNPJcoWANEig2tZ/viw2lj21fFtn870Jm"
+          }
+        },
+        "sort": {
+          "property": [
+            {
+              "field": "Комната"
+            },
+            {
+              "field": "cat_number_txt"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "73120b3f-36de-470c-9008-a03cdb383bc8",
+      "name": "Search records",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "7SzRNig5Rr7LRSsj",
+          "name": "Airtable account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        624,
+        0
+      ],
+      "id": "ca45dcbf-7c89-4a12-ad63-7c9d69c0dec4",
+      "name": "Aggregate"
     }
   ],
   "connections": {
-    "Airtable Trigger": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Search records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
       "main": [
         [
           {
@@ -88,15 +159,18 @@
   },
   "staticData": {
     "node:Airtable Trigger": {
-      "lastTimeChecked": "2026-01-08T12:31:26Z"
+      "lastTimeChecked": "2026-01-09T10:00:29Z"
+    },
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
     }
   },
   "meta": {
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "6e66fada-102f-4076-a443-cbd75a911e67",
-  "activeVersionId": "6e66fada-102f-4076-a443-cbd75a911e67",
+  "versionId": "28f8ff49-f8db-4783-bdb9-07e8ae75c0ec",
+  "activeVersionId": "28f8ff49-f8db-4783-bdb9-07e8ae75c0ec",
   "triggerCount": 1,
   "shared": [
     {
@@ -108,51 +182,15 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-01-02T18:20:04.000Z",
-    "createdAt": "2026-01-02T18:19:38.520Z",
-    "versionId": "6e66fada-102f-4076-a443-cbd75a911e67",
+    "updatedAt": "2026-01-09T10:22:40.000Z",
+    "createdAt": "2026-01-09T10:22:39.162Z",
+    "versionId": "28f8ff49-f8db-4783-bdb9-07e8ae75c0ec",
     "workflowId": "TKqxD98ixz8Vm61h",
     "nodes": [
       {
         "parameters": {
-          "pollTimes": {
-            "item": [
-              {}
-            ]
-          },
-          "authentication": "airtableTokenApi",
-          "baseId": {
-            "__rl": true,
-            "value": "https://airtable.com/app9k7MbtZfplJvDC/tblNPJcoWANEig2tZ/viw2lj21fFtn870Jm?blocks=hide",
-            "mode": "url"
-          },
-          "tableId": {
-            "__rl": true,
-            "value": "https://airtable.com/app9k7MbtZfplJvDC/tblNPJcoWANEig2tZ/viw2lj21fFtn870Jm?blocks=hide",
-            "mode": "url"
-          },
-          "triggerField": "created_at",
-          "additionalFields": {}
-        },
-        "type": "n8n-nodes-base.airtableTrigger",
-        "typeVersion": 1,
-        "position": [
-          0,
-          0
-        ],
-        "id": "1137bfbc-0d18-41a1-88ce-0e9917857613",
-        "name": "Airtable Trigger",
-        "credentials": {
-          "airtableTokenApi": {
-            "id": "7SzRNig5Rr7LRSsj",
-            "name": "Airtable account"
-          }
-        }
-      },
-      {
-        "parameters": {
           "chatId": "-1001938190303",
-          "text": "=Назначен новый медуход \nКошка: {{ $json.fields.cat_number_txt }}\nКомната: {{ $json.fields['Комната'][0] }}\nКоммент: {{ $json.fields['Коммент (общий)'] }}\n\nЛекарство: {{ $json.fields.med_txt }}\nРасположение: {{ $json.fields.Med_location[0] }}\n\nДата начала приема: {{ $json.fields['Дата начала приема'] }}\nДата окончания приема: {{ $json.fields['Дата окончания приема'] }}\n\nТип: {{ $json.fields['Тип'] }}",
+          "text": "={{ (function() {\n  try {\n    const input = $(\"Aggregate\").item.json.data;\n    if (!input || !Array.isArray(input)) return \"⚠️ Данные не найдены\";\n\n    const treatment = input.filter(i => i['Тип'] === 'лечение');\n    const check = input.filter(i => i['Тип'] === 'проверка');\n\n    let message = \"📋 **ЕЖЕДНЕВНЫЙ ОТЧЕТ ПО МЕДУХОДУ**\\n\\n\";\n\n    if (treatment.length > 0) {\n      message += \"💊 **ТЕКУЩЕЕ ЛЕЧЕНИЕ:**\\n\";\n      message += treatment.map(item => {\n        const cat = item['cat_number_txt'] || '---';\n        const room = Array.isArray(item['Комната']) ? item['Комната'][0] : (item['Комната'] || '---');\n        const med = Array.isArray(item['Name (from Лекарство+срок годности)']) ? item['Name (from Лекарство+срок годности)'][0] : (item['med_txt'] || 'манипуляция');\n        const loc = Array.isArray(item['Med_location']) ? item['Med_location'][0] : '---';\n        \n        // .trim() убирает лишние переносы из самой базы данных\n        const log = (item['Коммент (общий)'] || '-').toString().trim();\n        const dateEnd = item['Дата окончания приема'] || '---';\n\n        return `\\n🐱 **Кошка:** ${cat} (комн. ${room})\\n` +\n               `💊 **Лекарство:** ${med}\\n` +\n               `📦 **Расположение:** ${loc}\\n` +\n               `💬 **Коммент:** ${log}\\n` +\n               `⌛ **Окончание:** ${dateEnd}\\n` +\n               `──────────────────`;\n      }).join('\\n'); // Соединяем записи без лишних пустых строк\n    }\n\n    if (check.length > 0) {\n      if (treatment.length > 0) message += \"\\n\\n\"; // Отступ только между блоками\n      const catNumbers = check.map(item => {\n        const num = item['cat_number_txt'];\n        return Array.isArray(num) ? num[0] : num;\n      }).filter(n => n).join(', ');\n      \n      if (catNumbers) message += `🧵 **ПРОВЕРКА ШВОВ (номера):**\\n${catNumbers}`;\n    }\n\n    return message;\n  } catch (e) {\n    return \"❌ Ошибка: \" + e.message;\n  }\n})() }}",
           "additionalFields": {
             "reply_to_message_id": 114445
           }
@@ -160,7 +198,7 @@
         "type": "n8n-nodes-base.telegram",
         "typeVersion": 1.2,
         "position": [
-          208,
+          832,
           0
         ],
         "id": "9a6adcd9-15d2-4d53-be9f-8ad531b4342f",
@@ -172,10 +210,117 @@
             "name": "Telegram account 2"
           }
         }
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 11
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          208,
+          0
+        ],
+        "id": "fa2e053a-d0ee-41bb-8c0c-53969a33e8c5",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "operation": "search",
+          "base": {
+            "__rl": true,
+            "value": "app9k7MbtZfplJvDC",
+            "mode": "list",
+            "cachedResultName": "sterilization_main",
+            "cachedResultUrl": "https://airtable.com/app9k7MbtZfplJvDC"
+          },
+          "table": {
+            "__rl": true,
+            "value": "tblNPJcoWANEig2tZ",
+            "mode": "list",
+            "cachedResultName": "MedicalCare",
+            "cachedResultUrl": "https://airtable.com/app9k7MbtZfplJvDC/tblNPJcoWANEig2tZ"
+          },
+          "options": {
+            "view": {
+              "__rl": true,
+              "value": "viw2lj21fFtn870Jm",
+              "mode": "list",
+              "cachedResultName": "Активные назначения",
+              "cachedResultUrl": "https://airtable.com/app9k7MbtZfplJvDC/tblNPJcoWANEig2tZ/viw2lj21fFtn870Jm"
+            }
+          },
+          "sort": {
+            "property": [
+              {
+                "field": "Комната"
+              },
+              {
+                "field": "cat_number_txt"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.airtable",
+        "typeVersion": 2.1,
+        "position": [
+          416,
+          0
+        ],
+        "id": "73120b3f-36de-470c-9008-a03cdb383bc8",
+        "name": "Search records",
+        "credentials": {
+          "airtableTokenApi": {
+            "id": "7SzRNig5Rr7LRSsj",
+            "name": "Airtable account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          624,
+          0
+        ],
+        "id": "ca45dcbf-7c89-4a12-ad63-7c9d69c0dec4",
+        "name": "Aggregate"
       }
     ],
     "connections": {
-      "Airtable Trigger": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Search records",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search records": {
+        "main": [
+          [
+            {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate": {
         "main": [
           [
             {
@@ -188,8 +333,8 @@
       }
     },
     "authors": "alena tiamchik",
-    "name": "Version 6e66fada",
-    "description": "polling settings updated",
+    "name": "Version 28f8ff49",
+    "description": "",
     "autosaved": false
   },
   "tags": []
