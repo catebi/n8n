@@ -1,0 +1,236 @@
+{
+  "updatedAt": "2026-01-10T16:38:59.410Z",
+  "createdAt": "2026-01-10T16:20:47.957Z",
+  "id": "hbo0D0ssGlx7JYPTvmgWZ",
+  "name": "IG DM Inbound",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "/ig/webhook",
+        "responseMode": "responseNode",
+        "options": {
+          "rawBody": true
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "021188e2-84fc-4f83-b925-c1f61313726d",
+      "name": "Webhook",
+      "webhookId": "3c327c62-51d9-47da-938d-4fb09a08ece4"
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\n\n// 1) Get signature header\nconst signature = $headers['x-hub-signature-256'];\nif (!signature) {\n  throw new Error('Missing X-Hub-Signature-256');\n}\n\n// 2) Get raw body\nconst rawBody = $binary?.data?.data\n  ? Buffer.from($binary.data.data, 'base64')\n  : Buffer.from(JSON.stringify($json));\n\n// 3) Compute expected signature\nconst appSecret = 'addc25c8204de0dadd346b99f43eba25';\n\nconst expected =\n  'sha256=' +\n  crypto\n    .createHmac('sha256', appSecret)\n    .update(rawBody)\n    .digest('hex');\n\n// 4) Compare\nif (signature !== expected) {\n  throw new Error('Invalid webhook signature');\n}\n\n// If we’re here → request is legit\nreturn $input.all();\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "7e1509cf-cbbf-4e5b-a77a-ea6d741134d1",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code node (JavaScript)\nconst body = $input.first().json.body ?? $input.first().json; // depends on n8n webhook settings\n\n// Meta often sends: { object, entry: [ { messaging: [...] } ] }\nconst entries = body.entry || [];\nconst events = [];\n\nfor (const entry of entries) {\n  const messaging = entry.messaging || [];\n  for (const m of messaging) {\n    // Ignore delivery/read events\n    if (!m.message || !m.sender?.id) continue;\n\n    // Optional: ignore echo messages (messages your Page/account sent)\n    if (m.message.is_echo) continue;\n\n    events.push({\n      senderId: m.sender.id,              // Instagram-scoped ID (IGSID)\n      text: m.message.text || \"\",\n      mid: m.message.mid || \"\",\n      timestamp: m.timestamp || Date.now()\n    });\n  }\n}\n\nreturn events.map(e => ({ json: e }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "7e9522f3-4cad-4fbc-951e-7e17e87a7258",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "respondWith": "noData",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        624,
+        0
+      ],
+      "id": "c03068fe-dfac-44b1-accb-57fe7df173c9",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "0c785f07-2674-4148-8aa3-f33d73624e6d",
+  "activeVersionId": "0c785f07-2674-4148-8aa3-f33d73624e6d",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-01-10T16:20:47.966Z",
+      "createdAt": "2026-01-10T16:20:47.966Z",
+      "role": "workflow:owner",
+      "workflowId": "hbo0D0ssGlx7JYPTvmgWZ",
+      "projectId": "jnu5GnxkoXUPZEif"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-01-10T16:39:02.000Z",
+    "createdAt": "2026-01-10T16:38:59.413Z",
+    "versionId": "0c785f07-2674-4148-8aa3-f33d73624e6d",
+    "workflowId": "hbo0D0ssGlx7JYPTvmgWZ",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "/ig/webhook",
+          "responseMode": "responseNode",
+          "options": {
+            "rawBody": true
+          }
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "021188e2-84fc-4f83-b925-c1f61313726d",
+        "name": "Webhook",
+        "webhookId": "3c327c62-51d9-47da-938d-4fb09a08ece4"
+      },
+      {
+        "parameters": {
+          "jsCode": "const crypto = require('crypto');\n\n// 1) Get signature header\nconst signature = $headers['x-hub-signature-256'];\nif (!signature) {\n  throw new Error('Missing X-Hub-Signature-256');\n}\n\n// 2) Get raw body\nconst rawBody = $binary?.data?.data\n  ? Buffer.from($binary.data.data, 'base64')\n  : Buffer.from(JSON.stringify($json));\n\n// 3) Compute expected signature\nconst appSecret = 'addc25c8204de0dadd346b99f43eba25';\n\nconst expected =\n  'sha256=' +\n  crypto\n    .createHmac('sha256', appSecret)\n    .update(rawBody)\n    .digest('hex');\n\n// 4) Compare\nif (signature !== expected) {\n  throw new Error('Invalid webhook signature');\n}\n\n// If we’re here → request is legit\nreturn $input.all();\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          208,
+          0
+        ],
+        "id": "7e1509cf-cbbf-4e5b-a77a-ea6d741134d1",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "jsCode": "// n8n Code node (JavaScript)\nconst body = $input.first().json.body ?? $input.first().json; // depends on n8n webhook settings\n\n// Meta often sends: { object, entry: [ { messaging: [...] } ] }\nconst entries = body.entry || [];\nconst events = [];\n\nfor (const entry of entries) {\n  const messaging = entry.messaging || [];\n  for (const m of messaging) {\n    // Ignore delivery/read events\n    if (!m.message || !m.sender?.id) continue;\n\n    // Optional: ignore echo messages (messages your Page/account sent)\n    if (m.message.is_echo) continue;\n\n    events.push({\n      senderId: m.sender.id,              // Instagram-scoped ID (IGSID)\n      text: m.message.text || \"\",\n      mid: m.message.mid || \"\",\n      timestamp: m.timestamp || Date.now()\n    });\n  }\n}\n\nreturn events.map(e => ({ json: e }));\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          416,
+          0
+        ],
+        "id": "7e9522f3-4cad-4fbc-951e-7e17e87a7258",
+        "name": "Code in JavaScript1"
+      },
+      {
+        "parameters": {
+          "respondWith": "noData",
+          "options": {
+            "responseCode": 200
+          }
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          624,
+          0
+        ],
+        "id": "c03068fe-dfac-44b1-accb-57fe7df173c9",
+        "name": "Respond to Webhook"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript1": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Alexandra Ershova",
+    "name": "Version 0c785f07",
+    "description": "",
+    "autosaved": false
+  },
+  "tags": []
+}
