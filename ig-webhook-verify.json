@@ -1,0 +1,292 @@
+{
+  "updatedAt": "2026-01-10T16:19:07.183Z",
+  "createdAt": "2026-01-04T19:08:02.829Z",
+  "id": "FbNxS6d6aZALI9OV",
+  "name": "IG Webhook Verify",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "path": "/ig/webhook",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f966d645-77fc-4d26-882b-dea88d33fa89",
+      "name": "Webhook",
+      "webhookId": "e1c8bfd4-bdc7-481a-8b46-2dacb0fa161f"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c558ec30-a11f-442a-a69f-ec092fbc7c4d",
+              "leftValue": "={{$json.query[\"hub.mode\"]}}",
+              "rightValue": "subscribe",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "84a15c66-b093-40c9-95e0-961478331738",
+              "leftValue": "={{$json.query[\"hub.verify_token\"]}}",
+              "rightValue": "yup",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "b043ec8b-4451-44d1-909a-deca6ee0f09d",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json.query[\"hub.challenge\"]}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        416,
+        -96
+      ],
+      "id": "74672ee5-9ad5-4047-90b7-3de46f740325",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "respondWith": "noData",
+        "options": {
+          "responseCode": 403
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        416,
+        96
+      ],
+      "id": "f585a07e-d8a9-42cc-9fe0-e074bd5d68fd",
+      "name": "Respond to Webhook1"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "3b49ae90-a560-4a1c-b453-5ff8435b5880",
+  "activeVersionId": "3b49ae90-a560-4a1c-b453-5ff8435b5880",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-01-04T19:08:02.839Z",
+      "createdAt": "2026-01-04T19:08:02.839Z",
+      "role": "workflow:owner",
+      "workflowId": "FbNxS6d6aZALI9OV",
+      "projectId": "jnu5GnxkoXUPZEif"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-01-10T16:19:11.000Z",
+    "createdAt": "2026-01-10T16:19:07.185Z",
+    "versionId": "3b49ae90-a560-4a1c-b453-5ff8435b5880",
+    "workflowId": "FbNxS6d6aZALI9OV",
+    "nodes": [
+      {
+        "parameters": {
+          "path": "/ig/webhook",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "f966d645-77fc-4d26-882b-dea88d33fa89",
+        "name": "Webhook",
+        "webhookId": "e1c8bfd4-bdc7-481a-8b46-2dacb0fa161f"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "c558ec30-a11f-442a-a69f-ec092fbc7c4d",
+                "leftValue": "={{$json.query[\"hub.mode\"]}}",
+                "rightValue": "subscribe",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              },
+              {
+                "id": "84a15c66-b093-40c9-95e0-961478331738",
+                "leftValue": "={{$json.query[\"hub.verify_token\"]}}",
+                "rightValue": "yup",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          208,
+          0
+        ],
+        "id": "b043ec8b-4451-44d1-909a-deca6ee0f09d",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{$json.query[\"hub.challenge\"]}}",
+          "options": {
+            "responseCode": 200
+          }
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          416,
+          -96
+        ],
+        "id": "74672ee5-9ad5-4047-90b7-3de46f740325",
+        "name": "Respond to Webhook"
+      },
+      {
+        "parameters": {
+          "respondWith": "noData",
+          "options": {
+            "responseCode": 403
+          }
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          416,
+          96
+        ],
+        "id": "f585a07e-d8a9-42cc-9fe0-e074bd5d68fd",
+        "name": "Respond to Webhook1"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Respond to Webhook1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Alexandra Ershova",
+    "name": "Version 3b49ae90",
+    "description": "",
+    "autosaved": false
+  },
+  "tags": []
+}
