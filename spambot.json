@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-08T06:58:18.303Z",
+  "updatedAt": "2026-01-10T15:34:00.524Z",
   "createdAt": "2025-11-25T07:08:56.490Z",
   "id": "BzPT7nQWQllqpcsO",
   "name": "Spambot",
@@ -401,6 +401,10 @@
             {
               "category": "pet-related",
               "description": "anything related to pets or mentioning pets"
+            },
+            {
+              "category": "crypto exchange offer",
+              "description": "offer to buy, sell, or exchange cryptocurrency"
             }
           ]
         },
@@ -429,6 +433,14 @@
           "mode": "list",
           "cachedResultName": "Telegram creds",
           "cachedResultUrl": "/projects/jnu5GnxkoXUPZEif/datatables/japQZ3uw0Xawsx8L"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "SpamFilter",
+              "condition": "isTrue"
+            }
+          ]
         },
         "returnAll": true
       },
@@ -614,6 +626,13 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
@@ -646,31 +665,23 @@
     "Telegram Trigger": [
       {
         "json": {
-          "update_id": 833073345,
+          "update_id": 833076067,
           "message": {
-            "message_id": 7329,
+            "message_id": 49834,
             "from": {
-              "id": 8366731730,
+              "id": 7991947985,
               "is_bot": false,
-              "first_name": "Tara",
-              "last_name": "Gutierrez"
+              "first_name": "Ната",
+              "is_premium": true
             },
             "chat": {
-              "id": -1001999193889,
-              "title": "везём кошачью и собачью кровь 😼",
-              "username": "titers_tbi",
-              "is_forum": true,
+              "id": -1001247053710,
+              "title": "CATEBI Chat",
+              "username": "catebichat",
               "type": "supergroup"
             },
-            "date": 1767852007,
-            "text": "Требуются два человека на сегодня и завтра.\nПомощь по делам на несколько часов, работа простая.\nОплата 7 000 ₽ на руки каждому после выполнения.\nКому интересно — пишите в ЛС.",
-            "entities": [
-              {
-                "offset": 0,
-                "length": 174,
-                "type": "bold"
-              }
-            ]
+            "date": 1768056598,
+            "text": "Срочно ищу на подработку перевозчиков! Вакансия доступна как для людей с автомобилем, так и для тех, у кого нет машины или прав. Возраст и опыт не имеют значения. Подробности в личных сообщениях."
           }
         },
         "pairedItem": {
@@ -679,8 +690,8 @@
       }
     ]
   },
-  "versionId": "cb6c250f-8aa6-4fb3-9b9e-6d78e81b742b",
-  "activeVersionId": "cb6c250f-8aa6-4fb3-9b9e-6d78e81b742b",
+  "versionId": "e2b5994b-176b-4e92-9007-41a53a3d33b5",
+  "activeVersionId": "30c3d4b9-d965-4092-a5aa-221b3184d94a",
   "triggerCount": 1,
   "shared": [
     {
@@ -692,9 +703,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-01-08T06:58:30.000Z",
-    "createdAt": "2026-01-08T06:58:18.306Z",
-    "versionId": "cb6c250f-8aa6-4fb3-9b9e-6d78e81b742b",
+    "updatedAt": "2026-01-10T15:29:22.000Z",
+    "createdAt": "2026-01-10T15:29:11.564Z",
+    "versionId": "30c3d4b9-d965-4092-a5aa-221b3184d94a",
     "workflowId": "BzPT7nQWQllqpcsO",
     "nodes": [
       {
@@ -1092,6 +1103,10 @@
               {
                 "category": "pet-related",
                 "description": "anything related to pets or mentioning pets"
+              },
+              {
+                "category": "crypto exchange offer",
+                "description": "offer to buy, sell, or exchange cryptocurrency"
               }
             ]
           },
@@ -1305,6 +1320,13 @@
               "type": "main",
               "index": 0
             }
+          ],
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
           ]
         ]
       },
@@ -1321,8 +1343,8 @@
       }
     },
     "authors": "Alexandra Ershova",
-    "name": "Version cb6c250f",
-    "description": "ban across all chats",
+    "name": "Version 30c3d4b9",
+    "description": "added crypto spam",
     "autosaved": false
   },
   "tags": [
