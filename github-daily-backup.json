@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-07T15:52:25.000Z",
+  "updatedAt": "2026-01-12T19:56:56.467Z",
   "createdAt": "2025-12-07T13:45:53.428Z",
   "id": "IqtO9VBbkDFJFqrj",
   "name": "Github Daily Backup",
@@ -214,8 +214,8 @@
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        106,
-        -60
+        112,
+        -64
       ],
       "typeVersion": 1
     },
@@ -259,8 +259,8 @@
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        586,
-        -60
+        592,
+        -64
       ],
       "typeVersion": 1
     },
@@ -275,8 +275,8 @@
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1258,
-        36
+        1264,
+        48
       ],
       "typeVersion": 1
     },
@@ -406,8 +406,29 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {},
-  "versionId": "555a0af1-48af-48c9-9b46-2a06505fbc64",
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2026-01-12T00:00:52.020+04:00",
+          "Readable date": "January 12th 2026, 12:00:52 am",
+          "Readable time": "12:00:52 am",
+          "Day of week": "Monday",
+          "Year": "2026",
+          "Month": "January",
+          "Day of month": "12",
+          "Hour": "00",
+          "Minute": "00",
+          "Second": "52",
+          "Timezone": "Asia/Tbilisi (UTC+04:00)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "0fb0c600-9a3c-426f-8c5a-213477aece70",
   "activeVersionId": "555a0af1-48af-48c9-9b46-2a06505fbc64",
   "triggerCount": 1,
   "shared": [
