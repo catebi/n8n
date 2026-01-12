@@ -1,0 +1,31 @@
+{
+  "updatedAt": "2026-01-10T20:22:29.318Z",
+  "createdAt": "2026-01-10T20:22:29.318Z",
+  "id": "H3aUQrjTpu1p1vyIqlZml",
+  "name": "Instagram DM (Manychat edition)",
+  "active": false,
+  "isArchived": false,
+  "nodes": [],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "3c49e5d3-ed4c-4de1-9ca9-72aa64385b26",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-10T20:22:29.325Z",
+      "createdAt": "2026-01-10T20:22:29.325Z",
+      "role": "workflow:owner",
+      "workflowId": "H3aUQrjTpu1p1vyIqlZml",
+      "projectId": "jnu5GnxkoXUPZEif"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
