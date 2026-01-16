@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-10T15:34:00.524Z",
+  "updatedAt": "2026-01-16T13:16:50.112Z",
   "createdAt": "2025-11-25T07:08:56.490Z",
   "id": "BzPT7nQWQllqpcsO",
   "name": "Spambot",
@@ -19,7 +19,7 @@
       "typeVersion": 1.2,
       "position": [
         -224,
-        80
+        224
       ],
       "id": "a57e1413-51c3-4c93-8eb5-8f94b086e118",
       "name": "Telegram Trigger",
@@ -41,7 +41,7 @@
       "typeVersion": 1.2,
       "position": [
         1248,
-        336
+        344
       ],
       "id": "7d19429f-7252-4bf5-b54e-3ce17cd8b718",
       "name": "Delete a chat message",
@@ -59,7 +59,7 @@
       "typeVersion": 1.1,
       "position": [
         1024,
-        336
+        344
       ],
       "id": "54d6a6c9-619e-441c-8de3-b7d225616e6c",
       "name": "Wait",
@@ -89,7 +89,7 @@
       "typeVersion": 1,
       "position": [
         224,
-        144
+        148
       ],
       "id": "5f95842e-8f6d-4a4c-a66d-58d53ec91363",
       "name": "Load whitelist",
@@ -134,7 +134,7 @@
       "typeVersion": 2.2,
       "position": [
         448,
-        144
+        148
       ],
       "id": "14b575c3-22c3-4428-a04a-d29a0ce9c965",
       "name": "If account in whitelist"
@@ -178,7 +178,7 @@
       "typeVersion": 2.2,
       "position": [
         0,
-        80
+        76
       ],
       "id": "5f014d99-9564-483b-8787-22e9fe24091e",
       "name": "If message contains text"
@@ -220,7 +220,7 @@
       "typeVersion": 1.2,
       "position": [
         1472,
-        336
+        344
       ],
       "id": "6c1b1b86-ff01-47bb-a163-6c72ba247f76",
       "name": "Send message and wait for response",
@@ -260,7 +260,7 @@
       "typeVersion": 2.2,
       "position": [
         1696,
-        336
+        344
       ],
       "id": "2990ff49-ac34-44ee-894a-fa5e2a7f134b",
       "name": "If Ban Approved"
@@ -288,7 +288,7 @@
       "typeVersion": 4.3,
       "position": [
         2144,
-        240
+        248
       ],
       "id": "1862a28d-0e5e-4126-84cd-2de681ff8a8f",
       "name": "HTTP Request",
@@ -317,7 +317,7 @@
       "typeVersion": 1.1,
       "position": [
         1920,
-        432
+        440
       ],
       "id": "68e8b360-f208-4d68-883b-b6d255adc182",
       "name": "No Ban"
@@ -357,7 +357,7 @@
       "typeVersion": 1.1,
       "position": [
         2368,
-        240
+        256
       ],
       "id": "ea1b7fb1-5871-42c1-a37d-8413d077bf69",
       "name": "Ban"
@@ -369,8 +369,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        752,
-        576
+        744,
+        616
       ],
       "id": "d16bb295-eea2-4a46-887c-2d8c2562c4d4",
       "name": "Google Gemini Chat Model1",
@@ -416,7 +416,7 @@
       "typeVersion": 1.1,
       "position": [
         672,
-        288
+        296
       ],
       "id": "37b5079e-531f-492a-a6f1-28a6ec2b9b32",
       "name": "Text Classifier",
@@ -448,10 +448,83 @@
       "typeVersion": 1.1,
       "position": [
         1920,
-        240
+        248
       ],
       "id": "fd4d85ec-4342-4f22-bd43-907db3696bea",
       "name": "Get chats"
+    },
+    {
+      "parameters": {
+        "language": "pythonNative",
+        "pythonCode": "import re\nimport signal\n\ndef _timeout(signum, frame):\n    raise TimeoutError(\"Python node timed out\")\n\nsignal.signal(signal.SIGALRM, _timeout)\nsignal.alarm(20)  # seconds\n\nmsg = _items[0][\"json\"].get(\"message\", {})\n\n# Telegram text can be in different fields\ntext = (\n    msg.get(\"text\")\n    or msg.get(\"caption\")\n    or \"\"\n)\n# Regex for one @username\npattern = r'@([a-zA-Z0-9_\\.]+)'\n\nmatch = re.search(pattern, text)\n\nusername = match.group(1) if match else None\n\nreturn [\n    {\n        \"json\": {\n            \"username\": username,\n            \"text\": text\n        }\n    }\n]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2368,
+        660
+      ],
+      "id": "1c83bcbe-0ece-4735-994f-b54ab3cec9dc",
+      "name": "Code in Python (Native)"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2592,
+        492
+      ],
+      "id": "1a07106a-2682-4fd7-961e-c12546fa78b2",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "kdaucL3oYuGtAnSs",
+          "mode": "list",
+          "cachedResultName": "blacklist",
+          "cachedResultUrl": "/projects/jnu5GnxkoXUPZEif/datatables/kdaucL3oYuGtAnSs"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "username": "={{ $('Code in Python (Native)').item.json.username }}"
+          },
+          "matchingColumns": [
+            "username"
+          ],
+          "schema": [
+            {
+              "id": "username",
+              "displayName": "username",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2816,
+        492
+      ],
+      "id": "7740140b-6537-4591-8862-ecfbbb346592",
+      "name": "Upsert row(s)"
     }
   ],
   "connections": {
@@ -460,6 +533,11 @@
         [
           {
             "node": "If message contains text",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code in Python (Native)",
             "type": "main",
             "index": 0
           }
@@ -646,6 +724,39 @@
           }
         ]
       ]
+    },
+    "Ban": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in Python (Native)": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Upsert row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -655,7 +766,9 @@
     "availableInMCP": false,
     "errorWorkflow": "uxiU7FOABx5M1moL",
     "timeSavedPerExecution": 1,
-    "timezone": "Asia/Tbilisi"
+    "timezone": "Asia/Tbilisi",
+    "timeSavedMode": "fixed",
+    "executionTimeout": 180
   },
   "staticData": null,
   "meta": {
@@ -665,13 +778,14 @@
     "Telegram Trigger": [
       {
         "json": {
-          "update_id": 833076067,
+          "update_id": 833083219,
           "message": {
-            "message_id": 49834,
+            "message_id": 50182,
             "from": {
-              "id": 7991947985,
+              "id": 969193854,
               "is_bot": false,
-              "first_name": "Ната",
+              "first_name": "A N N A",
+              "username": "Annaaaaa_aaaaaa",
               "is_premium": true
             },
             "chat": {
@@ -680,8 +794,20 @@
               "username": "catebichat",
               "type": "supergroup"
             },
-            "date": 1768056598,
-            "text": "Срочно ищу на подработку перевозчиков! Вакансия доступна как для людей с автомобилем, так и для тех, у кого нет машины или прав. Возраст и опыт не имеют значения. Подробности в личных сообщениях."
+            "date": 1768557604,
+            "text": "Ищу 3 человек для легальной удалённой занятости.\nВозможный доход — от 450 долларов в неделю\nГотова поделиться подробностями — напишите «+» @Dianaa_official",
+            "entities": [
+              {
+                "offset": 139,
+                "length": 16,
+                "type": "mention"
+              },
+              {
+                "offset": 139,
+                "length": 16,
+                "type": "bold"
+              }
+            ]
           }
         },
         "pairedItem": {
@@ -690,8 +816,8 @@
       }
     ]
   },
-  "versionId": "e2b5994b-176b-4e92-9007-41a53a3d33b5",
-  "activeVersionId": "30c3d4b9-d965-4092-a5aa-221b3184d94a",
+  "versionId": "76513975-8778-46a0-9da3-46df6a697348",
+  "activeVersionId": "76513975-8778-46a0-9da3-46df6a697348",
   "triggerCount": 1,
   "shared": [
     {
@@ -703,9 +829,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-01-10T15:29:22.000Z",
-    "createdAt": "2026-01-10T15:29:11.564Z",
-    "versionId": "30c3d4b9-d965-4092-a5aa-221b3184d94a",
+    "updatedAt": "2026-01-16T13:17:11.000Z",
+    "createdAt": "2026-01-16T13:16:50.116Z",
+    "versionId": "76513975-8778-46a0-9da3-46df6a697348",
     "workflowId": "BzPT7nQWQllqpcsO",
     "nodes": [
       {
@@ -721,7 +847,7 @@
         "typeVersion": 1.2,
         "position": [
           -224,
-          80
+          224
         ],
         "id": "a57e1413-51c3-4c93-8eb5-8f94b086e118",
         "name": "Telegram Trigger",
@@ -743,7 +869,7 @@
         "typeVersion": 1.2,
         "position": [
           1248,
-          336
+          344
         ],
         "id": "7d19429f-7252-4bf5-b54e-3ce17cd8b718",
         "name": "Delete a chat message",
@@ -761,7 +887,7 @@
         "typeVersion": 1.1,
         "position": [
           1024,
-          336
+          344
         ],
         "id": "54d6a6c9-619e-441c-8de3-b7d225616e6c",
         "name": "Wait",
@@ -791,7 +917,7 @@
         "typeVersion": 1,
         "position": [
           224,
-          144
+          148
         ],
         "id": "5f95842e-8f6d-4a4c-a66d-58d53ec91363",
         "name": "Load whitelist",
@@ -836,7 +962,7 @@
         "typeVersion": 2.2,
         "position": [
           448,
-          144
+          148
         ],
         "id": "14b575c3-22c3-4428-a04a-d29a0ce9c965",
         "name": "If account in whitelist"
@@ -880,7 +1006,7 @@
         "typeVersion": 2.2,
         "position": [
           0,
-          80
+          76
         ],
         "id": "5f014d99-9564-483b-8787-22e9fe24091e",
         "name": "If message contains text"
@@ -922,7 +1048,7 @@
         "typeVersion": 1.2,
         "position": [
           1472,
-          336
+          344
         ],
         "id": "6c1b1b86-ff01-47bb-a163-6c72ba247f76",
         "name": "Send message and wait for response",
@@ -962,7 +1088,7 @@
         "typeVersion": 2.2,
         "position": [
           1696,
-          336
+          344
         ],
         "id": "2990ff49-ac34-44ee-894a-fa5e2a7f134b",
         "name": "If Ban Approved"
@@ -990,7 +1116,7 @@
         "typeVersion": 4.3,
         "position": [
           2144,
-          240
+          248
         ],
         "id": "1862a28d-0e5e-4126-84cd-2de681ff8a8f",
         "name": "HTTP Request",
@@ -1019,7 +1145,7 @@
         "typeVersion": 1.1,
         "position": [
           1920,
-          432
+          440
         ],
         "id": "68e8b360-f208-4d68-883b-b6d255adc182",
         "name": "No Ban"
@@ -1059,7 +1185,7 @@
         "typeVersion": 1.1,
         "position": [
           2368,
-          240
+          256
         ],
         "id": "ea1b7fb1-5871-42c1-a37d-8413d077bf69",
         "name": "Ban"
@@ -1071,8 +1197,8 @@
         "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
         "typeVersion": 1,
         "position": [
-          752,
-          576
+          744,
+          616
         ],
         "id": "d16bb295-eea2-4a46-887c-2d8c2562c4d4",
         "name": "Google Gemini Chat Model1",
@@ -1118,7 +1244,7 @@
         "typeVersion": 1.1,
         "position": [
           672,
-          288
+          296
         ],
         "id": "37b5079e-531f-492a-a6f1-28a6ec2b9b32",
         "name": "Text Classifier",
@@ -1136,16 +1262,97 @@
             "cachedResultName": "Telegram creds",
             "cachedResultUrl": "/projects/jnu5GnxkoXUPZEif/datatables/japQZ3uw0Xawsx8L"
           },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "SpamFilter",
+                "condition": "isTrue"
+              }
+            ]
+          },
           "returnAll": true
         },
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1.1,
         "position": [
           1920,
-          240
+          248
         ],
         "id": "fd4d85ec-4342-4f22-bd43-907db3696bea",
         "name": "Get chats"
+      },
+      {
+        "parameters": {
+          "language": "pythonNative",
+          "pythonCode": "import re\nimport signal\n\ndef _timeout(signum, frame):\n    raise TimeoutError(\"Python node timed out\")\n\nsignal.signal(signal.SIGALRM, _timeout)\nsignal.alarm(20)  # seconds\n\nmsg = _items[0][\"json\"].get(\"message\", {})\n\n# Telegram text can be in different fields\ntext = (\n    msg.get(\"text\")\n    or msg.get(\"caption\")\n    or \"\"\n)\n# Regex for one @username\npattern = r'@([a-zA-Z0-9_\\.]+)'\n\nmatch = re.search(pattern, text)\n\nusername = match.group(1) if match else None\n\nreturn [\n    {\n        \"json\": {\n            \"username\": username,\n            \"text\": text\n        }\n    }\n]"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2368,
+          660
+        ],
+        "id": "1c83bcbe-0ece-4735-994f-b54ab3cec9dc",
+        "name": "Code in Python (Native)"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineAll",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          2592,
+          492
+        ],
+        "id": "1a07106a-2682-4fd7-961e-c12546fa78b2",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "dataTableId": {
+            "__rl": true,
+            "value": "kdaucL3oYuGtAnSs",
+            "mode": "list",
+            "cachedResultName": "blacklist",
+            "cachedResultUrl": "/projects/jnu5GnxkoXUPZEif/datatables/kdaucL3oYuGtAnSs"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "username": "={{ $('Code in Python (Native)').item.json.username }}"
+            },
+            "matchingColumns": [
+              "username"
+            ],
+            "schema": [
+              {
+                "id": "username",
+                "displayName": "username",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          2816,
+          492
+        ],
+        "id": "7740140b-6537-4591-8862-ecfbbb346592",
+        "name": "Upsert row(s)"
       }
     ],
     "connections": {
@@ -1154,6 +1361,11 @@
           [
             {
               "node": "If message contains text",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Code in Python (Native)",
               "type": "main",
               "index": 0
             }
@@ -1340,11 +1552,44 @@
             }
           ]
         ]
+      },
+      "Ban": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in Python (Native)": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Upsert row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Alexandra Ershova",
-    "name": "Version 30c3d4b9",
-    "description": "added crypto spam",
+    "name": "Version 76513975",
+    "description": "added blacklist filling",
     "autosaved": false
   },
   "tags": [
