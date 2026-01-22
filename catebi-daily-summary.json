@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-13T06:05:44.984Z",
+  "updatedAt": "2026-01-22T09:30:16.558Z",
   "createdAt": "2025-12-14T10:31:39.535Z",
   "id": "ki83AovnVbBGdtXO",
   "name": "Catebi Daily Summary",
@@ -137,7 +137,7 @@
     },
     {
       "parameters": {
-        "modelName": "models/gemini-3-flash-preview",
+        "modelName": "models/gemini-3-pro-preview",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -1078,8 +1078,8 @@
       }
     ]
   },
-  "versionId": "bbc09a27-2369-46f4-9742-d5a49900488b",
-  "activeVersionId": "bbc09a27-2369-46f4-9742-d5a49900488b",
+  "versionId": "5c6de980-e48e-4862-bd56-b08caded6ff5",
+  "activeVersionId": "5c6de980-e48e-4862-bd56-b08caded6ff5",
   "triggerCount": 1,
   "shared": [
     {
@@ -1091,9 +1091,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-01-13T06:06:02.000Z",
-    "createdAt": "2026-01-13T06:05:44.999Z",
-    "versionId": "bbc09a27-2369-46f4-9742-d5a49900488b",
+    "updatedAt": "2026-01-22T09:30:39.000Z",
+    "createdAt": "2026-01-22T09:30:16.562Z",
+    "versionId": "5c6de980-e48e-4862-bd56-b08caded6ff5",
     "workflowId": "ki83AovnVbBGdtXO",
     "nodes": [
       {
@@ -1227,7 +1227,7 @@
       },
       {
         "parameters": {
-          "modelName": "models/gemini-3-flash-preview",
+          "modelName": "models/gemini-3-pro-preview",
           "options": {}
         },
         "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -2132,9 +2132,9 @@
       }
     },
     "authors": "Alexandra Ershova",
-    "name": "Version bbc09a27",
-    "description": "fixed binary field error",
-    "autosaved": false
+    "name": "Version 5c6de980",
+    "description": "switched flash to pro",
+    "autosaved": true
   },
   "tags": []
 }
