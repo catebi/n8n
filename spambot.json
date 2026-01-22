@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-19T07:28:28.564Z",
+  "updatedAt": "2026-01-21T14:39:28.681Z",
   "createdAt": "2025-11-25T07:08:56.490Z",
   "id": "BzPT7nQWQllqpcsO",
   "name": "Spambot",
@@ -19,7 +19,7 @@
       "typeVersion": 1.2,
       "position": [
         -1360,
-        272
+        224
       ],
       "id": "a57e1413-51c3-4c93-8eb5-8f94b086e118",
       "name": "Telegram Trigger",
@@ -40,8 +40,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1248,
-        352
+        112,
+        344
       ],
       "id": "7d19429f-7252-4bf5-b54e-3ce17cd8b718",
       "name": "Delete a chat message",
@@ -58,8 +58,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1024,
-        352
+        -112,
+        344
       ],
       "id": "54d6a6c9-619e-441c-8de3-b7d225616e6c",
       "name": "Wait",
@@ -88,8 +88,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1,
       "position": [
-        -592,
-        144
+        -912,
+        148
       ],
       "id": "5f95842e-8f6d-4a4c-a66d-58d53ec91363",
       "name": "Load whitelist",
@@ -133,8 +133,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -432,
-        144
+        -688,
+        148
       ],
       "id": "14b575c3-22c3-4428-a04a-d29a0ce9c965",
       "name": "If account in whitelist"
@@ -177,8 +177,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -864,
-        64
+        -1136,
+        76
       ],
       "id": "5f014d99-9564-483b-8787-22e9fe24091e",
       "name": "If message contains text"
@@ -188,7 +188,7 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        1024,
+        -112,
         0
       ],
       "id": "aaad4c23-0f52-47a3-bdb5-38f8a8630221",
@@ -219,8 +219,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1472,
-        352
+        336,
+        344
       ],
       "id": "6c1b1b86-ff01-47bb-a163-6c72ba247f76",
       "name": "Send message and wait for response",
@@ -259,8 +259,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1696,
-        352
+        560,
+        344
       ],
       "id": "2990ff49-ac34-44ee-894a-fa5e2a7f134b",
       "name": "If Ban Approved"
@@ -287,8 +287,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        2144,
-        256
+        1008,
+        248
       ],
       "id": "1862a28d-0e5e-4126-84cd-2de681ff8a8f",
       "name": "HTTP Request",
@@ -316,8 +316,8 @@
       "type": "n8n-nodes-base.executionData",
       "typeVersion": 1.1,
       "position": [
-        1920,
-        448
+        784,
+        440
       ],
       "id": "68e8b360-f208-4d68-883b-b6d255adc182",
       "name": "No Ban"
@@ -336,7 +336,7 @@
       "type": "n8n-nodes-base.executionData",
       "typeVersion": 1.1,
       "position": [
-        1248,
+        112,
         0
       ],
       "id": "5edb718e-e99f-46a4-9890-2e1bd5b1789a",
@@ -356,8 +356,8 @@
       "type": "n8n-nodes-base.executionData",
       "typeVersion": 1.1,
       "position": [
-        2368,
-        256
+        1232,
+        248
       ],
       "id": "ea1b7fb1-5871-42c1-a37d-8413d077bf69",
       "name": "Ban"
@@ -369,8 +369,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        752,
-        624
+        -392,
+        616
       ],
       "id": "d16bb295-eea2-4a46-887c-2d8c2562c4d4",
       "name": "Google Gemini Chat Model1",
@@ -415,8 +415,8 @@
       "type": "@n8n/n8n-nodes-langchain.textClassifier",
       "typeVersion": 1.1,
       "position": [
-        672,
-        288
+        -464,
+        296
       ],
       "id": "37b5079e-531f-492a-a6f1-28a6ec2b9b32",
       "name": "Text Classifier",
@@ -447,8 +447,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        1920,
-        256
+        784,
+        248
       ],
       "id": "fd4d85ec-4342-4f22-bd43-907db3696bea",
       "name": "Get chats"
@@ -461,8 +461,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2368,
-        672
+        1232,
+        660
       ],
       "id": "1c83bcbe-0ece-4735-994f-b54ab3cec9dc",
       "name": "Code in Python (Native)"
@@ -476,8 +476,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        2592,
-        496
+        1456,
+        492
       ],
       "id": "1a07106a-2682-4fd7-961e-c12546fa78b2",
       "name": "Merge"
@@ -520,8 +520,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        3040,
-        496
+        1904,
+        492
       ],
       "id": "7740140b-6537-4591-8862-ecfbbb346592",
       "name": "Upsert row(s)"
@@ -554,8 +554,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        2816,
-        496
+        1680,
+        492
       ],
       "id": "cddae23c-5ef1-494b-af11-8027b2ef89b0",
       "name": "If"
@@ -849,7 +849,7 @@
       }
     ]
   },
-  "versionId": "5c044b37-6763-4351-93ed-b476baea887f",
+  "versionId": "2a23b702-0f33-44e3-a0ce-9ba767bc252e",
   "activeVersionId": "e7589eaa-a7d7-4853-be92-1f28219814b1",
   "triggerCount": 1,
   "shared": [
