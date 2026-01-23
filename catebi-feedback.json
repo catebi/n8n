@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-31T14:20:47.521Z",
+  "updatedAt": "2026-01-23T05:18:19.423Z",
   "createdAt": "2025-12-09T07:01:52.897Z",
   "id": "JUsbCQX9ptL9iGiv",
   "name": "Catebi Feedback",
@@ -776,7 +776,7 @@
         "binaryData": true,
         "binaryPropertyName": "chart",
         "additionalFields": {
-          "caption": "={{ $node['Diff'].json.average_comment + '\\n' + $node['Diff'].json.responders_comment + '\\n\\nКомментарии:\\n'}} {{$json.concatenated_text_feedback ?? '(пусто)' }}",
+          "caption": "={{ $node['Diff'].json.average_comment + '\\n' + $node['Diff'].json.responders_comment + '\\n\\nКомментарии:\\n'}} {{$json.concatenated_text_feedback.slice(0, 800) ?? '(пусто)' }}",
           "fileName": "chart.png",
           "parse_mode": "Markdown",
           "message_thread_id": 354496
@@ -1144,34 +1144,6 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {
-    "Yesterday Mark Summary": [
-      {
-        "json": {
-          "average_mark": 3,
-          "count_mark": 10
-        }
-      }
-    ],
-    "Calculate Feedback": [
-      {
-        "json": {
-          "timestamp": "2025-12-12T23:55:04.039+04:00",
-          "Readable date": "December 12th 2025, 11:55:04 pm",
-          "Readable time": "11:55:04 pm",
-          "Day of week": "Friday",
-          "Year": "2025",
-          "Month": "December",
-          "Day of month": "12",
-          "Hour": "23",
-          "Minute": "55",
-          "Second": "04",
-          "Timezone": "Asia/Tbilisi (UTC+04:00)"
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      }
-    ],
     "Evaluation": [
       {
         "json": {
@@ -1245,9 +1217,29 @@
           "item": 0
         }
       }
+    ],
+    "Calculate Feedback": [
+      {
+        "json": {
+          "timestamp": "2026-01-22T23:55:07.038+04:00",
+          "Readable date": "January 22nd 2026, 11:55:07 pm",
+          "Readable time": "11:55:07 pm",
+          "Day of week": "Thursday",
+          "Year": "2026",
+          "Month": "January",
+          "Day of month": "22",
+          "Hour": "23",
+          "Minute": "55",
+          "Second": "07",
+          "Timezone": "Asia/Tbilisi (UTC+04:00)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
     ]
   },
-  "versionId": "79a59d31-4994-43aa-8cf9-a3020210c921",
+  "versionId": "ea9ca368-5abc-41ef-817a-46a65839a632",
   "activeVersionId": "79a59d31-4994-43aa-8cf9-a3020210c921",
   "triggerCount": 3,
   "shared": [
