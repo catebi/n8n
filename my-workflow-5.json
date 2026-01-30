@@ -1,0 +1,146 @@
+{
+  "updatedAt": "2026-01-30T20:00:37.700Z",
+  "createdAt": "2026-01-30T19:47:56.998Z",
+  "id": "MRFXbryqZF_SyCGXJcQjV",
+  "name": "My workflow 5",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b5ffc80f-cad8-4de0-9e19-6c789ade01de",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT from_username, text, date\nfrom v_tg_message_flat\nWHERE topic_thread_id = 177225\n  and date >= '2026-01-30'\norder by date",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        208,
+        0
+      ],
+      "id": "84823eba-8070-4d57-9cfe-2a3b003a56d4",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "postgres": {
+          "id": "u5hzEAvZADCVqBIT",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "concatenate",
+              "field": "message",
+              "separateBy": "\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        624,
+        0
+      ],
+      "id": "3ff05472-4e74-466a-8e73-5e89b3be5efc",
+      "name": "Summarize"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e8f65389-5f2f-4083-8a5e-7d5366376d13",
+              "name": "message",
+              "value": "=[{{ $json.date }}] {{ $json.from_username }}: {{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "e99ec996-8013-4f4f-97e1-1f6e74c173b5",
+      "name": "Edit Fields"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Summarize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "aa34b414-2c0d-4f7b-a20c-ea47ca057c20",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-30T19:47:57.011Z",
+      "createdAt": "2026-01-30T19:47:57.011Z",
+      "role": "workflow:owner",
+      "workflowId": "MRFXbryqZF_SyCGXJcQjV",
+      "projectId": "jnu5GnxkoXUPZEif"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
