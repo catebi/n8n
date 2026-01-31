@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-30T20:00:37.700Z",
+  "updatedAt": "2026-01-30T20:26:12.129Z",
   "createdAt": "2026-01-30T19:47:56.998Z",
   "id": "MRFXbryqZF_SyCGXJcQjV",
   "name": "My workflow 5",
@@ -82,6 +82,85 @@
       ],
       "id": "e99ec996-8013-4f4f-97e1-1f6e74c173b5",
       "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "mode": "markdownToHtml",
+        "markdown": "={{ $json.output.text }}",
+        "options": {
+          "completeHTMLDocument": true,
+          "simpleLineBreaks": true
+        }
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        1264,
+        0
+      ],
+      "id": "5431a15d-34f1-4cc8-be32-cc454a02d1de",
+      "name": "Markdown"
+    },
+    {
+      "parameters": {
+        "htmlInput": "={{ $json.data }}"
+      },
+      "type": "@custom-js/n8n-nodes-pdf-toolkit.html2Pdf",
+      "typeVersion": 1,
+      "position": [
+        1472,
+        0
+      ],
+      "id": "5cbb2a59-ef44-45c2-86bc-f102d9169074",
+      "name": "HTML to PDF",
+      "credentials": {
+        "customJsApi": {
+          "id": "lb3S0k0du5N7VUtS",
+          "name": "CustomJS account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chunkSize": 20000,
+        "options": {
+          "summarizationMethodAndPrompts": {
+            "values": {
+              "summarizationMethod": "stuff",
+              "prompt": "You are preparing a conflict report for the mediator. You need to summarize the text messages while preserving who said what and the gist of the conflict. Write a summary in Russian of the following:\n\n\n\"{text}\"\n\n\nSUMMARY:"
+            }
+          },
+          "batching": {}
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainSummarization",
+      "typeVersion": 2.1,
+      "position": [
+        832,
+        0
+      ],
+      "id": "8ccf4c0d-04b8-48e5-8448-0ab55d0ab700",
+      "name": "Summarization Chain"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3-pro-preview",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        768,
+        208
+      ],
+      "id": "f470e02c-ac03-4f01-a75c-c8b3863992dd",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "82kFMSuErz4YBXNW",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
     }
   ],
   "connections": {
@@ -117,6 +196,50 @@
           }
         ]
       ]
+    },
+    "Summarize": {
+      "main": [
+        [
+          {
+            "node": "Summarization Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Markdown": {
+      "main": [
+        [
+          {
+            "node": "HTML to PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarization Chain": {
+      "main": [
+        [
+          {
+            "node": "Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Summarization Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -129,7 +252,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "aa34b414-2c0d-4f7b-a20c-ea47ca057c20",
+  "versionId": "e3e40200-2174-4e69-8275-a12b4331dcbd",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [
