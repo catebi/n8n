@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-23T05:18:19.423Z",
+  "updatedAt": "2026-02-03T11:42:39.298Z",
   "createdAt": "2025-12-09T07:01:52.897Z",
   "id": "JUsbCQX9ptL9iGiv",
   "name": "Catebi Feedback",
@@ -776,7 +776,7 @@
         "binaryData": true,
         "binaryPropertyName": "chart",
         "additionalFields": {
-          "caption": "={{ $node['Diff'].json.average_comment + '\\n' + $node['Diff'].json.responders_comment + '\\n\\nКомментарии:\\n'}} {{$json.concatenated_text_feedback.slice(0, 800) ?? '(пусто)' }}",
+          "caption": "={{ $node['Diff'].json.average_comment + '\\n' + $node['Diff'].json.responders_comment + '\\n\\nКомментарии:\\n временно отключены'}} ",
           "fileName": "chart.png",
           "parse_mode": "Markdown",
           "message_thread_id": 354496
@@ -1239,8 +1239,8 @@
       }
     ]
   },
-  "versionId": "ea9ca368-5abc-41ef-817a-46a65839a632",
-  "activeVersionId": "79a59d31-4994-43aa-8cf9-a3020210c921",
+  "versionId": "b2d668b6-d006-4128-8a73-62a80b3f1ff9",
+  "activeVersionId": "b2d668b6-d006-4128-8a73-62a80b3f1ff9",
   "triggerCount": 3,
   "shared": [
     {
@@ -1252,9 +1252,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2025-12-31T14:20:50.000Z",
-    "createdAt": "2025-12-31T14:20:47.527Z",
-    "versionId": "79a59d31-4994-43aa-8cf9-a3020210c921",
+    "updatedAt": "2026-02-03T11:42:50.000Z",
+    "createdAt": "2026-02-03T11:42:39.300Z",
+    "versionId": "b2d668b6-d006-4128-8a73-62a80b3f1ff9",
     "workflowId": "JUsbCQX9ptL9iGiv",
     "nodes": [
       {
@@ -2027,7 +2027,7 @@
           "binaryData": true,
           "binaryPropertyName": "chart",
           "additionalFields": {
-            "caption": "={{ $node['Diff'].json.average_comment + '\\n' + $node['Diff'].json.responders_comment + '\\n\\nКомментарии:\\n'}} {{$json.concatenated_text_feedback ?? '(пусто)' }}",
+            "caption": "={{ $node['Diff'].json.average_comment + '\\n' + $node['Diff'].json.responders_comment + '\\n\\nКомментарии:\\n временно отключены'}} ",
             "fileName": "chart.png",
             "parse_mode": "Markdown",
             "message_thread_id": 354496
@@ -2378,9 +2378,9 @@
       }
     },
     "authors": "Alexandra Ershova",
-    "name": "Version 79a59d31",
-    "description": "",
-    "autosaved": false
+    "name": "Version b2d668b6",
+    "description": "turned off comments\n",
+    "autosaved": true
   },
   "tags": []
 }
