@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-21T08:18:34.712Z",
+  "updatedAt": "2026-02-03T06:35:35.827Z",
   "createdAt": "2025-11-25T14:46:39.204Z",
   "id": "uxiU7FOABx5M1moL",
   "name": "Error Notification workflow",
@@ -19,21 +19,6 @@
     },
     {
       "parameters": {
-        "mode": "runOnceForEachItem",
-        "language": "pythonNative",
-        "pythonCode": "def escape_markdown_v2(text: str) -> str:\n    \"\"\"\n    Escape all Telegram MarkdownV2 special characters\n    WITHOUT using regex.\n    \"\"\"\n    special_chars = {\n        '_', '*', '[', ']', '(', ')',\n        '~', '`', '>', '#', '+', '-',\n        '=', '|', '{', '}', '.', '!'\n    }\n\n    escaped = []\n    for ch in text:\n        if ch in special_chars:\n            escaped.append('\\\\' + ch)\n        else:\n            escaped.append(ch)\n\n    return ''.join(escaped)\n\n\n# Build the message with monospace stacktrace\nworkflow_name = _item['json']['workflow']['name']\nnode_name = _item['json']['execution']['lastNodeExecuted']\nerror_msg = _item['json']['execution']['error']['message']\nstacktrace = _item['json']['execution']['error']['stack']\nurl = _item['json']['execution']['url']\n\nmessage = (\n    f\"*WORKFLOW ERROR*\\n\\n\"\n    f\"*Workflow:* {escape_markdown_v2(workflow_name)}\\n\"\n    f\"*Node:* {escape_markdown_v2(node_name)}\\n\"\n    f\"*Error:* {escape_markdown_v2(error_msg)}\\n\"\n    f\"*Execution:* [open]({escape_markdown_v2(url)})\\n\\n\"\n    f\"*Stacktrace:*\\n\"\n    f\"```\\n{escape_markdown_v2(stacktrace)}\\n```\"\n)\n\nreturn {\"message\": message}"
-      },
-      "id": "5bb86eb6-87f6-4e8f-a9bb-47d6c652a6d7",
-      "name": "Code",
-      "type": "n8n-nodes-base.code",
-      "position": [
-        -224,
-        400
-      ],
-      "typeVersion": 2
-    },
-    {
-      "parameters": {
         "sendTo": "catebi.tbilisi@gmail.com",
         "subject": "n8n Workflow Error",
         "message": "={{ $json.message }}",
@@ -43,7 +28,7 @@
       "name": "Notify Gmail",
       "type": "n8n-nodes-base.gmail",
       "position": [
-        0,
+        208,
         400
       ],
       "webhookId": "52f0cc71-1ad8-4f9a-b07c-bae9be1e217c",
@@ -62,7 +47,7 @@
       "name": "Notify Telegram",
       "type": "n8n-nodes-base.telegram",
       "position": [
-        0,
+        208,
         208
       ],
       "webhookId": "13c616bf-a3ad-4035-998a-1dfe6021b89f",
@@ -80,7 +65,7 @@
       "parameters": {
         "content": "## 🚨 Error Notification Workflow\n\nThis workflow automatically sends notifications when any other workflow fails.\n\nSimply download copy and paste into your workflow then add your credential with prefered channel\n\nThis workflow is free. \nwant more? [contact me](khmuhtadin.com)\n\nhave something to helps me chill, [a coffee](coff.ee/khmuhtadin) would be great!",
         "height": 280,
-        "width": 420,
+        "width": 628,
         "color": 5
       },
       "id": "badc57af-3ca6-49ee-ba26-f147e083908f",
@@ -91,30 +76,78 @@
         64
       ],
       "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "381db499-3c75-45a6-9137-02ebb9ba61c8",
+              "name": "message",
+              "value": "=**WORKFLOW ERROR**  \n  \n**Workflow:** {{ $json.workflow.name }}  \n**Node:** {{ $json.workflow.name }}  \n**Error:** {{ $json.execution.error.message }}  \n**Execution:** [open]({{ $json.execution.url }})  \n**Stacktrace:**  \n```  \n{{ $json.execution.error.stack }}```",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -240,
+        400
+      ],
+      "id": "54a6144c-b4bd-424d-b388-444b2165b64d",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "markdownText": "={{ $json.message }}",
+        "unsupportedTagsStrategy": "keep"
+      },
+      "type": "@aotoki/n8n-nodes-telegramify-markdown.telegramifyMarkdown",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        400
+      ],
+      "id": "303f13ef-f085-4b0d-8c8c-05659ba52120",
+      "name": "Telegramify Markdown"
     }
   ],
   "connections": {
-    "Code": {
+    "Error Trigger": {
       "main": [
         [
           {
-            "node": "Notify Telegram",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Notify Gmail",
+            "node": "Edit Fields",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Error Trigger": {
+    "Edit Fields": {
       "main": [
         [
           {
-            "node": "Code",
+            "node": "Notify Gmail",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Telegramify Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegramify Markdown": {
+      "main": [
+        [
+          {
+            "node": "Notify Telegram",
             "type": "main",
             "index": 0
           }
@@ -132,27 +165,19 @@
       {
         "json": {
           "execution": {
-            "id": "111317",
-            "url": "https://n8n.religofsil.space/workflow/BzPT7nQWQllqpcsO/executions/111317",
+            "id": "143218",
+            "url": "https://n8n.religofsil.space/workflow/BzPT7nQWQllqpcsO/executions/143218",
             "error": {
               "level": "warning",
-              "shouldReport": false,
-              "description": "Your Code node task was not matched to a runner within the timeout period. This indicates that the task runner is currently down, or not ready, or at capacity, so it cannot service your task.<br/><br/>If you are repeatedly executing Code nodes with long-running tasks across your instance, please space them apart to give the runner time to catch up. If this does not describe your use case, please open a GitHub issue or reach out to support.<br/><br/>If needed, you can increase the timeout using the N8N_RUNNERS_TASK_REQUEST_TIMEOUT environment variable.",
               "tags": {},
-              "message": "Task request timed out after 60 seconds",
-              "stack": "Error: Task request timed out after 60 seconds\n    at LocalTaskRequester.requestExpired (/usr/local/lib/node_modules/n8n/src/task-runners/task-managers/task-requester.ts:304:17)\n    at LocalTaskRequester.onMessage (/usr/local/lib/node_modules/n8n/src/task-runners/task-managers/task-requester.ts:272:10)\n    at TaskBroker.handleRequestTimeout (/usr/local/lib/node_modules/n8n/src/task-runners/task-broker/task-broker.service.ts:115:50)\n    at Timeout.<anonymous> (/usr/local/lib/node_modules/n8n/src/task-runners/task-broker/task-broker.service.ts:102:9)\n    at listOnTimeout (node:internal/timers:588:17)\n    at processTimers (node:internal/timers:523:7)"
+              "timestamp": 1770079184705,
+              "context": {},
+              "functionality": "regular",
+              "name": "WorkflowHasIssuesError",
+              "message": "The workflow has issues and cannot be executed for that reason. Please fix them first.",
+              "stack": "WorkflowHasIssuesError: The workflow has issues and cannot be executed for that reason. Please fix them first.\n    at WorkflowExecute.checkForWorkflowIssues (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_ec37920eb95917b28efaa783206b20f3/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:1355:10)\n    at WorkflowExecute.processRunExecutionData (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_ec37920eb95917b28efaa783206b20f3/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:1434:8)\n    at WorkflowRunner.runMainProcess (/usr/local/lib/node_modules/n8n/src/workflow-runner.ts:298:41)\n    at WorkflowRunner.run (/usr/local/lib/node_modules/n8n/src/workflow-runner.ts:176:4)\n    at Object.executeWebhook (/usr/local/lib/node_modules/n8n/src/webhooks/webhook-helpers.ts:631:17)"
             },
-            "lastNodeExecuted": "Code in Python (Native)",
-            "mode": "webhook",
-            "executionContext": {
-              "version": 1,
-              "establishedAt": 1768927548415,
-              "source": "webhook",
-              "triggerNode": {
-                "name": "Telegram Trigger",
-                "type": "n8n-nodes-base.telegramTrigger"
-              }
-            }
+            "mode": "webhook"
           },
           "workflow": {
             "id": "BzPT7nQWQllqpcsO",
@@ -165,7 +190,7 @@
       }
     ]
   },
-  "versionId": "6ae40dd0-d935-4d5c-9459-bf49ff391f95",
+  "versionId": "9385238e-ca13-47c8-b8f3-f0f9c27d99a5",
   "activeVersionId": "6ae40dd0-d935-4d5c-9459-bf49ff391f95",
   "triggerCount": 0,
   "shared": [
