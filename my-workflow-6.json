@@ -1,0 +1,78 @@
+{
+  "updatedAt": "2026-02-06T19:10:45.092Z",
+  "createdAt": "2026-02-06T19:09:44.296Z",
+  "id": "Fzs_RZ_FNuuZGM2u4Dqgr",
+  "name": "My workflow 6",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "66100d1c-f551-4425-88b7-ae81f9319f54",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://api.tally.so/forms/Bz7P7R",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpBearerAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "7482da76-6cb2-4991-accf-b5f8b7ac21ca",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "8YxdqvcEIK7SBTPa",
+          "name": "Tally"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "ec0028f9-a392-4ebf-9f8d-1ac16422110c",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-02-06T19:09:44.315Z",
+      "createdAt": "2026-02-06T19:09:44.315Z",
+      "role": "workflow:owner",
+      "workflowId": "Fzs_RZ_FNuuZGM2u4Dqgr",
+      "projectId": "jnu5GnxkoXUPZEif"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
