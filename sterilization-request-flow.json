@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-11-28T11:27:26.000Z",
+  "updatedAt": "2026-02-06T12:11:49.236Z",
   "createdAt": "2025-09-28T15:16:12.101Z",
   "id": "AwLuEu613JUuE8ue",
   "name": "Sterilization request flow",
@@ -25,7 +25,7 @@
     {
       "parameters": {
         "chatId": "-1001938190303",
-        "text": "=Пришла новая анкета!\nЗаявитель:ница: {{ $('Webhook').item.json.body.fields.requestor_name }}, язык {{ $('Webhook').item.json.body.fields.language.name }}\n{{ $('Webhook').item.json.body.fields.requestor_contact }}\nБеременность: {{ $('Webhook').item.json.body.fields.is_pregnant.name }}",
+        "text": "=Пришла новая анкета #{{ $json.body.fields.id }}!\nЗаявитель:ница: {{ $('Webhook').item.json.body.fields.requestor_name }}, язык {{ $('Webhook').item.json.body.fields.language.name }}\n{{ $('Webhook').item.json.body.fields.requestor_contact }}\nБеременность: {{ $('Webhook').item.json.body.fields.is_pregnant.name }}",
         "additionalFields": {
           "message_thread_id": 2231
         }
@@ -118,9 +118,214 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {},
-  "versionId": "dc25b68e-a146-47af-abae-5d8ef1ef8c9e",
-  "activeVersionId": "dc25b68e-a146-47af-abae-5d8ef1ef8c9e",
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "connection": "close",
+            "host": "n8n.religofsil.space",
+            "x-real-ip": "44.220.89.66",
+            "x-forwarded-for": "44.220.89.66",
+            "x-forwarded-proto": "https",
+            "content-length": "4608",
+            "content-type": "application/json",
+            "user-agent": "Mozilla/5.0 (compatible; AirtableScripting; +https://airtable.com/developers/scripting;)",
+            "x-airtable-source": "app9k7MbtZfplJvDC/wflj88DNMzyuGBOXG",
+            "accept": "*/*",
+            "accept-encoding": "gzip,deflate"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "recordId": "recgE8BKwZp8acSW6",
+            "fields": {
+              "created_date": "2026-02-06",
+              "requestor_contact": "Phone: +995599129237\nTelegram: olia443\nWhatsapp: \nViber: \nInst: \nEmail: olga-nikolaeva443@yandex.ru\n",
+              "address": "Арсенидзе 11",
+              "sex": {
+                "id": "selBeE8ZsBQHNyLpE",
+                "name": "Кошка",
+                "color": "greenLight2"
+              },
+              "catch_type": null,
+              "wild_or_tame": {
+                "id": "selMAJI6ciCtHioV1",
+                "name": "Ручная",
+                "color": "greenLight2"
+              },
+              "payment_choice": null,
+              "🏠 needs_foster_care": {
+                "id": "selBiWxceJqAUqOEP",
+                "name": "Нет, оставьте кошку в котодоме",
+                "color": "orangeLight2"
+              },
+              "🩺 health": {
+                "id": "selNYZXSqTOzAUS15",
+                "name": "Проблемы со здоровьем",
+                "color": "redLight2"
+              },
+              "is_pregnant": {
+                "id": "sel6piNTYaIKUxK1o",
+                "name": "Нет уверенности",
+                "color": "grayLight2"
+              },
+              "return_type": {
+                "id": "selMLuo7NIH1ltSVe",
+                "name": "Заберу кошку самостоятельно",
+                "color": "greenLight2"
+              },
+              "clinic": {
+                "id": "sel96ePma39ASmWjb",
+                "name": "Без разницы",
+                "color": "greenLight2"
+              },
+              "🦟is_deflead": {
+                "id": "selhRofqfECqRKXFh",
+                "name": "Нет",
+                "color": "redLight2"
+              },
+              "is_vaccinated": {
+                "id": "selnPrRHSv9F2GZlM",
+                "name": "Нет",
+                "color": "redLight2"
+              },
+              "requestor_name": "Ольга",
+              "created_by": {
+                "id": "usrPAGESHARE00000",
+                "email": "anonymous+formpage@noreply.airtable.com",
+                "permissionLevel": "none",
+                "name": "Anonymous",
+                "profilePicUrl": "https://static.airtable.com/images/userIcons/public_form_submission_user.png"
+              },
+              "is_volunteer": true,
+              "status": {
+                "id": "sel9diwNH36X5aBpz",
+                "name": "Новая заявка",
+                "color": "cyanLight2"
+              },
+              "Ответственность куратора": true,
+              "Ответственность за переноски взятые у Catebi": null,
+              "id": 2515,
+              "👜need_carrier": null,
+              "language": {
+                "id": "seljx2TpKDn2Lzldd",
+                "name": "ru",
+                "color": "greenLight2"
+              },
+              "geo_location": null,
+              "notes": null,
+              "ear-tipping": null,
+              "district": {
+                "id": "selYEywLjCrrJAE4Y",
+                "name": "Исани",
+                "color": "yellowLight2"
+              },
+              "operator": null,
+              "cat_picture": null,
+              "steril_date": null,
+              "sterilized": null,
+              "cat_flat_fostering": null,
+              "Carriers": null,
+              "cat_flat_fostering 2": null,
+              "cat_flat_fostering 3": null,
+              "cat_flat_fostering 4": null,
+              "cat_flat_fostering 5": null,
+              "images (from cat_flat_fostering)": null,
+              "out_date (from cat_flat_fostering)": null,
+              "лог изменений": null,
+              "payment_calculated": "Они",
+              "sex_calculated": "Кошка",
+              "pregnancy_calculated": "Нет уверенности",
+              "переноски/манежи/котоловки": null,
+              "cat_type": {
+                "id": "selllewfPjbLkWHDv",
+                "name": "Уличная",
+                "color": "cyanLight2"
+              },
+              "pay_for_a_streetcat": {
+                "id": "selhWKI4f7KHPHI3e",
+                "name": "оплачу полную стоимость",
+                "color": "blueLight2"
+              },
+              "pay_for_a_house_cat": null,
+              "is_from_pride": null,
+              "pay_for_pride": null,
+              "payment_choice_updated": "оплачу полную стоимость  ",
+              "ear_clipping_updated": "Резать",
+              "complex_req": true,
+              "rabies_req": null,
+              "vac_payment_calc": 35,
+              "vac_payment_type_stray": {
+                "id": "selUX5A0yf07ehgss",
+                "name": "оплачу целиком",
+                "color": "blueLight2"
+              },
+              "vac_payment_type_house": null,
+              "vac_payment_type_pride": null,
+              "Нужно вакцинировать?": "Vaccines: комплексная \nTotal amount: 35\nPayment type: оплачу целиком",
+              "💸payed?": null,
+              "📧": null,
+              "last_modified": "2026-02-06T11:46:45.000Z",
+              "last_modified_status": "2026-02-06T11:46:42.000Z",
+              "geo_location_point": null,
+              "room_cage": null,
+              "email": "olga-nikolaeva443@yandex.ru",
+              "phone": "+995599129237",
+              "telegram": "olia443",
+              "whatsapp": null,
+              "instagram": null,
+              "messengers": [
+                {
+                  "id": "selrZsKv2SdukBbWB",
+                  "name": "telegram",
+                  "color": "blueBright"
+                }
+              ],
+              "viber": null,
+              "Contacts": "Телефон: +995599129237\nEmail: olga-nikolaeva443@yandex.ru\nTelegram: olia443\nWhatsapp: \nViber: \ninstagram: ",
+              "health_notes": "Глистов видела, остальное все в норме, худая очень",
+              "pregnant_notes": "Видела ее две недели назад была не беременной",
+              "cat_flat_fostering 6": null,
+              "cat_flat_fostering 7": null,
+              "cat_flat_fostering 8": null,
+              "cat_flat_fostering 9": null,
+              "Анкеты укотовителей": null,
+              "Анкеты укотовителей copy": null,
+              "MedicalCare": null,
+              "intake_release": null,
+              "Table 9": null,
+              "_intake_release": null,
+              "isHere": null,
+              "cat_flat_fostering 10": null,
+              "photo": null,
+              "Manual sort": "bZJ",
+              "carrier type": null,
+              "created_year_month": "2026-02",
+              "is_paid": {
+                "id": "sel6jPFatWEJhisfR",
+                "name": "Не оплачено",
+                "color": "redBright"
+              },
+              "From field: Count (cat_flat_fostering 10)": null,
+              "status (from cat_flat_fostering)": null,
+              "record_id": "recgE8BKwZp8acSW6",
+              "cat_flat_fostering_record_id": null,
+              "complex_vatebi_vac_req": null,
+              "cat_travel_prep": null
+            }
+          },
+          "webhookUrl": "https://n8n.religofsil.space/webhook/new-sterilisation-form",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "2559d934-6a50-4047-9876-e40c2c6fb7dd",
+  "activeVersionId": "2559d934-6a50-4047-9876-e40c2c6fb7dd",
   "triggerCount": 1,
   "shared": [
     {
@@ -132,9 +337,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2025-11-27T11:21:42.558Z",
-    "createdAt": "2025-11-27T11:21:42.558Z",
-    "versionId": "dc25b68e-a146-47af-abae-5d8ef1ef8c9e",
+    "updatedAt": "2026-02-06T12:12:20.000Z",
+    "createdAt": "2026-02-06T12:11:38.247Z",
+    "versionId": "2559d934-6a50-4047-9876-e40c2c6fb7dd",
     "workflowId": "AwLuEu613JUuE8ue",
     "nodes": [
       {
@@ -156,7 +361,7 @@
       {
         "parameters": {
           "chatId": "-1001938190303",
-          "text": "=Пришла новая анкета!\nЗаявитель:ница: {{ $('Webhook').item.json.body.fields.requestor_name }}, язык {{ $('Webhook').item.json.body.fields.language.name }}\n{{ $('Webhook').item.json.body.fields.requestor_contact }}\nБеременность: {{ $('Webhook').item.json.body.fields.is_pregnant.name }}",
+          "text": "=Пришла новая анкета #{{ $json.body.fields.id }}!\nЗаявитель:ница: {{ $('Webhook').item.json.body.fields.requestor_name }}, язык {{ $('Webhook').item.json.body.fields.language.name }}\n{{ $('Webhook').item.json.body.fields.requestor_contact }}\nБеременность: {{ $('Webhook').item.json.body.fields.is_pregnant.name }}",
           "additionalFields": {
             "message_thread_id": 2231
           }
@@ -236,10 +441,10 @@
         ]
       }
     },
-    "authors": "system migration",
-    "name": null,
-    "description": null,
-    "autosaved": false
+    "authors": "Alexandra Ershova",
+    "name": "Version 2559d934",
+    "description": "added # of request",
+    "autosaved": true
   },
   "tags": [
     {
