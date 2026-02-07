@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-06T19:57:32.526Z",
+  "updatedAt": "2026-02-06T21:26:07.557Z",
   "createdAt": "2026-02-06T17:42:21.849Z",
   "id": "2hN3vxnASq101YawqWKud",
   "name": "Catbook_form_builder",
@@ -51,7 +51,7 @@
       "parameters": {
         "mode": "runOnceForEachItem",
         "language": "pythonNative",
-        "pythonCode": "import uuid\n\ndef u():\n    return str(uuid.uuid4())\n\ndef html_schema(text: str):\n    return [[text]]\n\ndef build_ad_section(ad_index: int, ad: dict):\n    blocks = []\n\n    # Section heading\n    blocks.append({\n        \"uuid\": u(),\n        \"type\": \"HEADING_2\",\n        \"groupUuid\": u(),\n        \"groupType\": \"HEADING_2\",\n        \"payload\": {\"safeHTMLSchema\": html_schema(f\"Объявление #{ad_index + 1}\")}\n    })\n\n    # Ad context\n    header = ad.get(\"header\", f\"Объявление #{ad_index + 1}\")\n    link = ad.get(\"link\", \"\")\n    posting_date = ad.get(\"posting_date\", \"\")\n\n    lines = [f\"<b>{header}</b>\"]\n    if posting_date:\n        lines.append(f\"Дата: {posting_date}\")\n    if link:\n        lines.append(f\"Ссылка: {link}\")\n\n    blocks.append({\n        \"uuid\": u(),\n        \"type\": \"TEXT\",\n        \"groupUuid\": u(),\n        \"groupType\": \"TEXT\",\n        \"payload\": {\"safeHTMLSchema\": html_schema(\"<br>\".join(lines))}\n    })\n\n    # Q1\n    mc_group = u()\n\n    blocks.append({\n        \"uuid\": u(),\n        \"type\": \"TITLE\",\n        \"groupUuid\": u(),\n        \"groupType\": \"QUESTION\",\n        \"payload\": {\n            \"isFolded\": False,\n            \"safeHTMLSchema\": html_schema(\"Актуально ли объявление?\")\n        }\n    })\n\n    opt_yes_uuid = u()\n    opt_no_uuid = u()\n    opt_other_uuid = u()\n\n    blocks.append({\n        \"uuid\": opt_yes_uuid,\n        \"type\": \"MULTIPLE_CHOICE_OPTION\",\n        \"groupUuid\": mc_group,\n        \"groupType\": \"MULTIPLE_CHOICE\",\n        \"payload\": {\n            \"index\": 0, \"isRequired\": True, \"isFirst\": True, \"isLast\": False,\n            \"hasOtherOption\": True, \"text\": \"Объявление актуально\"\n        }\n    })\n\n    blocks.append({\n        \"uuid\": opt_no_uuid,\n        \"type\": \"MULTIPLE_CHOICE_OPTION\",\n        \"groupUuid\": mc_group,\n        \"groupType\": \"MULTIPLE_CHOICE\",\n        \"payload\": {\n            \"index\": 1, \"isRequired\": True, \"isFirst\": False, \"isLast\": False,\n            \"hasOtherOption\": True, \"text\": \"Объявление не актуально\"\n        }\n    })\n\n    blocks.append({\n        \"uuid\": opt_other_uuid,\n        \"type\": \"MULTIPLE_CHOICE_OPTION\",\n        \"groupUuid\": mc_group,\n        \"groupType\": \"MULTIPLE_CHOICE\",\n        \"payload\": {\n            \"isOtherOption\": True, \"index\": 2, \"isRequired\": True,\n            \"isFirst\": False, \"isLast\": True, \"hasOtherOption\": True, \"text\": \"Other\"\n        }\n    })\n\n    # Q2 (hidden)\n    q2_title_uuid = u()\n    q2_mc_group = u()\n\n    blocks.append({\n        \"uuid\": q2_title_uuid,\n        \"type\": \"TITLE\",\n        \"groupUuid\": u(),\n        \"groupType\": \"QUESTION\",\n        \"payload\": {\n            \"isFolded\": False,\n            \"isHidden\": True,\n            \"safeHTMLSchema\": html_schema(\"Что случилось с животным?\")\n        }\n    })\n\n    follow_opts = [\n        \"Пристроили\",\n        \"Оставили себе\",\n        \"Умерло\",\n        \"Проходит лечение / адаптацию\",\n        \"Выпустили на улицу\",\n    ]\n\n    follow_opt_uuids = []\n    for i, t in enumerate(follow_opts):\n        ou = u()\n        follow_opt_uuids.append(ou)\n        blocks.append({\n            \"uuid\": ou,\n            \"type\": \"MULTIPLE_CHOICE_OPTION\",\n            \"groupUuid\": q2_mc_group,\n            \"groupType\": \"MULTIPLE_CHOICE\",\n            \"payload\": {\n                \"index\": i, \"isRequired\": True, \"isFirst\": (i == 0), \"isLast\": False,\n                \"hasOtherOption\": True, \"isHidden\": True, \"text\": t\n            }\n        })\n\n    follow_other_uuid = u()\n    blocks.append({\n        \"uuid\": follow_other_uuid,\n        \"type\": \"MULTIPLE_CHOICE_OPTION\",\n        \"groupUuid\": q2_mc_group,\n        \"groupType\": \"MULTIPLE_CHOICE\",\n        \"payload\": {\n            \"isOtherOption\": True, \"index\": len(follow_opts), \"isRequired\": True,\n            \"isFirst\": False, \"isLast\": True, \"hasOtherOption\": True,\n            \"isHidden\": True, \"text\": \"Other\"\n        }\n    })\n\n    # Conditional logic: if Q1 == \"not актуально\" => show Q2 blocks\n    show_blocks = [q2_title_uuid] + follow_opt_uuids + [follow_other_uuid]\n\n    blocks.append({\n        \"uuid\": u(),\n        \"type\": \"CONDITIONAL_LOGIC\",\n        \"groupUuid\": u(),\n        \"groupType\": \"CONDITIONAL_LOGIC\",\n        \"payload\": {\n            \"updateUuid\": u(),\n            \"logicalOperator\": \"AND\",\n            \"conditionals\": [\n                {\n                    \"uuid\": u(),\n                    \"type\": \"SINGLE\",\n                    \"payload\": {\n                        \"field\": {\n                            \"uuid\": mc_group,\n                            \"type\": \"INPUT_FIELD\",\n                            \"questionType\": \"MULTIPLE_CHOICE\",\n                            \"blockGroupUuid\": mc_group,\n                            \"title\": \"Актуально ли объявление?\"\n                        },\n                        \"comparison\": \"IS\",\n                        \"value\": opt_no_uuid\n                    }\n                }\n            ],\n            \"actions\": [\n                {\n                    \"uuid\": u(),\n                    \"type\": \"SHOW_BLOCKS\",\n                    \"payload\": {\"showBlocks\": show_blocks}\n                }\n            ]\n        }\n    })\n\n    return blocks\n\n\n# -------- native python input --------\ndata = _item['json']['items']\n\nusername = data['username']\nads = data['entries']\n\nblocks = []\n\nblocks.append({\n    \"uuid\": u(),\n    \"type\": \"FORM_TITLE\",\n    \"groupUuid\": u(),\n    \"groupType\": \"TEXT\",\n    \"payload\": {\n        \"button\": {\"label\": \"Отправить ответы\"},\n        \"safeHTMLSchema\": html_schema(f\"Форма для {username}\"),\n        \"title\": f\"Форма для {username}\"\n    }\n})\n\nblocks.append({\n    \"uuid\": u(),\n    \"type\": \"TEXT\",\n    \"groupUuid\": u(),\n    \"groupType\": \"TEXT\",\n    \"payload\": {\n        \"safeHTMLSchema\": html_schema(\n            f\"В Catbook сейчас есть {len(ads)} ваших объявлений, давайте поймём, какие актуальны.\"\n        )\n    }\n})\n\nfor i, ad in enumerate(ads):\n    blocks.extend(build_ad_section(i, ad))\n\npayload = {\n    \"status\": \"PUBLISHED\",\n    \"settings\": {\n        \"language\": \"en\",\n        \"hasProgressBar\": True,\n        \"saveForLater\": True,\n        \"pageAutoJump\": False\n    },\n    \"blocks\": blocks\n}\n\n# IMPORTANT: native python expects list of dicts (each dict is item.json)\nreturn {'result':payload}\n"
+        "pythonCode": "import uuid\nfrom datetime import datetime\n\ndef u():\n    return str(uuid.uuid4())\n\ndef html_schema(text: str):\n    return [[text]]\n\ndef build_ad_section(ad_index: int, ad: dict):\n    blocks = []\n\n    # Section heading\n    blocks.append({\n        \"uuid\": u(),\n        \"type\": \"HEADING_2\",\n        \"groupUuid\": u(),\n        \"groupType\": \"HEADING_2\",\n        \"payload\": {\"safeHTMLSchema\": html_schema(f\"Объявление #{ad_index + 1}\")}\n    })\n\n    header = ad.get(\"header\", f\"Объявление #{ad_index + 1}\")\n    link = (ad.get(\"link\") or \"\").strip()\n    posting_date_raw = (ad.get(\"posting_date\") or \"\").strip()\n    \n    # Parse \"YYYY-MM-DD HH:MM:SS\" -> \"DD.MM.YYYY HH:MM\"\n    posting_date = \"\"\n    if posting_date_raw:\n        try:\n            dt = datetime.strptime(posting_date_raw, \"%Y-%m-%d %H:%M:%S\")\n            posting_date = dt.strftime(\"%d.%m.%Y %H:%M\")\n        except ValueError:\n            posting_date = posting_date_raw\n    \n    # 1) header block\n    blocks.append({\n        \"uuid\": u(),\n        \"type\": \"TEXT\",\n        \"groupUuid\": u(),\n        \"groupType\": \"TEXT\",\n        \"payload\": {\"safeHTMLSchema\": html_schema(f\"<b>{header}</b>\")}\n    })\n    \n    # 2) date block\n    if posting_date:\n        blocks.append({\n            \"uuid\": u(),\n            \"type\": \"TEXT\",\n            \"groupUuid\": u(),\n            \"groupType\": \"TEXT\",\n            \"payload\": {\"safeHTMLSchema\": html_schema(f\"Дата: {posting_date}\")}\n        })\n    \n    # 3) link block (real clickable anchor)\n    if link:\n        blocks.append({\n        \"uuid\": u(),\n        \"type\": \"TEXT\",\n        \"groupUuid\": u(),\n        \"groupType\": \"TEXT\",\n        \"payload\": {\"html\": f'<a href=\"{link}\">Ссылка на пост</a>'}\n    })\n\n    # Q1\n    mc_group = u()\n\n    blocks.append({\n        \"uuid\": u(),\n        \"type\": \"TITLE\",\n        \"groupUuid\": u(),\n        \"groupType\": \"QUESTION\",\n        \"payload\": {\n            \"isFolded\": False,\n            \"safeHTMLSchema\": html_schema(\"Актуально ли объявление?\")\n        }\n    })\n\n    opt_yes_uuid = u()\n    opt_no_uuid = u()\n    opt_other_uuid = u()\n\n    blocks.append({\n        \"uuid\": opt_yes_uuid,\n        \"type\": \"MULTIPLE_CHOICE_OPTION\",\n        \"groupUuid\": mc_group,\n        \"groupType\": \"MULTIPLE_CHOICE\",\n        \"payload\": {\n            \"index\": 0, \"isRequired\": True, \"isFirst\": True, \"isLast\": False,\n            \"hasOtherOption\": True, \"text\": \"Объявление актуально\"\n        }\n    })\n\n    blocks.append({\n        \"uuid\": opt_no_uuid,\n        \"type\": \"MULTIPLE_CHOICE_OPTION\",\n        \"groupUuid\": mc_group,\n        \"groupType\": \"MULTIPLE_CHOICE\",\n        \"payload\": {\n            \"index\": 1, \"isRequired\": True, \"isFirst\": False, \"isLast\": False,\n            \"hasOtherOption\": True, \"text\": \"Объявление не актуально\"\n        }\n    })\n\n    blocks.append({\n        \"uuid\": opt_other_uuid,\n        \"type\": \"MULTIPLE_CHOICE_OPTION\",\n        \"groupUuid\": mc_group,\n        \"groupType\": \"MULTIPLE_CHOICE\",\n        \"payload\": {\n            \"isOtherOption\": True, \"index\": 2, \"isRequired\": True,\n            \"isFirst\": False, \"isLast\": True, \"hasOtherOption\": True, \"text\": \"Other\"\n        }\n    })\n\n    # Q2 (hidden)\n    q2_title_uuid = u()\n    q2_mc_group = u()\n\n    blocks.append({\n        \"uuid\": q2_title_uuid,\n        \"type\": \"TITLE\",\n        \"groupUuid\": u(),\n        \"groupType\": \"QUESTION\",\n        \"payload\": {\n            \"isFolded\": False,\n            \"isHidden\": True,\n            \"safeHTMLSchema\": html_schema(\"Что случилось с животным?\")\n        }\n    })\n\n    follow_opts = [\n        \"Пристроили\",\n        \"Оставили себе\",\n        \"Умерло\",\n        \"Проходит лечение / адаптацию\",\n        \"Выпустили на улицу\",\n    ]\n\n    follow_opt_uuids = []\n    for i, t in enumerate(follow_opts):\n        ou = u()\n        follow_opt_uuids.append(ou)\n        blocks.append({\n            \"uuid\": ou,\n            \"type\": \"MULTIPLE_CHOICE_OPTION\",\n            \"groupUuid\": q2_mc_group,\n            \"groupType\": \"MULTIPLE_CHOICE\",\n            \"payload\": {\n                \"index\": i, \"isRequired\": True, \"isFirst\": (i == 0), \"isLast\": False,\n                \"hasOtherOption\": True, \"isHidden\": True, \"text\": t\n            }\n        })\n\n    follow_other_uuid = u()\n    blocks.append({\n        \"uuid\": follow_other_uuid,\n        \"type\": \"MULTIPLE_CHOICE_OPTION\",\n        \"groupUuid\": q2_mc_group,\n        \"groupType\": \"MULTIPLE_CHOICE\",\n        \"payload\": {\n            \"isOtherOption\": True, \"index\": len(follow_opts), \"isRequired\": True,\n            \"isFirst\": False, \"isLast\": True, \"hasOtherOption\": True,\n            \"isHidden\": True, \"text\": \"Other\"\n        }\n    })\n\n    # Conditional logic: if Q1 == \"not актуально\" => show Q2 blocks\n    show_blocks = [q2_title_uuid] + follow_opt_uuids + [follow_other_uuid]\n\n    blocks.append({\n        \"uuid\": u(),\n        \"type\": \"CONDITIONAL_LOGIC\",\n        \"groupUuid\": u(),\n        \"groupType\": \"CONDITIONAL_LOGIC\",\n        \"payload\": {\n            \"updateUuid\": u(),\n            \"logicalOperator\": \"AND\",\n            \"conditionals\": [\n                {\n                    \"uuid\": u(),\n                    \"type\": \"SINGLE\",\n                    \"payload\": {\n                        \"field\": {\n                            \"uuid\": mc_group,\n                            \"type\": \"INPUT_FIELD\",\n                            \"questionType\": \"MULTIPLE_CHOICE\",\n                            \"blockGroupUuid\": mc_group,\n                            \"title\": \"Актуально ли объявление?\"\n                        },\n                        \"comparison\": \"IS\",\n                        \"value\": opt_no_uuid\n                    }\n                }\n            ],\n            \"actions\": [\n                {\n                    \"uuid\": u(),\n                    \"type\": \"SHOW_BLOCKS\",\n                    \"payload\": {\"showBlocks\": show_blocks}\n                }\n            ]\n        }\n    })\n\n    return blocks\n\n\n# -------- native python input --------\ndata = _item['json']['items']\n\nusername = data['username']\nads = data['entries']\n\nblocks = []\n\nblocks.append({\n    \"uuid\": u(),\n    \"type\": \"FORM_TITLE\",\n    \"groupUuid\": u(),\n    \"groupType\": \"TEXT\",\n    \"payload\": {\n        \"button\": {\"label\": \"Отправить ответы\"},\n        \"safeHTMLSchema\": html_schema(f\"Форма для {username}\"),\n        \"title\": f\"Форма для {username}\"\n    }\n})\n\nblocks.append({\n    \"uuid\": u(),\n    \"type\": \"TEXT\",\n    \"groupUuid\": u(),\n    \"groupType\": \"TEXT\",\n    \"payload\": {\n        \"safeHTMLSchema\": html_schema(\n            f\"В Catbook сейчас есть {len(ads)} ваших объявлений, давайте поймём, какие актуальны.\"\n        )\n    }\n})\n\nfor i, ad in enumerate(ads):\n    blocks.extend(build_ad_section(i, ad))\n\npayload = {\n    \"status\": \"PUBLISHED\",\n    \"settings\": {\n        \"language\": \"en\",\n        \"hasProgressBar\": True,\n        \"saveForLater\": True,\n        \"pageAutoJump\": False\n    },\n    \"blocks\": blocks\n}\n\n# IMPORTANT: native python expects list of dicts (each dict is item.json)\nreturn {'result':payload}\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -60,7 +60,8 @@
         0
       ],
       "id": "c75c242c-ff52-4a9f-99f1-7645d910614a",
-      "name": "Code in Python"
+      "name": "Code in Python",
+      "executeOnce": false
     },
     {
       "parameters": {
@@ -87,12 +88,97 @@
       ],
       "id": "90c74e2f-6242-4b8d-931b-d1b393994475",
       "name": "HTTP Request",
+      "executeOnce": false,
       "credentials": {
         "httpBearerAuth": {
           "id": "8YxdqvcEIK7SBTPa",
           "name": "Tally"
         }
       }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8ac48b2a-55e8-4f51-be8a-793486a1bea7",
+              "name": "username",
+              "value": "={{ $('Split Out').item.json.items.username }}",
+              "type": "string"
+            },
+            {
+              "id": "7c7b9650-531c-4503-b9ac-6583a9cbeb77",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "798f54cb-5764-4610-b91e-02e52b08eacc",
+              "name": "form_link",
+              "value": "=https://tally.so/r/{{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1040,
+        0
+      ],
+      "id": "6ad3b014-ee28-4791-b32e-11576e6d98d9",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "AK1HzBYLd26e0wXZ",
+          "mode": "list",
+          "cachedResultName": "catbook_cleaning_forms",
+          "cachedResultUrl": "/projects/jnu5GnxkoXUPZEif/datatables/AK1HzBYLd26e0wXZ"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "username",
+              "displayName": "username",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "form_link",
+              "displayName": "form_link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1248,
+        0
+      ],
+      "id": "2858a8c8-1938-4a02-b404-3d3a468b1f49",
+      "name": "Insert row"
     }
   ],
   "connections": {
@@ -139,6 +225,28 @@
           }
         ]
       ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -149,7 +257,7 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "8ddaf0b6-34bd-496d-a14d-b8c142641f75",
+  "versionId": "472d3916-f3fd-4b2b-89e2-7bcf9e585864",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [
