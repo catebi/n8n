@@ -1,0 +1,79 @@
+{
+  "updatedAt": "2026-02-07T11:48:27.740Z",
+  "createdAt": "2026-02-07T11:42:32.048Z",
+  "id": "SKWAADOylNtu9H2xNoLHj",
+  "name": "Send Tally response updates to tg",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "aec5f26f-daa1-4a00-8772-8d851a3acfac",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "798e77e6-8bd2-456d-b060-33927628d597",
+      "name": "HTTP Request"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "b7aac1ac-bb31-447d-9b9a-cda5eba6e7e0",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-02-07T11:42:32.069Z",
+      "createdAt": "2026-02-07T11:42:32.069Z",
+      "role": "workflow:owner",
+      "workflowId": "SKWAADOylNtu9H2xNoLHj",
+      "projectId": "jnu5GnxkoXUPZEif"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
