@@ -1,0 +1,154 @@
+{
+  "updatedAt": "2026-02-07T08:07:12.809Z",
+  "createdAt": "2026-02-07T07:44:42.906Z",
+  "id": "S0pDAHD-Aaxnsu9EMnIpB",
+  "name": "Download a table",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b101e871-28c2-461c-95d3-79ba5d30e80a",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "AK1HzBYLd26e0wXZ",
+          "mode": "list",
+          "cachedResultName": "catbook_cleaning_forms",
+          "cachedResultUrl": "/projects/jnu5GnxkoXUPZEif/datatables/AK1HzBYLd26e0wXZ"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "78d9c8b2-facb-4645-9e4a-100980744f5a",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "=https://docs.google.com/spreadsheets/d/1td3SQEP4bQJfKQpM1gSvN-b2GjuVyNfRHm2syC36Vf0/edit?usp=sharing",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1493096967,
+          "mode": "list",
+          "cachedResultName": "Form list",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1td3SQEP4bQJfKQpM1gSvN-b2GjuVyNfRHm2syC36Vf0/edit#gid=1493096967"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "username": "={{ $json.username }}",
+            "link": "={{ $json.form_link }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "username",
+              "displayName": "username",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "link",
+              "displayName": "link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "useAppend": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        464,
+        0
+      ],
+      "id": "11ca0c09-affb-4a19-8aa5-85bb6f2a9531",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jzRmRHsSBn3D5ia8",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "077f1ef1-2ec0-4d47-8ec2-45dd075553a0",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-02-07T07:44:42.926Z",
+      "createdAt": "2026-02-07T07:44:42.926Z",
+      "role": "workflow:owner",
+      "workflowId": "S0pDAHD-Aaxnsu9EMnIpB",
+      "projectId": "jnu5GnxkoXUPZEif"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
