@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-23T19:44:10.464Z",
+  "updatedAt": "2026-02-23T08:36:12.809Z",
   "createdAt": "2025-12-18T07:09:13.049Z",
   "id": "xJDmCc9db0iDa99P",
   "name": "SMM Post Ideas",
@@ -35,6 +35,7 @@
           "cachedResultName": "catebi_chat_summaries",
           "cachedResultUrl": "/projects/jnu5GnxkoXUPZEif/datatables/s5U6BsVmCURL1OFC"
         },
+        "matchType": "allConditions",
         "filters": {
           "conditions": [
             {
@@ -443,8 +444,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "b975f379-06b4-4c5f-a24f-70f968a77d0c",
-  "activeVersionId": "b975f379-06b4-4c5f-a24f-70f968a77d0c",
+  "versionId": "d74a39ac-ce75-465c-8faf-480931b4df02",
+  "activeVersionId": "d74a39ac-ce75-465c-8faf-480931b4df02",
   "triggerCount": 1,
   "shared": [
     {
@@ -456,9 +457,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2025-12-23T19:44:17.000Z",
-    "createdAt": "2025-12-23T19:44:10.467Z",
-    "versionId": "b975f379-06b4-4c5f-a24f-70f968a77d0c",
+    "updatedAt": "2026-02-23T08:36:32.000Z",
+    "createdAt": "2026-02-23T08:36:12.812Z",
+    "versionId": "d74a39ac-ce75-465c-8faf-480931b4df02",
     "workflowId": "xJDmCc9db0iDa99P",
     "nodes": [
       {
@@ -490,6 +491,7 @@
             "cachedResultName": "catebi_chat_summaries",
             "cachedResultUrl": "/projects/jnu5GnxkoXUPZEif/datatables/s5U6BsVmCURL1OFC"
           },
+          "matchType": "allConditions",
           "filters": {
             "conditions": [
               {
@@ -881,9 +883,9 @@
       }
     },
     "authors": "Alexandra Ershova",
-    "name": "Version b975f379",
+    "name": "fix context window",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": []
 }
