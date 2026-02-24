@@ -1,0 +1,52 @@
+{
+  "updatedAt": "2026-02-24T10:14:05.137Z",
+  "createdAt": "2025-11-26T04:58:41.069Z",
+  "id": "lVrde0zFUPZuQNLt",
+  "name": "Evaluation workflow",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "NPnJou3OacPV1H0W",
+          "mode": "list",
+          "cachedResultName": "Spambot Evals",
+          "cachedResultUrl": "/projects/jnu5GnxkoXUPZEif/datatables/NPnJou3OacPV1H0W"
+        }
+      },
+      "type": "n8n-nodes-base.evaluationTrigger",
+      "typeVersion": 4.7,
+      "position": [
+        0,
+        0
+      ],
+      "id": "221ec510-44ac-4268-802e-658af86c79a7",
+      "name": "When fetching a dataset row"
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "35ba1c85-25c4-420b-99cf-c094fc545761",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-11-26T04:58:41.075Z",
+      "createdAt": "2025-11-26T04:58:41.075Z",
+      "role": "workflow:owner",
+      "workflowId": "lVrde0zFUPZuQNLt",
+      "projectId": "jnu5GnxkoXUPZEif"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
