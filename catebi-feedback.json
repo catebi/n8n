@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-03T11:42:39.298Z",
+  "updatedAt": "2026-02-26T13:15:48.973Z",
   "createdAt": "2025-12-09T07:01:52.897Z",
   "id": "JUsbCQX9ptL9iGiv",
   "name": "Catebi Feedback",
@@ -825,7 +825,8 @@
             "values": {
               "resolveClash": "addSuffix"
             }
-          }
+          },
+          "includeUnpaired": true
         }
       },
       "type": "n8n-nodes-base.merge",
@@ -1217,29 +1218,9 @@
           "item": 0
         }
       }
-    ],
-    "Calculate Feedback": [
-      {
-        "json": {
-          "timestamp": "2026-01-22T23:55:07.038+04:00",
-          "Readable date": "January 22nd 2026, 11:55:07 pm",
-          "Readable time": "11:55:07 pm",
-          "Day of week": "Thursday",
-          "Year": "2026",
-          "Month": "January",
-          "Day of month": "22",
-          "Hour": "23",
-          "Minute": "55",
-          "Second": "07",
-          "Timezone": "Asia/Tbilisi (UTC+04:00)"
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      }
     ]
   },
-  "versionId": "b2d668b6-d006-4128-8a73-62a80b3f1ff9",
+  "versionId": "907406fd-dac2-44bb-9aea-1ea9e947ffa2",
   "activeVersionId": "b2d668b6-d006-4128-8a73-62a80b3f1ff9",
   "triggerCount": 3,
   "shared": [
