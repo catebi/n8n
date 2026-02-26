@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-12T19:56:56.467Z",
+  "updatedAt": "2026-02-26T13:17:21.079Z",
   "createdAt": "2025-12-07T13:45:53.428Z",
   "id": "IqtO9VBbkDFJFqrj",
   "name": "Github Daily Backup",
@@ -410,16 +410,16 @@
     "Schedule Trigger": [
       {
         "json": {
-          "timestamp": "2026-01-12T00:00:52.020+04:00",
-          "Readable date": "January 12th 2026, 12:00:52 am",
-          "Readable time": "12:00:52 am",
-          "Day of week": "Monday",
+          "timestamp": "2026-02-26T00:00:54.013+04:00",
+          "Readable date": "February 26th 2026, 12:00:54 am",
+          "Readable time": "12:00:54 am",
+          "Day of week": "Thursday",
           "Year": "2026",
-          "Month": "January",
-          "Day of month": "12",
+          "Month": "February",
+          "Day of month": "26",
           "Hour": "00",
           "Minute": "00",
-          "Second": "52",
+          "Second": "54",
           "Timezone": "Asia/Tbilisi (UTC+04:00)"
         },
         "pairedItem": {
