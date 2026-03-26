@@ -1,0 +1,373 @@
+{
+  "updatedAt": "2026-03-26T14:40:56.556Z",
+  "createdAt": "2026-03-26T13:57:55.807Z",
+  "id": "3qmTKtyoRuwrpZPzzjo2l",
+  "name": "FridayCheck",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "path": "friday-release-list",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "5f7db848-4bbd-4d1f-91aa-517241d40d3f",
+      "name": "Webhook",
+      "webhookId": "e983f22f-1196-4da8-addc-ad9a64f86b4c"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app9k7MbtZfplJvDC",
+          "mode": "list",
+          "cachedResultName": "sterilization_main",
+          "cachedResultUrl": "https://airtable.com/app9k7MbtZfplJvDC"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblJ8gVMPypLoR1tU",
+          "mode": "list",
+          "cachedResultName": "cat_flat_fostering",
+          "cachedResultUrl": "https://airtable.com/app9k7MbtZfplJvDC/tblJ8gVMPypLoR1tU"
+        },
+        "options": {
+          "view": {
+            "__rl": true,
+            "value": "viwAQCMD0rEscIZa5",
+            "mode": "list",
+            "cachedResultName": "пятничная проверка",
+            "cachedResultUrl": "https://airtable.com/app9k7MbtZfplJvDC/tblJ8gVMPypLoR1tU/viwAQCMD0rEscIZa5"
+          }
+        },
+        "sort": {
+          "property": [
+            {
+              "field": "room"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "36706238-b93d-4663-b1b5-aee8e4ffa46e",
+      "name": "Search records",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "7SzRNig5Rr7LRSsj",
+          "name": "Airtable account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "5e80b72d-50e3-4646-bdb2-0603fb571d96",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "chatId": "-1001938190303",
+        "text": "={{ (function() {\n  try {\n    const input = $(\"Aggregate\").item.json.data;\n    if (!input || !Array.isArray(input)) return \"⚠️ Данные не найдены\";\n\n    const today = new Date().toLocaleDateString('ru-RU', {\n      day: 'numeric', month: 'long'\n    });\n\n    const ready = [];\n    const notReady = [];\n    const noInfo = [];\n\n    for (const item of input) {\n      const sterilRaw = Array.isArray(item['sterilization_date']) \n        ? item['sterilization_date'][0] \n        : item['sterilization_date'];\n\n      const cat = {\n        id: item['cat_house_foster_id'] ?? '—',\n        room: item['room_cage'] ?? (Array.isArray(item['room']) ? item['room'].join(', ') : '—'),\n        sterilDate: sterilRaw\n          ? new Date(sterilRaw).toLocaleDateString('ru-RU', {day: 'numeric', month: 'long'})\n          : '—',\n        notes: (item['notes_kk'] ?? '').trim(),\n        isReady: item['isReady'] === true || item['isReady'] === 1\n      };\n\n      if (cat.isReady) {\n        ready.push(cat);\n      } else if (cat.notes) {\n        notReady.push(cat);\n      } else {\n        noInfo.push(cat);\n      }\n    }\n\n    const formatCat = (cat) => {\n      let line = `  № ${cat.id} | комната: ${cat.room} | дата стерилки: ${cat.sterilDate}`;\n      if (cat.notes) line += `\\n    💬 комментарий: ${cat.notes}`;\n      return line;\n    };\n\n    let text = `🐱 Список на выписку — ${today}\\n`;\n    text += `Всего кошек: ${input.length}\\n\\n`;\n\n    text += `✅ Готовы к выписке: ${ready.length}\\n`;\n    text += ready.length > 0 ? ready.map(formatCat).join('\\n') + '\\n' : 'нет кошек\\n';\n\n    text += `\\n⏳ Не готовы: ${notReady.length}\\n`;\n    text += notReady.length > 0 ? notReady.map(formatCat).join('\\n') + '\\n' : 'нет кошек\\n';\n\n    text += `\\n❓ Нет инфо: ${noInfo.length}\\n`;\n    text += noInfo.length > 0 ? noInfo.map(formatCat).join('\\n') + '\\n' : 'нет кошек\\n';\n\n    text += `\\n@DieAhnung, @astro_lina`;\n\n    return text;\n  } catch(e) {\n    return \"⚠️ Ошибка: \" + e.message;\n  }\n})() }}",
+        "additionalFields": {
+          "reply_to_message_id": 114445
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        624,
+        0
+      ],
+      "id": "be115088-fbff-4399-b726-5c8c200ec9d4",
+      "name": "Send a text message",
+      "webhookId": "ef7f66d2-9c8b-4761-b49e-6f9a704ad286",
+      "credentials": {
+        "telegramApi": {
+          "id": "jxMY2QGKg0jS5vUN",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "<html><head><meta charset=\"utf-8\">\n<style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#f5f5f5}.box{text-align:center;padding:40px;background:white;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,.1)}.e{font-size:48px}</style></head>\n<body><div class=\"box\"><div class=\"e\">✅</div><h2>Список отправлен!</h2></div></body></html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        832,
+        0
+      ],
+      "id": "1136c4cb-6da3-4a69-aae3-686740acf242",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Search records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "6b66de15-8421-4f74-9e26-14d7f9156255",
+  "activeVersionId": "5fe673c5-0514-4322-a8ee-9a78b138545e",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-03-26T13:57:55.836Z",
+      "createdAt": "2026-03-26T13:57:55.836Z",
+      "role": "workflow:owner",
+      "workflowId": "3qmTKtyoRuwrpZPzzjo2l",
+      "projectId": "ZJyso94CaJPPWQxE"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-03-26T14:38:44.000Z",
+    "createdAt": "2026-03-26T14:38:32.035Z",
+    "versionId": "5fe673c5-0514-4322-a8ee-9a78b138545e",
+    "workflowId": "3qmTKtyoRuwrpZPzzjo2l",
+    "nodes": [
+      {
+        "parameters": {
+          "path": "friday-release-list",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "5f7db848-4bbd-4d1f-91aa-517241d40d3f",
+        "name": "Webhook",
+        "webhookId": "e983f22f-1196-4da8-addc-ad9a64f86b4c"
+      },
+      {
+        "parameters": {
+          "operation": "search",
+          "base": {
+            "__rl": true,
+            "value": "app9k7MbtZfplJvDC",
+            "mode": "list",
+            "cachedResultName": "sterilization_main",
+            "cachedResultUrl": "https://airtable.com/app9k7MbtZfplJvDC"
+          },
+          "table": {
+            "__rl": true,
+            "value": "tblJ8gVMPypLoR1tU",
+            "mode": "list",
+            "cachedResultName": "cat_flat_fostering",
+            "cachedResultUrl": "https://airtable.com/app9k7MbtZfplJvDC/tblJ8gVMPypLoR1tU"
+          },
+          "options": {
+            "view": {
+              "__rl": true,
+              "value": "viwAQCMD0rEscIZa5",
+              "mode": "list",
+              "cachedResultName": "пятничная проверка",
+              "cachedResultUrl": "https://airtable.com/app9k7MbtZfplJvDC/tblJ8gVMPypLoR1tU/viwAQCMD0rEscIZa5"
+            }
+          },
+          "sort": {
+            "property": [
+              {
+                "field": "room"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.airtable",
+        "typeVersion": 2.1,
+        "position": [
+          208,
+          0
+        ],
+        "id": "36706238-b93d-4663-b1b5-aee8e4ffa46e",
+        "name": "Search records",
+        "credentials": {
+          "airtableTokenApi": {
+            "id": "7SzRNig5Rr7LRSsj",
+            "name": "Airtable account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          416,
+          0
+        ],
+        "id": "5e80b72d-50e3-4646-bdb2-0603fb571d96",
+        "name": "Aggregate"
+      },
+      {
+        "parameters": {
+          "chatId": "-1001938190303",
+          "text": "={{ (function() {\n  try {\n    const input = $(\"Aggregate\").item.json.data;\n    if (!input || !Array.isArray(input)) return \"⚠️ Данные не найдены\";\n\n    const today = new Date().toLocaleDateString('ru-RU', {\n      day: 'numeric', month: 'long'\n    });\n\n    const ready = [];\n    const notReady = [];\n    const noInfo = [];\n\n    for (const item of input) {\n      const sterilRaw = Array.isArray(item['sterilization_date']) \n        ? item['sterilization_date'][0] \n        : item['sterilization_date'];\n\n      const cat = {\n        id: item['cat_house_foster_id'] ?? '—',\n        room: item['room_cage'] ?? (Array.isArray(item['room']) ? item['room'].join(', ') : '—'),\n        sterilDate: sterilRaw\n          ? new Date(sterilRaw).toLocaleDateString('ru-RU', {day: 'numeric', month: 'long'})\n          : '—',\n        notes: (item['notes_kk'] ?? '').trim(),\n        isReady: item['isReady'] === true || item['isReady'] === 1\n      };\n\n      if (cat.isReady) {\n        ready.push(cat);\n      } else if (cat.notes) {\n        notReady.push(cat);\n      } else {\n        noInfo.push(cat);\n      }\n    }\n\n    const formatCat = (cat) => {\n      let line = `  № ${cat.id} | комната: ${cat.room} | дата стерилки: ${cat.sterilDate}`;\n      if (cat.notes) line += `\\n    💬 комментарий: ${cat.notes}`;\n      return line;\n    };\n\n    let text = `🐱 Пятничная проверка — ${today}\\n`;\n    text += `Всего кошек: ${input.length}\\n\\n`;\n\n    text += `✅ Готовы к выписке: ${ready.length}\\n`;\n    text += ready.length > 0 ? ready.map(formatCat).join('\\n') + '\\n' : 'нет кошек\\n';\n\n    text += `\\n⏳ Не готовы: ${notReady.length}\\n`;\n    text += notReady.length > 0 ? notReady.map(formatCat).join('\\n') + '\\n' : 'нет кошек\\n';\n\n    text += `\\n❓ Нет инфо: ${noInfo.length}\\n`;\n    text += noInfo.length > 0 ? noInfo.map(formatCat).join('\\n') + '\\n' : 'нет кошек\\n';\n\n    text += `\\n@DieAhnung`;\n\n    return text;\n  } catch(e) {\n    return \"⚠️ Ошибка: \" + e.message;\n  }\n})() }}",
+          "additionalFields": {
+            "reply_to_message_id": 114445
+          }
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          624,
+          0
+        ],
+        "id": "be115088-fbff-4399-b726-5c8c200ec9d4",
+        "name": "Send a text message",
+        "webhookId": "ef7f66d2-9c8b-4761-b49e-6f9a704ad286",
+        "credentials": {
+          "telegramApi": {
+            "id": "jxMY2QGKg0jS5vUN",
+            "name": "Telegram account 2"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "respondWith": "text",
+          "responseBody": "<html><head><meta charset=\"utf-8\">\n<style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#f5f5f5}.box{text-align:center;padding:40px;background:white;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,.1)}.e{font-size:48px}</style></head>\n<body><div class=\"box\"><div class=\"e\">✅</div><h2>Список отправлен!</h2></div></body></html>",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          832,
+          0
+        ],
+        "id": "1136c4cb-6da3-4a69-aae3-686740acf242",
+        "name": "Respond to Webhook"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Search records",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search records": {
+        "main": [
+          [
+            {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate": {
+        "main": [
+          [
+            {
+              "node": "Send a text message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send a text message": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "alena tiamchik",
+    "name": "Version 5fe673c5",
+    "description": "chat updated ",
+    "autosaved": true
+  },
+  "tags": []
+}
