@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-26T14:40:56.556Z",
+  "updatedAt": "2026-03-30T07:13:39.728Z",
   "createdAt": "2026-03-26T13:57:55.807Z",
   "id": "3qmTKtyoRuwrpZPzzjo2l",
   "name": "FridayCheck",
@@ -88,7 +88,7 @@
     {
       "parameters": {
         "chatId": "-1001938190303",
-        "text": "={{ (function() {\n  try {\n    const input = $(\"Aggregate\").item.json.data;\n    if (!input || !Array.isArray(input)) return \"⚠️ Данные не найдены\";\n\n    const today = new Date().toLocaleDateString('ru-RU', {\n      day: 'numeric', month: 'long'\n    });\n\n    const ready = [];\n    const notReady = [];\n    const noInfo = [];\n\n    for (const item of input) {\n      const sterilRaw = Array.isArray(item['sterilization_date']) \n        ? item['sterilization_date'][0] \n        : item['sterilization_date'];\n\n      const cat = {\n        id: item['cat_house_foster_id'] ?? '—',\n        room: item['room_cage'] ?? (Array.isArray(item['room']) ? item['room'].join(', ') : '—'),\n        sterilDate: sterilRaw\n          ? new Date(sterilRaw).toLocaleDateString('ru-RU', {day: 'numeric', month: 'long'})\n          : '—',\n        notes: (item['notes_kk'] ?? '').trim(),\n        isReady: item['isReady'] === true || item['isReady'] === 1\n      };\n\n      if (cat.isReady) {\n        ready.push(cat);\n      } else if (cat.notes) {\n        notReady.push(cat);\n      } else {\n        noInfo.push(cat);\n      }\n    }\n\n    const formatCat = (cat) => {\n      let line = `  № ${cat.id} | комната: ${cat.room} | дата стерилки: ${cat.sterilDate}`;\n      if (cat.notes) line += `\\n    💬 комментарий: ${cat.notes}`;\n      return line;\n    };\n\n    let text = `🐱 Список на выписку — ${today}\\n`;\n    text += `Всего кошек: ${input.length}\\n\\n`;\n\n    text += `✅ Готовы к выписке: ${ready.length}\\n`;\n    text += ready.length > 0 ? ready.map(formatCat).join('\\n') + '\\n' : 'нет кошек\\n';\n\n    text += `\\n⏳ Не готовы: ${notReady.length}\\n`;\n    text += notReady.length > 0 ? notReady.map(formatCat).join('\\n') + '\\n' : 'нет кошек\\n';\n\n    text += `\\n❓ Нет инфо: ${noInfo.length}\\n`;\n    text += noInfo.length > 0 ? noInfo.map(formatCat).join('\\n') + '\\n' : 'нет кошек\\n';\n\n    text += `\\n@DieAhnung, @astro_lina`;\n\n    return text;\n  } catch(e) {\n    return \"⚠️ Ошибка: \" + e.message;\n  }\n})() }}",
+        "text": "={{ (function() {\n  try {\n    const input = $(\"Aggregate\").item.json.data;\n    if (!input || !Array.isArray(input)) return \"⚠️ Данные не найдены\";\n\n    const today = new Date().toLocaleDateString('ru-RU', {\n      day: 'numeric', month: 'long'\n    });\n\n    const ready = [];\n    const notReady = [];\n    const noInfo = [];\n\n    for (const item of input) {\n      const sterilRaw = Array.isArray(item['sterilization_date']) \n        ? item['sterilization_date'][0] \n        : item['sterilization_date'];\n\n      const cat = {\n        id: Array.isArray(item['request_id']) ? item['request_id'][0] : (item['request_id'] ?? '—'),\n        room: item['room_cage'] ?? (Array.isArray(item['room']) ? item['room'].join(', ') : '—'),\n        sterilDate: sterilRaw\n          ? new Date(sterilRaw).toLocaleDateString('ru-RU', {day: 'numeric', month: 'long'})\n          : '—',\n        notes: (item['notes_kk'] ?? '').trim(),\n        isReady: item['isReady'] === true || item['isReady'] === 1\n      };\n\n      if (cat.isReady) {\n        ready.push(cat);\n      } else if (cat.notes) {\n        notReady.push(cat);\n      } else {\n        noInfo.push(cat);\n      }\n    }\n\n    const formatCat = (cat) => {\n      let line = `  № ${cat.id} | комната: ${cat.room} | дата стерилки: ${cat.sterilDate}`;\n      if (cat.notes) line += `\\n    💬 комментарий: ${cat.notes}`;\n      return line;\n    };\n\n    let text = `🐱 Список на выписку — ${today}\\n`;\n    text += `Всего кошек: ${input.length}\\n\\n`;\n\n    text += `✅ Готовы к выписке: ${ready.length}\\n`;\n    text += ready.length > 0 ? ready.map(formatCat).join('\\n') + '\\n' : 'нет кошек\\n';\n\n    text += `\\n⏳ Не готовы: ${notReady.length}\\n`;\n    text += notReady.length > 0 ? notReady.map(formatCat).join('\\n') + '\\n' : 'нет кошек\\n';\n\n    text += `\\n❓ Нет инфо: ${noInfo.length}\\n`;\n    text += noInfo.length > 0 ? noInfo.map(formatCat).join('\\n') + '\\n' : 'нет кошек\\n';\n\n    text += `\\n@DieAhnung @astro_lina`;\n\n    return text;\n  } catch(e) {\n    return \"⚠️ Ошибка: \" + e.message;\n  }\n})() }}",
         "additionalFields": {
           "reply_to_message_id": 114445
         }
@@ -181,8 +181,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "6b66de15-8421-4f74-9e26-14d7f9156255",
-  "activeVersionId": "5fe673c5-0514-4322-a8ee-9a78b138545e",
+  "versionId": "33f8c51d-2b52-4975-9a60-ffae4df9b6cf",
+  "activeVersionId": "33f8c51d-2b52-4975-9a60-ffae4df9b6cf",
   "triggerCount": 1,
   "shared": [
     {
@@ -194,9 +194,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-26T14:38:44.000Z",
-    "createdAt": "2026-03-26T14:38:32.035Z",
-    "versionId": "5fe673c5-0514-4322-a8ee-9a78b138545e",
+    "updatedAt": "2026-03-30T07:18:31.000Z",
+    "createdAt": "2026-03-30T07:13:39.730Z",
+    "versionId": "33f8c51d-2b52-4975-9a60-ffae4df9b6cf",
     "workflowId": "3qmTKtyoRuwrpZPzzjo2l",
     "nodes": [
       {
@@ -281,7 +281,7 @@
       {
         "parameters": {
           "chatId": "-1001938190303",
-          "text": "={{ (function() {\n  try {\n    const input = $(\"Aggregate\").item.json.data;\n    if (!input || !Array.isArray(input)) return \"⚠️ Данные не найдены\";\n\n    const today = new Date().toLocaleDateString('ru-RU', {\n      day: 'numeric', month: 'long'\n    });\n\n    const ready = [];\n    const notReady = [];\n    const noInfo = [];\n\n    for (const item of input) {\n      const sterilRaw = Array.isArray(item['sterilization_date']) \n        ? item['sterilization_date'][0] \n        : item['sterilization_date'];\n\n      const cat = {\n        id: item['cat_house_foster_id'] ?? '—',\n        room: item['room_cage'] ?? (Array.isArray(item['room']) ? item['room'].join(', ') : '—'),\n        sterilDate: sterilRaw\n          ? new Date(sterilRaw).toLocaleDateString('ru-RU', {day: 'numeric', month: 'long'})\n          : '—',\n        notes: (item['notes_kk'] ?? '').trim(),\n        isReady: item['isReady'] === true || item['isReady'] === 1\n      };\n\n      if (cat.isReady) {\n        ready.push(cat);\n      } else if (cat.notes) {\n        notReady.push(cat);\n      } else {\n        noInfo.push(cat);\n      }\n    }\n\n    const formatCat = (cat) => {\n      let line = `  № ${cat.id} | комната: ${cat.room} | дата стерилки: ${cat.sterilDate}`;\n      if (cat.notes) line += `\\n    💬 комментарий: ${cat.notes}`;\n      return line;\n    };\n\n    let text = `🐱 Пятничная проверка — ${today}\\n`;\n    text += `Всего кошек: ${input.length}\\n\\n`;\n\n    text += `✅ Готовы к выписке: ${ready.length}\\n`;\n    text += ready.length > 0 ? ready.map(formatCat).join('\\n') + '\\n' : 'нет кошек\\n';\n\n    text += `\\n⏳ Не готовы: ${notReady.length}\\n`;\n    text += notReady.length > 0 ? notReady.map(formatCat).join('\\n') + '\\n' : 'нет кошек\\n';\n\n    text += `\\n❓ Нет инфо: ${noInfo.length}\\n`;\n    text += noInfo.length > 0 ? noInfo.map(formatCat).join('\\n') + '\\n' : 'нет кошек\\n';\n\n    text += `\\n@DieAhnung`;\n\n    return text;\n  } catch(e) {\n    return \"⚠️ Ошибка: \" + e.message;\n  }\n})() }}",
+          "text": "={{ (function() {\n  try {\n    const input = $(\"Aggregate\").item.json.data;\n    if (!input || !Array.isArray(input)) return \"⚠️ Данные не найдены\";\n\n    const today = new Date().toLocaleDateString('ru-RU', {\n      day: 'numeric', month: 'long'\n    });\n\n    const ready = [];\n    const notReady = [];\n    const noInfo = [];\n\n    for (const item of input) {\n      const sterilRaw = Array.isArray(item['sterilization_date']) \n        ? item['sterilization_date'][0] \n        : item['sterilization_date'];\n\n      const cat = {\n        id: Array.isArray(item['request_id']) ? item['request_id'][0] : (item['request_id'] ?? '—'),\n        room: item['room_cage'] ?? (Array.isArray(item['room']) ? item['room'].join(', ') : '—'),\n        sterilDate: sterilRaw\n          ? new Date(sterilRaw).toLocaleDateString('ru-RU', {day: 'numeric', month: 'long'})\n          : '—',\n        notes: (item['notes_kk'] ?? '').trim(),\n        isReady: item['isReady'] === true || item['isReady'] === 1\n      };\n\n      if (cat.isReady) {\n        ready.push(cat);\n      } else if (cat.notes) {\n        notReady.push(cat);\n      } else {\n        noInfo.push(cat);\n      }\n    }\n\n    const formatCat = (cat) => {\n      let line = `  № ${cat.id} | комната: ${cat.room} | дата стерилки: ${cat.sterilDate}`;\n      if (cat.notes) line += `\\n    💬 комментарий: ${cat.notes}`;\n      return line;\n    };\n\n    let text = `🐱 Список на выписку — ${today}\\n`;\n    text += `Всего кошек: ${input.length}\\n\\n`;\n\n    text += `✅ Готовы к выписке: ${ready.length}\\n`;\n    text += ready.length > 0 ? ready.map(formatCat).join('\\n') + '\\n' : 'нет кошек\\n';\n\n    text += `\\n⏳ Не готовы: ${notReady.length}\\n`;\n    text += notReady.length > 0 ? notReady.map(formatCat).join('\\n') + '\\n' : 'нет кошек\\n';\n\n    text += `\\n❓ Нет инфо: ${noInfo.length}\\n`;\n    text += noInfo.length > 0 ? noInfo.map(formatCat).join('\\n') + '\\n' : 'нет кошек\\n';\n\n    text += `\\n@DieAhnung @astro_lina`;\n\n    return text;\n  } catch(e) {\n    return \"⚠️ Ошибка: \" + e.message;\n  }\n})() }}",
           "additionalFields": {
             "reply_to_message_id": 114445
           }
@@ -365,8 +365,8 @@
       }
     },
     "authors": "alena tiamchik",
-    "name": "Version 5fe673c5",
-    "description": "chat updated ",
+    "name": "Version 33f8c51d",
+    "description": "cat id updated",
     "autosaved": true
   },
   "tags": []
