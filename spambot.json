@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-24T09:32:34.960Z",
+  "updatedAt": "2026-03-31T12:22:36.208Z",
   "createdAt": "2025-11-25T07:08:56.490Z",
   "id": "BzPT7nQWQllqpcsO",
   "name": "Spambot",
@@ -18,8 +18,8 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
       "position": [
-        -1360,
-        416
+        -1648,
+        320
       ],
       "id": "a57e1413-51c3-4c93-8eb5-8f94b086e118",
       "name": "Telegram Trigger",
@@ -40,26 +40,28 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        336,
-        256
+        1168,
+        528
       ],
       "id": "7d19429f-7252-4bf5-b54e-3ce17cd8b718",
       "name": "Delete a chat message",
       "webhookId": "684d0175-5b57-41be-856d-5e6dd53da1aa",
+      "retryOnFail": false,
       "credentials": {
         "telegramApi": {
           "id": "tcX20TpSwtOgHBGq",
           "name": "Peredast"
         }
-      }
+      },
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {},
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        112,
-        256
+        944,
+        524
       ],
       "id": "54d6a6c9-619e-441c-8de3-b7d225616e6c",
       "name": "Wait",
@@ -88,8 +90,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1,
       "position": [
-        -688,
-        208
+        -752,
+        56
       ],
       "id": "5f95842e-8f6d-4a4c-a66d-58d53ec91363",
       "name": "Load whitelist",
@@ -133,11 +135,12 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -464,
-        208
+        -528,
+        56
       ],
       "id": "14b575c3-22c3-4428-a04a-d29a0ce9c965",
-      "name": "If account in whitelist"
+      "name": "If account in whitelist",
+      "alwaysOutputData": false
     },
     {
       "parameters": {
@@ -168,6 +171,16 @@
                 "operation": "exists",
                 "singleValue": true
               }
+            },
+            {
+              "id": "c50269cf-4e2f-41f4-b7b1-82a3ffc03a39",
+              "leftValue": "={{ $json.message.quote.text }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
             }
           ],
           "combinator": "or"
@@ -177,8 +190,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1136,
-        416
+        -1424,
+        -16
       ],
       "id": "5f014d99-9564-483b-8787-22e9fe24091e",
       "name": "If message contains text"
@@ -188,8 +201,8 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        112,
-        -16
+        944,
+        8
       ],
       "id": "aaad4c23-0f52-47a3-bdb5-38f8a8630221",
       "name": "No Operation, do nothing"
@@ -213,8 +226,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        560,
-        256
+        1392,
+        524
       ],
       "id": "6c1b1b86-ff01-47bb-a163-6c72ba247f76",
       "name": "Send message and wait for response",
@@ -253,8 +266,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        784,
-        256
+        1616,
+        524
       ],
       "id": "2990ff49-ac34-44ee-894a-fa5e2a7f134b",
       "name": "If Ban Approved"
@@ -281,8 +294,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        1232,
-        160
+        2064,
+        428
       ],
       "id": "1862a28d-0e5e-4126-84cd-2de681ff8a8f",
       "name": "HTTP Request",
@@ -310,8 +323,8 @@
       "type": "n8n-nodes-base.executionData",
       "typeVersion": 1.1,
       "position": [
-        1008,
-        352
+        1840,
+        620
       ],
       "id": "68e8b360-f208-4d68-883b-b6d255adc182",
       "name": "No Ban"
@@ -330,8 +343,8 @@
       "type": "n8n-nodes-base.executionData",
       "typeVersion": 1.1,
       "position": [
-        336,
-        -16
+        1168,
+        8
       ],
       "id": "5edb718e-e99f-46a4-9890-2e1bd5b1789a",
       "name": "No Action"
@@ -350,8 +363,8 @@
       "type": "n8n-nodes-base.executionData",
       "typeVersion": 1.1,
       "position": [
-        1456,
-        160
+        2288,
+        428
       ],
       "id": "ea1b7fb1-5871-42c1-a37d-8413d077bf69",
       "name": "Ban"
@@ -363,8 +376,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        -176,
-        528
+        664,
+        672
       ],
       "id": "d16bb295-eea2-4a46-887c-2d8c2562c4d4",
       "name": "Google Gemini Chat Model1",
@@ -377,7 +390,7 @@
     },
     {
       "parameters": {
-        "inputText": "={{ $('Telegram Trigger').item.json.message.text ?? $('Telegram Trigger').item.json.message.caption }}",
+        "inputText": "={{ $('Concat all text content').item.json.whole_text }}",
         "categories": {
           "categories": [
             {
@@ -399,6 +412,10 @@
             {
               "category": "crypto exchange offer",
               "description": "offer to buy, sell, or exchange cryptocurrency"
+            },
+            {
+              "category": "VPN ad",
+              "description": "offer to use or buy VPN"
             }
           ]
         },
@@ -409,8 +426,8 @@
       "type": "@n8n/n8n-nodes-langchain.textClassifier",
       "typeVersion": 1.1,
       "position": [
-        -240,
-        208
+        608,
+        224
       ],
       "id": "37b5079e-531f-492a-a6f1-28a6ec2b9b32",
       "name": "Text Classifier",
@@ -441,8 +458,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        1008,
-        160
+        1840,
+        428
       ],
       "id": "fd4d85ec-4342-4f22-bd43-907db3696bea",
       "name": "Get chats"
@@ -450,29 +467,25 @@
     {
       "parameters": {
         "language": "pythonNative",
-        "pythonCode": "import re\nimport signal\n\ndef _timeout(signum, frame):\n    raise TimeoutError(\"Python node timed out\")\n\nsignal.signal(signal.SIGALRM, _timeout)\nsignal.alarm(20)  # seconds\n\nmsg = _items[0][\"json\"].get(\"message\", {})\n\n# Telegram text can be in different fields\ntext = (\n    msg.get(\"text\")\n    or msg.get(\"caption\")\n    or \"\"\n)\n# Regex for one @username\npattern = r'@([a-zA-Z0-9_\\.]+)'\n\nmatch = re.search(pattern, text)\n\nusername = match.group(1) if match else None\n\nreturn [\n    {\n        \"json\": {\n            \"username\": username,\n            \"text\": text\n        }\n    }\n]"
+        "pythonCode": "import re\nimport signal\n\ndef _timeout(signum, frame):\n    raise TimeoutError(\"Python node timed out\")\n\nsignal.signal(signal.SIGALRM, _timeout)\nsignal.alarm(20)  # seconds\n\nmsg = _items[1][\"json\"].get(\"message\", {})\n\n# Telegram text can be in different fields\ntext = (\n    msg.get(\"text\")\n    or msg.get(\"caption\")\n    or \"\"\n)\n# Regex for one @username\npattern = r'@([a-zA-Z0-9_\\.]+)'\n\nmatch = re.search(pattern, text)\n\nusername = match.group(1) if match else None\n\nreturn [\n    {\n        \"json\": {\n            \"username\": username,\n            \"text\": text\n        }\n    }\n]"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1232,
-        576
+        -80,
+        548
       ],
       "id": "1c83bcbe-0ece-4735-994f-b54ab3cec9dc",
       "name": "Code in Python (Native)",
       "onError": "continueRegularOutput"
     },
     {
-      "parameters": {
-        "mode": "combine",
-        "combineBy": "combineAll",
-        "options": {}
-      },
+      "parameters": {},
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        1680,
-        432
+        2512,
+        596
       ],
       "id": "1a07106a-2682-4fd7-961e-c12546fa78b2",
       "name": "Merge"
@@ -523,8 +536,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        2128,
-        432
+        2960,
+        596
       ],
       "id": "7740140b-6537-4591-8862-ecfbbb346592",
       "name": "Upsert row(s)"
@@ -541,7 +554,7 @@
           "conditions": [
             {
               "id": "f2f2ab8c-06e7-4525-9a2a-9987a0e5d66e",
-              "leftValue": "={{ $json.username }}",
+              "leftValue": "={{ $('Code in Python (Native)').item.json.username }}",
               "rightValue": "",
               "operator": {
                 "type": "string",
@@ -557,34 +570,11 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        1904,
-        432
+        2736,
+        596
       ],
       "id": "cddae23c-5ef1-494b-af11-8027b2ef89b0",
       "name": "If"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "93be3069-126c-4c3d-82e0-41a6c9592827",
-              "name": "new_field",
-              "value": "1",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        1456,
-        576
-      ],
-      "id": "6ca32efd-07c7-4379-94dc-83428cf3d38a",
-      "name": "Edit Fields"
     },
     {
       "parameters": {
@@ -601,11 +591,114 @@
       "type": "n8n-nodes-base.evaluation",
       "typeVersion": 4.8,
       "position": [
-        -912,
-        208
+        -976,
+        56
       ],
       "id": "636e9752-b273-4017-85d4-010d695853c7",
       "name": "Evaluation"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "86d61c93-8ae6-4586-8f51-c0f7629b591a",
+              "name": "whole_text",
+              "value": "={{[$json.message.text, $json.message.caption, $json.message.quote?.text].filter(Boolean).join(' ')}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1200,
+        56
+      ],
+      "id": "ab612179-6755-4ad1-bbf2-f24e63977325",
+      "name": "Concat all text content"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -304,
+        548
+      ],
+      "id": "ae57894f-9c78-4fe9-ac96-0c0e07e5d5cb",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "kdaucL3oYuGtAnSs",
+          "mode": "list",
+          "cachedResultName": "blacklist",
+          "cachedResultUrl": "/projects/jnu5GnxkoXUPZEif/datatables/kdaucL3oYuGtAnSs"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "username",
+              "keyValue": "={{ $json.username }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        144,
+        476
+      ],
+      "id": "7340dd33-3e17-490d-897f-828bdd995865",
+      "name": "Get row(s)",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "aa8579ce-d41d-4aec-9f06-9806f65794b9",
+              "leftValue": "={{ $item(\"0\").$node[\"Get row(s)\"].json }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        368,
+        476
+      ],
+      "id": "b9fbc092-e67c-4091-993c-737d1db03ddc",
+      "name": "If1"
     }
   ],
   "connections": {
@@ -616,6 +709,11 @@
             "node": "If message contains text",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
           }
         ]
       ]
@@ -653,12 +751,7 @@
         ],
         [
           {
-            "node": "Text Classifier",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Code in Python (Native)",
+            "node": "Merge1",
             "type": "main",
             "index": 0
           }
@@ -669,7 +762,7 @@
       "main": [
         [
           {
-            "node": "Evaluation",
+            "node": "Concat all text content",
             "type": "main",
             "index": 0
           }
@@ -792,6 +885,13 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
@@ -821,9 +921,14 @@
       "main": [
         [
           {
-            "node": "Edit Fields",
+            "node": "Get row(s)",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
           }
         ]
       ]
@@ -850,17 +955,6 @@
         ]
       ]
     },
-    "Edit Fields": {
-      "main": [
-        [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
     "Upsert row(s)": {
       "main": [
         []
@@ -871,6 +965,57 @@
         [
           {
             "node": "Load whitelist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Concat all text content": {
+      "main": [
+        [
+          {
+            "node": "Evaluation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Code in Python (Native)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
             "type": "main",
             "index": 0
           }
@@ -897,24 +1042,32 @@
     "Telegram Trigger": [
       {
         "json": {
-          "update_id": 833108025,
+          "update_id": 833149123,
           "message": {
-            "message_id": 51662,
+            "message_id": 7581,
             "from": {
-              "id": 8277395888,
+              "id": 1342017013,
               "is_bot": false,
-              "first_name": "Илона",
-              "username": "zsdxgfchgvjbkjnk",
+              "first_name": "Мария",
+              "username": "Mariia_Bulgakova",
               "is_premium": true
             },
             "chat": {
-              "id": -1001247053710,
-              "title": "CATEBI Chat",
-              "username": "catebichat",
+              "id": -1001999193889,
+              "title": "везём кошачью и собачью кровь 😼",
+              "username": "titers_tbi",
+              "is_forum": true,
               "type": "supergroup"
             },
-            "date": 1770359964,
-            "text": "Срочно нyжe водитeль с кaтeгоpией Б,зaрплaта высoкaя,по всем вопросaм писaть в лc"
+            "date": 1774953447,
+            "text": "СРОЧНО нужны 2 человека. Онлайн-занятость. Прuличный доход. Всё с телефона. \nПишите ей 👉 @nadezhda_off",
+            "entities": [
+              {
+                "offset": 90,
+                "length": 13,
+                "type": "mention"
+              }
+            ]
           }
         },
         "pairedItem": {
@@ -923,8 +1076,8 @@
       }
     ]
   },
-  "versionId": "0337028e-cf2c-4e51-ba95-5123ed03acdc",
-  "activeVersionId": "0337028e-cf2c-4e51-ba95-5123ed03acdc",
+  "versionId": "962ff07d-16af-4d87-b2f0-91a889d1ac5b",
+  "activeVersionId": "962ff07d-16af-4d87-b2f0-91a889d1ac5b",
   "triggerCount": 1,
   "shared": [
     {
@@ -936,9 +1089,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-02-24T09:33:32.000Z",
-    "createdAt": "2026-02-24T09:31:39.908Z",
-    "versionId": "0337028e-cf2c-4e51-ba95-5123ed03acdc",
+    "updatedAt": "2026-03-31T12:22:54.000Z",
+    "createdAt": "2026-03-31T12:22:36.213Z",
+    "versionId": "962ff07d-16af-4d87-b2f0-91a889d1ac5b",
     "workflowId": "BzPT7nQWQllqpcsO",
     "nodes": [
       {
@@ -953,8 +1106,8 @@
         "type": "n8n-nodes-base.telegramTrigger",
         "typeVersion": 1.2,
         "position": [
-          -1360,
-          416
+          -1648,
+          320
         ],
         "id": "a57e1413-51c3-4c93-8eb5-8f94b086e118",
         "name": "Telegram Trigger",
@@ -975,26 +1128,28 @@
         "type": "n8n-nodes-base.telegram",
         "typeVersion": 1.2,
         "position": [
-          336,
-          256
+          1168,
+          528
         ],
         "id": "7d19429f-7252-4bf5-b54e-3ce17cd8b718",
         "name": "Delete a chat message",
         "webhookId": "684d0175-5b57-41be-856d-5e6dd53da1aa",
+        "retryOnFail": false,
         "credentials": {
           "telegramApi": {
             "id": "tcX20TpSwtOgHBGq",
             "name": "Peredast"
           }
-        }
+        },
+        "onError": "continueRegularOutput"
       },
       {
         "parameters": {},
         "type": "n8n-nodes-base.wait",
         "typeVersion": 1.1,
         "position": [
-          112,
-          256
+          944,
+          524
         ],
         "id": "54d6a6c9-619e-441c-8de3-b7d225616e6c",
         "name": "Wait",
@@ -1023,8 +1178,8 @@
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1,
         "position": [
-          -688,
-          208
+          -752,
+          56
         ],
         "id": "5f95842e-8f6d-4a4c-a66d-58d53ec91363",
         "name": "Load whitelist",
@@ -1068,11 +1223,12 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.2,
         "position": [
-          -464,
-          208
+          -528,
+          56
         ],
         "id": "14b575c3-22c3-4428-a04a-d29a0ce9c965",
-        "name": "If account in whitelist"
+        "name": "If account in whitelist",
+        "alwaysOutputData": false
       },
       {
         "parameters": {
@@ -1103,6 +1259,16 @@
                   "operation": "exists",
                   "singleValue": true
                 }
+              },
+              {
+                "id": "c50269cf-4e2f-41f4-b7b1-82a3ffc03a39",
+                "leftValue": "={{ $json.message.quote.text }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "exists",
+                  "singleValue": true
+                }
               }
             ],
             "combinator": "or"
@@ -1112,8 +1278,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.2,
         "position": [
-          -1136,
-          416
+          -1424,
+          -16
         ],
         "id": "5f014d99-9564-483b-8787-22e9fe24091e",
         "name": "If message contains text"
@@ -1123,8 +1289,8 @@
         "type": "n8n-nodes-base.noOp",
         "typeVersion": 1,
         "position": [
-          112,
-          -16
+          944,
+          8
         ],
         "id": "aaad4c23-0f52-47a3-bdb5-38f8a8630221",
         "name": "No Operation, do nothing"
@@ -1148,8 +1314,8 @@
         "type": "n8n-nodes-base.telegram",
         "typeVersion": 1.2,
         "position": [
-          560,
-          256
+          1392,
+          524
         ],
         "id": "6c1b1b86-ff01-47bb-a163-6c72ba247f76",
         "name": "Send message and wait for response",
@@ -1188,8 +1354,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.2,
         "position": [
-          784,
-          256
+          1616,
+          524
         ],
         "id": "2990ff49-ac34-44ee-894a-fa5e2a7f134b",
         "name": "If Ban Approved"
@@ -1216,8 +1382,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          1232,
-          160
+          2064,
+          428
         ],
         "id": "1862a28d-0e5e-4126-84cd-2de681ff8a8f",
         "name": "HTTP Request",
@@ -1245,8 +1411,8 @@
         "type": "n8n-nodes-base.executionData",
         "typeVersion": 1.1,
         "position": [
-          1008,
-          352
+          1840,
+          620
         ],
         "id": "68e8b360-f208-4d68-883b-b6d255adc182",
         "name": "No Ban"
@@ -1265,8 +1431,8 @@
         "type": "n8n-nodes-base.executionData",
         "typeVersion": 1.1,
         "position": [
-          336,
-          -16
+          1168,
+          8
         ],
         "id": "5edb718e-e99f-46a4-9890-2e1bd5b1789a",
         "name": "No Action"
@@ -1285,8 +1451,8 @@
         "type": "n8n-nodes-base.executionData",
         "typeVersion": 1.1,
         "position": [
-          1456,
-          160
+          2288,
+          428
         ],
         "id": "ea1b7fb1-5871-42c1-a37d-8413d077bf69",
         "name": "Ban"
@@ -1298,8 +1464,8 @@
         "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
         "typeVersion": 1,
         "position": [
-          -176,
-          528
+          664,
+          672
         ],
         "id": "d16bb295-eea2-4a46-887c-2d8c2562c4d4",
         "name": "Google Gemini Chat Model1",
@@ -1312,7 +1478,7 @@
       },
       {
         "parameters": {
-          "inputText": "={{ $('Telegram Trigger').item.json.message.text ?? $('Telegram Trigger').item.json.message.caption }}",
+          "inputText": "={{ $('Concat all text content').item.json.whole_text }}",
           "categories": {
             "categories": [
               {
@@ -1334,6 +1500,10 @@
               {
                 "category": "crypto exchange offer",
                 "description": "offer to buy, sell, or exchange cryptocurrency"
+              },
+              {
+                "category": "VPN ad",
+                "description": "offer to use or buy VPN"
               }
             ]
           },
@@ -1344,8 +1514,8 @@
         "type": "@n8n/n8n-nodes-langchain.textClassifier",
         "typeVersion": 1.1,
         "position": [
-          -240,
-          208
+          608,
+          224
         ],
         "id": "37b5079e-531f-492a-a6f1-28a6ec2b9b32",
         "name": "Text Classifier",
@@ -1376,8 +1546,8 @@
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1.1,
         "position": [
-          1008,
-          160
+          1840,
+          428
         ],
         "id": "fd4d85ec-4342-4f22-bd43-907db3696bea",
         "name": "Get chats"
@@ -1385,29 +1555,25 @@
       {
         "parameters": {
           "language": "pythonNative",
-          "pythonCode": "import re\nimport signal\n\ndef _timeout(signum, frame):\n    raise TimeoutError(\"Python node timed out\")\n\nsignal.signal(signal.SIGALRM, _timeout)\nsignal.alarm(20)  # seconds\n\nmsg = _items[0][\"json\"].get(\"message\", {})\n\n# Telegram text can be in different fields\ntext = (\n    msg.get(\"text\")\n    or msg.get(\"caption\")\n    or \"\"\n)\n# Regex for one @username\npattern = r'@([a-zA-Z0-9_\\.]+)'\n\nmatch = re.search(pattern, text)\n\nusername = match.group(1) if match else None\n\nreturn [\n    {\n        \"json\": {\n            \"username\": username,\n            \"text\": text\n        }\n    }\n]"
+          "pythonCode": "import re\nimport signal\n\ndef _timeout(signum, frame):\n    raise TimeoutError(\"Python node timed out\")\n\nsignal.signal(signal.SIGALRM, _timeout)\nsignal.alarm(20)  # seconds\n\nmsg = _items[1][\"json\"].get(\"message\", {})\n\n# Telegram text can be in different fields\ntext = (\n    msg.get(\"text\")\n    or msg.get(\"caption\")\n    or \"\"\n)\n# Regex for one @username\npattern = r'@([a-zA-Z0-9_\\.]+)'\n\nmatch = re.search(pattern, text)\n\nusername = match.group(1) if match else None\n\nreturn [\n    {\n        \"json\": {\n            \"username\": username,\n            \"text\": text\n        }\n    }\n]"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          1232,
-          576
+          -80,
+          548
         ],
         "id": "1c83bcbe-0ece-4735-994f-b54ab3cec9dc",
         "name": "Code in Python (Native)",
         "onError": "continueRegularOutput"
       },
       {
-        "parameters": {
-          "mode": "combine",
-          "combineBy": "combineAll",
-          "options": {}
-        },
+        "parameters": {},
         "type": "n8n-nodes-base.merge",
         "typeVersion": 3.2,
         "position": [
-          1680,
-          432
+          2512,
+          596
         ],
         "id": "1a07106a-2682-4fd7-961e-c12546fa78b2",
         "name": "Merge"
@@ -1458,8 +1624,8 @@
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1.1,
         "position": [
-          2128,
-          432
+          2960,
+          596
         ],
         "id": "7740140b-6537-4591-8862-ecfbbb346592",
         "name": "Upsert row(s)"
@@ -1476,7 +1642,7 @@
             "conditions": [
               {
                 "id": "f2f2ab8c-06e7-4525-9a2a-9987a0e5d66e",
-                "leftValue": "={{ $json.username }}",
+                "leftValue": "={{ $('Code in Python (Native)').item.json.username }}",
                 "rightValue": "",
                 "operator": {
                   "type": "string",
@@ -1492,34 +1658,11 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          1904,
-          432
+          2736,
+          596
         ],
         "id": "cddae23c-5ef1-494b-af11-8027b2ef89b0",
         "name": "If"
-      },
-      {
-        "parameters": {
-          "assignments": {
-            "assignments": [
-              {
-                "id": "93be3069-126c-4c3d-82e0-41a6c9592827",
-                "name": "new_field",
-                "value": "1",
-                "type": "string"
-              }
-            ]
-          },
-          "options": {}
-        },
-        "type": "n8n-nodes-base.set",
-        "typeVersion": 3.4,
-        "position": [
-          1456,
-          576
-        ],
-        "id": "6ca32efd-07c7-4379-94dc-83428cf3d38a",
-        "name": "Edit Fields"
       },
       {
         "parameters": {
@@ -1536,11 +1679,114 @@
         "type": "n8n-nodes-base.evaluation",
         "typeVersion": 4.8,
         "position": [
-          -912,
-          208
+          -976,
+          56
         ],
         "id": "636e9752-b273-4017-85d4-010d695853c7",
         "name": "Evaluation"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "86d61c93-8ae6-4586-8f51-c0f7629b591a",
+                "name": "whole_text",
+                "value": "={{[$json.message.text, $json.message.caption, $json.message.quote?.text].filter(Boolean).join(' ')}}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -1200,
+          56
+        ],
+        "id": "ab612179-6755-4ad1-bbf2-f24e63977325",
+        "name": "Concat all text content"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineByPosition",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -304,
+          548
+        ],
+        "id": "ae57894f-9c78-4fe9-ac96-0c0e07e5d5cb",
+        "name": "Merge1"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "kdaucL3oYuGtAnSs",
+            "mode": "list",
+            "cachedResultName": "blacklist",
+            "cachedResultUrl": "/projects/jnu5GnxkoXUPZEif/datatables/kdaucL3oYuGtAnSs"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "username",
+                "keyValue": "={{ $json.username }}"
+              }
+            ]
+          },
+          "returnAll": true
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          144,
+          476
+        ],
+        "id": "7340dd33-3e17-490d-897f-828bdd995865",
+        "name": "Get row(s)",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "aa8579ce-d41d-4aec-9f06-9806f65794b9",
+                "leftValue": "={{ $item(\"0\").$node[\"Get row(s)\"].json }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "object",
+                  "operation": "empty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          368,
+          476
+        ],
+        "id": "b9fbc092-e67c-4091-993c-737d1db03ddc",
+        "name": "If1"
       }
     ],
     "connections": {
@@ -1551,6 +1797,11 @@
               "node": "If message contains text",
               "type": "main",
               "index": 0
+            },
+            {
+              "node": "Merge1",
+              "type": "main",
+              "index": 1
             }
           ]
         ]
@@ -1588,12 +1839,7 @@
           ],
           [
             {
-              "node": "Text Classifier",
-              "type": "main",
-              "index": 0
-            },
-            {
-              "node": "Code in Python (Native)",
+              "node": "Merge1",
               "type": "main",
               "index": 0
             }
@@ -1604,7 +1850,7 @@
         "main": [
           [
             {
-              "node": "Evaluation",
+              "node": "Concat all text content",
               "type": "main",
               "index": 0
             }
@@ -1727,6 +1973,13 @@
               "type": "main",
               "index": 0
             }
+          ],
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
           ]
         ]
       },
@@ -1756,9 +2009,14 @@
         "main": [
           [
             {
-              "node": "Edit Fields",
+              "node": "Get row(s)",
               "type": "main",
               "index": 0
+            },
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
             }
           ]
         ]
@@ -1785,17 +2043,6 @@
           ]
         ]
       },
-      "Edit Fields": {
-        "main": [
-          [
-            {
-              "node": "Merge",
-              "type": "main",
-              "index": 1
-            }
-          ]
-        ]
-      },
       "Upsert row(s)": {
         "main": [
           []
@@ -1811,11 +2058,62 @@
             }
           ]
         ]
+      },
+      "Concat all text content": {
+        "main": [
+          [
+            {
+              "node": "Evaluation",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge1": {
+        "main": [
+          [
+            {
+              "node": "Code in Python (Native)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s)": {
+        "main": [
+          [
+            {
+              "node": "If1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If1": {
+        "main": [
+          [
+            {
+              "node": "Text Classifier",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Alexandra Ershova",
-    "name": "Version 0337028e",
-    "description": "add evaluation inputs",
+    "name": "Version 962ff07d",
+    "description": "fix spambot",
     "autosaved": true
   },
   "tags": [
