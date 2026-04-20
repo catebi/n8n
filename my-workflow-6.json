@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-02-06T19:10:45.092Z",
-  "createdAt": "2026-02-06T19:09:44.296Z",
-  "id": "Fzs_RZ_FNuuZGM2u4Dqgr",
+  "updatedAt": "2026-04-19T15:56:36.274Z",
+  "createdAt": "2026-04-19T15:50:48.135Z",
+  "id": "Pv1RySikFnphxOsQ",
   "name": "My workflow 6",
   "active": false,
   "isArchived": false,
@@ -14,28 +14,41 @@
         0,
         0
       ],
-      "id": "66100d1c-f551-4425-88b7-ae81f9319f54",
+      "id": "b9f20eda-1382-47ae-9956-09e639f5e7e5",
       "name": "When clicking ‘Execute workflow’"
     },
     {
       "parameters": {
-        "url": "https://api.tally.so/forms/Bz7P7R",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "httpBearerAuth",
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appfcG1rrMV3dCwHq",
+          "mode": "list",
+          "cachedResultName": "sterilization_test",
+          "cachedResultUrl": "https://airtable.com/appfcG1rrMV3dCwHq"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbljZZhuebNasR4IF",
+          "mode": "list",
+          "cachedResultName": "sterilization_request",
+          "cachedResultUrl": "https://airtable.com/appfcG1rrMV3dCwHq/tbljZZhuebNasR4IF"
+        },
+        "filterByFormula": "{}",
         "options": {}
       },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.4,
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
       "position": [
         208,
         0
       ],
-      "id": "7482da76-6cb2-4991-accf-b5f8b7ac21ca",
-      "name": "HTTP Request",
+      "id": "f40acc73-184a-4226-bb86-42afef6167e3",
+      "name": "Search records",
       "credentials": {
-        "httpBearerAuth": {
-          "id": "8YxdqvcEIK7SBTPa",
-          "name": "Tally"
+        "airtableTokenApi": {
+          "id": "btX5TKY3tFhz5XFA",
+          "name": "Airtable Personal Access Token account"
         }
       }
     }
@@ -45,7 +58,7 @@
       "main": [
         [
           {
-            "node": "HTTP Request",
+            "node": "Search records",
             "type": "main",
             "index": 0
           }
@@ -55,21 +68,22 @@
   },
   "settings": {
     "executionOrder": "v1",
-    "binaryMode": "separate",
-    "availableInMCP": false
+    "binaryMode": "separate"
   },
   "staticData": null,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "pinData": {},
-  "versionId": "ec0028f9-a392-4ebf-9f8d-1ac16422110c",
+  "versionId": "8fa301ae-d41d-4ff7-a823-f2cb8873073a",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [
     {
-      "updatedAt": "2026-02-06T19:09:44.315Z",
-      "createdAt": "2026-02-06T19:09:44.315Z",
+      "updatedAt": "2026-04-19T15:50:48.177Z",
+      "createdAt": "2026-04-19T15:50:48.177Z",
       "role": "workflow:owner",
-      "workflowId": "Fzs_RZ_FNuuZGM2u4Dqgr",
+      "workflowId": "Pv1RySikFnphxOsQ",
       "projectId": "jnu5GnxkoXUPZEif"
     }
   ],
