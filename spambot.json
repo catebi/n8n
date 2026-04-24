@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T12:22:36.208Z",
+  "updatedAt": "2026-04-24T08:23:31.104Z",
   "createdAt": "2025-11-25T07:08:56.490Z",
   "id": "BzPT7nQWQllqpcsO",
   "name": "Spambot",
@@ -61,7 +61,7 @@
       "typeVersion": 1.1,
       "position": [
         944,
-        524
+        528
       ],
       "id": "54d6a6c9-619e-441c-8de3-b7d225616e6c",
       "name": "Wait",
@@ -81,7 +81,7 @@
           "conditions": [
             {
               "keyName": "user_id",
-              "keyValue": "={{ $json.message.from.id }}"
+              "keyValue": "={{ $('Telegram Trigger').item.json.message.from.id }}"
             }
           ]
         },
@@ -91,7 +91,7 @@
       "typeVersion": 1,
       "position": [
         -752,
-        56
+        64
       ],
       "id": "5f95842e-8f6d-4a4c-a66d-58d53ec91363",
       "name": "Load whitelist",
@@ -136,7 +136,7 @@
       "typeVersion": 2.2,
       "position": [
         -528,
-        56
+        64
       ],
       "id": "14b575c3-22c3-4428-a04a-d29a0ce9c965",
       "name": "If account in whitelist",
@@ -202,7 +202,7 @@
       "typeVersion": 1,
       "position": [
         944,
-        8
+        16
       ],
       "id": "aaad4c23-0f52-47a3-bdb5-38f8a8630221",
       "name": "No Operation, do nothing"
@@ -227,7 +227,7 @@
       "typeVersion": 1.2,
       "position": [
         1392,
-        524
+        528
       ],
       "id": "6c1b1b86-ff01-47bb-a163-6c72ba247f76",
       "name": "Send message and wait for response",
@@ -267,7 +267,7 @@
       "typeVersion": 2.2,
       "position": [
         1616,
-        524
+        528
       ],
       "id": "2990ff49-ac34-44ee-894a-fa5e2a7f134b",
       "name": "If Ban Approved"
@@ -295,7 +295,7 @@
       "typeVersion": 4.3,
       "position": [
         2064,
-        428
+        432
       ],
       "id": "1862a28d-0e5e-4126-84cd-2de681ff8a8f",
       "name": "HTTP Request",
@@ -324,7 +324,7 @@
       "typeVersion": 1.1,
       "position": [
         1840,
-        620
+        624
       ],
       "id": "68e8b360-f208-4d68-883b-b6d255adc182",
       "name": "No Ban"
@@ -344,7 +344,7 @@
       "typeVersion": 1.1,
       "position": [
         1168,
-        8
+        16
       ],
       "id": "5edb718e-e99f-46a4-9890-2e1bd5b1789a",
       "name": "No Action"
@@ -364,7 +364,7 @@
       "typeVersion": 1.1,
       "position": [
         2288,
-        428
+        432
       ],
       "id": "ea1b7fb1-5871-42c1-a37d-8413d077bf69",
       "name": "Ban"
@@ -376,7 +376,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        664,
+        672,
         672
       ],
       "id": "d16bb295-eea2-4a46-887c-2d8c2562c4d4",
@@ -407,7 +407,7 @@
             },
             {
               "category": "pet-related",
-              "description": "anything related to pets or mentioning pets"
+              "description": "anything related to pets or mentioning pets or Catebi organisation"
             },
             {
               "category": "crypto exchange offer",
@@ -459,7 +459,7 @@
       "typeVersion": 1.1,
       "position": [
         1840,
-        428
+        432
       ],
       "id": "fd4d85ec-4342-4f22-bd43-907db3696bea",
       "name": "Get chats"
@@ -473,7 +473,7 @@
       "typeVersion": 2,
       "position": [
         -80,
-        548
+        560
       ],
       "id": "1c83bcbe-0ece-4735-994f-b54ab3cec9dc",
       "name": "Code in Python (Native)",
@@ -485,7 +485,7 @@
       "typeVersion": 3.2,
       "position": [
         2512,
-        596
+        608
       ],
       "id": "1a07106a-2682-4fd7-961e-c12546fa78b2",
       "name": "Merge"
@@ -537,7 +537,7 @@
       "typeVersion": 1.1,
       "position": [
         2960,
-        596
+        608
       ],
       "id": "7740140b-6537-4591-8862-ecfbbb346592",
       "name": "Upsert row(s)"
@@ -571,7 +571,7 @@
       "typeVersion": 2.3,
       "position": [
         2736,
-        596
+        608
       ],
       "id": "cddae23c-5ef1-494b-af11-8027b2ef89b0",
       "name": "If"
@@ -592,7 +592,7 @@
       "typeVersion": 4.8,
       "position": [
         -976,
-        56
+        64
       ],
       "id": "636e9752-b273-4017-85d4-010d695853c7",
       "name": "Evaluation"
@@ -615,7 +615,7 @@
       "typeVersion": 3.4,
       "position": [
         -1200,
-        56
+        64
       ],
       "id": "ab612179-6755-4ad1-bbf2-f24e63977325",
       "name": "Concat all text content"
@@ -630,7 +630,7 @@
       "typeVersion": 3.2,
       "position": [
         -304,
-        548
+        560
       ],
       "id": "ae57894f-9c78-4fe9-ac96-0c0e07e5d5cb",
       "name": "Merge1"
@@ -660,7 +660,7 @@
       "typeVersion": 1.1,
       "position": [
         144,
-        476
+        480
       ],
       "id": "7340dd33-3e17-490d-897f-828bdd995865",
       "name": "Get row(s)",
@@ -695,7 +695,7 @@
       "typeVersion": 2.3,
       "position": [
         368,
-        476
+        480
       ],
       "id": "b9fbc092-e67c-4091-993c-737d1db03ddc",
       "name": "If1"
@@ -1032,7 +1032,8 @@
     "timeSavedPerExecution": 1,
     "timezone": "Asia/Tbilisi",
     "timeSavedMode": "fixed",
-    "executionTimeout": 180
+    "executionTimeout": 180,
+    "binaryMode": "separate"
   },
   "staticData": null,
   "meta": {
@@ -1042,32 +1043,24 @@
     "Telegram Trigger": [
       {
         "json": {
-          "update_id": 833149123,
+          "update_id": 833164013,
           "message": {
-            "message_id": 7581,
+            "message_id": 59495,
             "from": {
-              "id": 1342017013,
+              "id": 138688318,
               "is_bot": false,
-              "first_name": "Мария",
-              "username": "Mariia_Bulgakova",
+              "first_name": "Gesha",
+              "username": "anjeladevis",
               "is_premium": true
             },
             "chat": {
-              "id": -1001999193889,
-              "title": "везём кошачью и собачью кровь 😼",
-              "username": "titers_tbi",
-              "is_forum": true,
+              "id": -1001247053710,
+              "title": "CATEBI Chat",
+              "username": "catebichat",
               "type": "supergroup"
             },
-            "date": 1774953447,
-            "text": "СРОЧНО нужны 2 человека. Онлайн-занятость. Прuличный доход. Всё с телефона. \nПишите ей 👉 @nadezhda_off",
-            "entities": [
-              {
-                "offset": 90,
-                "length": 13,
-                "type": "mention"
-              }
-            ]
+            "date": 1777017991,
+            "text": "Всем привет!\nИщем фотографа на сегодняшний благотворительный квиз в баре Хэппенс с 20:00 до 21:00\n\nОт вас — час вашего времени и фото, от нас — напиток в подарок, большая-пребольшая благодарность и упоминания вас в соцсетях CATEBI.\n\nОчень-очень нужно 🥹"
           }
         },
         "pairedItem": {
@@ -1076,8 +1069,8 @@
       }
     ]
   },
-  "versionId": "962ff07d-16af-4d87-b2f0-91a889d1ac5b",
-  "activeVersionId": "962ff07d-16af-4d87-b2f0-91a889d1ac5b",
+  "versionId": "53523d85-c9ca-4af9-8dca-e1e93d905183",
+  "activeVersionId": "53523d85-c9ca-4af9-8dca-e1e93d905183",
   "triggerCount": 1,
   "shared": [
     {
@@ -1089,9 +1082,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-31T12:22:54.000Z",
-    "createdAt": "2026-03-31T12:22:36.213Z",
-    "versionId": "962ff07d-16af-4d87-b2f0-91a889d1ac5b",
+    "updatedAt": "2026-04-24T08:23:51.000Z",
+    "createdAt": "2026-04-24T08:23:31.110Z",
+    "versionId": "53523d85-c9ca-4af9-8dca-e1e93d905183",
     "workflowId": "BzPT7nQWQllqpcsO",
     "nodes": [
       {
@@ -1149,7 +1142,7 @@
         "typeVersion": 1.1,
         "position": [
           944,
-          524
+          528
         ],
         "id": "54d6a6c9-619e-441c-8de3-b7d225616e6c",
         "name": "Wait",
@@ -1169,7 +1162,7 @@
             "conditions": [
               {
                 "keyName": "user_id",
-                "keyValue": "={{ $json.message.from.id }}"
+                "keyValue": "={{ $('Telegram Trigger').item.json.message.from.id }}"
               }
             ]
           },
@@ -1179,7 +1172,7 @@
         "typeVersion": 1,
         "position": [
           -752,
-          56
+          64
         ],
         "id": "5f95842e-8f6d-4a4c-a66d-58d53ec91363",
         "name": "Load whitelist",
@@ -1224,7 +1217,7 @@
         "typeVersion": 2.2,
         "position": [
           -528,
-          56
+          64
         ],
         "id": "14b575c3-22c3-4428-a04a-d29a0ce9c965",
         "name": "If account in whitelist",
@@ -1290,7 +1283,7 @@
         "typeVersion": 1,
         "position": [
           944,
-          8
+          16
         ],
         "id": "aaad4c23-0f52-47a3-bdb5-38f8a8630221",
         "name": "No Operation, do nothing"
@@ -1315,7 +1308,7 @@
         "typeVersion": 1.2,
         "position": [
           1392,
-          524
+          528
         ],
         "id": "6c1b1b86-ff01-47bb-a163-6c72ba247f76",
         "name": "Send message and wait for response",
@@ -1355,7 +1348,7 @@
         "typeVersion": 2.2,
         "position": [
           1616,
-          524
+          528
         ],
         "id": "2990ff49-ac34-44ee-894a-fa5e2a7f134b",
         "name": "If Ban Approved"
@@ -1383,7 +1376,7 @@
         "typeVersion": 4.3,
         "position": [
           2064,
-          428
+          432
         ],
         "id": "1862a28d-0e5e-4126-84cd-2de681ff8a8f",
         "name": "HTTP Request",
@@ -1412,7 +1405,7 @@
         "typeVersion": 1.1,
         "position": [
           1840,
-          620
+          624
         ],
         "id": "68e8b360-f208-4d68-883b-b6d255adc182",
         "name": "No Ban"
@@ -1432,7 +1425,7 @@
         "typeVersion": 1.1,
         "position": [
           1168,
-          8
+          16
         ],
         "id": "5edb718e-e99f-46a4-9890-2e1bd5b1789a",
         "name": "No Action"
@@ -1452,7 +1445,7 @@
         "typeVersion": 1.1,
         "position": [
           2288,
-          428
+          432
         ],
         "id": "ea1b7fb1-5871-42c1-a37d-8413d077bf69",
         "name": "Ban"
@@ -1464,7 +1457,7 @@
         "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
         "typeVersion": 1,
         "position": [
-          664,
+          672,
           672
         ],
         "id": "d16bb295-eea2-4a46-887c-2d8c2562c4d4",
@@ -1495,7 +1488,7 @@
               },
               {
                 "category": "pet-related",
-                "description": "anything related to pets or mentioning pets"
+                "description": "anything related to pets or mentioning pets or Catebi organisation"
               },
               {
                 "category": "crypto exchange offer",
@@ -1547,7 +1540,7 @@
         "typeVersion": 1.1,
         "position": [
           1840,
-          428
+          432
         ],
         "id": "fd4d85ec-4342-4f22-bd43-907db3696bea",
         "name": "Get chats"
@@ -1561,7 +1554,7 @@
         "typeVersion": 2,
         "position": [
           -80,
-          548
+          560
         ],
         "id": "1c83bcbe-0ece-4735-994f-b54ab3cec9dc",
         "name": "Code in Python (Native)",
@@ -1573,7 +1566,7 @@
         "typeVersion": 3.2,
         "position": [
           2512,
-          596
+          608
         ],
         "id": "1a07106a-2682-4fd7-961e-c12546fa78b2",
         "name": "Merge"
@@ -1625,7 +1618,7 @@
         "typeVersion": 1.1,
         "position": [
           2960,
-          596
+          608
         ],
         "id": "7740140b-6537-4591-8862-ecfbbb346592",
         "name": "Upsert row(s)"
@@ -1659,7 +1652,7 @@
         "typeVersion": 2.3,
         "position": [
           2736,
-          596
+          608
         ],
         "id": "cddae23c-5ef1-494b-af11-8027b2ef89b0",
         "name": "If"
@@ -1680,7 +1673,7 @@
         "typeVersion": 4.8,
         "position": [
           -976,
-          56
+          64
         ],
         "id": "636e9752-b273-4017-85d4-010d695853c7",
         "name": "Evaluation"
@@ -1703,7 +1696,7 @@
         "typeVersion": 3.4,
         "position": [
           -1200,
-          56
+          64
         ],
         "id": "ab612179-6755-4ad1-bbf2-f24e63977325",
         "name": "Concat all text content"
@@ -1718,7 +1711,7 @@
         "typeVersion": 3.2,
         "position": [
           -304,
-          548
+          560
         ],
         "id": "ae57894f-9c78-4fe9-ac96-0c0e07e5d5cb",
         "name": "Merge1"
@@ -1748,7 +1741,7 @@
         "typeVersion": 1.1,
         "position": [
           144,
-          476
+          480
         ],
         "id": "7340dd33-3e17-490d-897f-828bdd995865",
         "name": "Get row(s)",
@@ -1783,7 +1776,7 @@
         "typeVersion": 2.3,
         "position": [
           368,
-          476
+          480
         ],
         "id": "b9fbc092-e67c-4091-993c-737d1db03ddc",
         "name": "If1"
@@ -2112,8 +2105,8 @@
       }
     },
     "authors": "Alexandra Ershova",
-    "name": "Version 962ff07d",
-    "description": "fix spambot",
+    "name": "Version 53523d85",
+    "description": "fix whitelist",
     "autosaved": true
   },
   "tags": [
