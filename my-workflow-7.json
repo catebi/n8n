@@ -1,0 +1,44 @@
+{
+  "updatedAt": "2026-04-26T13:15:56.748Z",
+  "createdAt": "2026-04-26T13:15:56.748Z",
+  "id": "HFHwbRe3sPgwC7J0",
+  "name": "My workflow 7",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-fillout.filloutTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "24aaf5bb-a6ef-4349-8980-b397910c4bef",
+      "name": "Fillout Trigger",
+      "webhookId": "43482b9c-7c87-4a2b-bc7d-c29b1503fbd3"
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "5e1b9f67-7559-468c-97fb-580e93c0e8c4",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-04-26T13:15:56.765Z",
+      "createdAt": "2026-04-26T13:15:56.765Z",
+      "role": "workflow:owner",
+      "workflowId": "HFHwbRe3sPgwC7J0",
+      "projectId": "jnu5GnxkoXUPZEif"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
