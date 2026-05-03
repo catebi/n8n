@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-24T08:23:31.104Z",
+  "updatedAt": "2026-05-03T17:32:13.453Z",
   "createdAt": "2025-11-25T07:08:56.490Z",
   "id": "BzPT7nQWQllqpcsO",
   "name": "Spambot",
@@ -604,7 +604,7 @@
             {
               "id": "86d61c93-8ae6-4586-8f51-c0f7629b591a",
               "name": "whole_text",
-              "value": "={{[$json.message.text, $json.message.caption, $json.message.quote?.text].filter(Boolean).join(' ')}}",
+              "value": "={{[$json.message.text, $json.message.caption, $json.message.quote?.text, $json.message.document?.file_name].filter(Boolean).join(' ')}}",
               "type": "string"
             }
           ]
@@ -1043,14 +1043,14 @@
     "Telegram Trigger": [
       {
         "json": {
-          "update_id": 833164013,
+          "update_id": 833170284,
           "message": {
-            "message_id": 59495,
+            "message_id": 60605,
             "from": {
-              "id": 138688318,
+              "id": 5307355874,
               "is_bot": false,
-              "first_name": "Gesha",
-              "username": "anjeladevis",
+              "first_name": "Konstanta",
+              "username": "Konstanta2285",
               "is_premium": true
             },
             "chat": {
@@ -1059,8 +1059,15 @@
               "username": "catebichat",
               "type": "supergroup"
             },
-            "date": 1777017991,
-            "text": "Всем привет!\nИщем фотографа на сегодняшний благотворительный квиз в баре Хэппенс с 20:00 до 21:00\n\nОт вас — час вашего времени и фото, от нас — напиток в подарок, большая-пребольшая благодарность и упоминания вас в соцсетях CATEBI.\n\nОчень-очень нужно 🥹"
+            "date": 1777829250,
+            "document": {
+              "file_name": "Бесплатный VPN.html",
+              "mime_type": "application/octet-stream",
+              "file_id": "BQACAgIAAx0CSlSHjgAC7L1p94WDEGSMVxX3r2mUAmXvpK93fQACu50AAmI8wUuCpNjCWAzl5TsE",
+              "file_unique_id": "AgADu50AAmI8wUs",
+              "file_size": 2867
+            },
+            "caption": "Спасибо вам)) Добрые люди"
           }
         },
         "pairedItem": {
@@ -1069,8 +1076,8 @@
       }
     ]
   },
-  "versionId": "53523d85-c9ca-4af9-8dca-e1e93d905183",
-  "activeVersionId": "53523d85-c9ca-4af9-8dca-e1e93d905183",
+  "versionId": "4ef16fb5-5af4-494f-9c7f-b7ad3d1d2674",
+  "activeVersionId": "4ef16fb5-5af4-494f-9c7f-b7ad3d1d2674",
   "triggerCount": 1,
   "shared": [
     {
@@ -1082,9 +1089,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-24T08:23:51.000Z",
-    "createdAt": "2026-04-24T08:23:31.110Z",
-    "versionId": "53523d85-c9ca-4af9-8dca-e1e93d905183",
+    "updatedAt": "2026-05-03T17:32:33.000Z",
+    "createdAt": "2026-05-03T17:32:13.460Z",
+    "versionId": "4ef16fb5-5af4-494f-9c7f-b7ad3d1d2674",
     "workflowId": "BzPT7nQWQllqpcsO",
     "nodes": [
       {
@@ -1685,7 +1692,7 @@
               {
                 "id": "86d61c93-8ae6-4586-8f51-c0f7629b591a",
                 "name": "whole_text",
-                "value": "={{[$json.message.text, $json.message.caption, $json.message.quote?.text].filter(Boolean).join(' ')}}",
+                "value": "={{[$json.message.text, $json.message.caption, $json.message.quote?.text, $json.message.document?.file_name].filter(Boolean).join(' ')}}",
                 "type": "string"
               }
             ]
@@ -2105,8 +2112,8 @@
       }
     },
     "authors": "Alexandra Ershova",
-    "name": "Version 53523d85",
-    "description": "fix whitelist",
+    "name": "Version 4ef16fb5",
+    "description": "",
     "autosaved": true
   },
   "tags": [
