@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-14T13:44:00.488Z",
+  "updatedAt": "2026-05-15T09:46:01.450Z",
   "createdAt": "2025-11-25T07:08:56.490Z",
   "id": "BzPT7nQWQllqpcsO",
   "name": "Spambot",
@@ -211,7 +211,7 @@
       "parameters": {
         "operation": "sendAndWait",
         "chatId": "113754494",
-        "message": "=*Ban Request*\n\n{{ $('Concat all text content').item.json.whole_text }}\n\nUser: @{{ $('Telegram Trigger').item.json.message.from.username?.replace(/([_*\\[\\]()~`>#+\\-=|{}.!\\\\])/g, '\\\\$1') ?? ''}}  \n[User link](tg://user?id={{ $('Telegram Trigger').item.json.message.from.id }}) \n\nChat: {{ $('Telegram Trigger').item.json.message.chat.title }}",
+        "message": "={{ $json.ban_text_message }}",
         "approvalOptions": {
           "values": {
             "approvalType": "double",
@@ -226,7 +226,7 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1840,
+        2064,
         544
       ],
       "id": "6c1b1b86-ff01-47bb-a163-6c72ba247f76",
@@ -266,7 +266,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2064,
+        2480,
         544
       ],
       "id": "2990ff49-ac34-44ee-894a-fa5e2a7f134b",
@@ -294,7 +294,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        2512,
+        2928,
         528
       ],
       "id": "1862a28d-0e5e-4126-84cd-2de681ff8a8f",
@@ -323,8 +323,8 @@
       "type": "n8n-nodes-base.executionData",
       "typeVersion": 1.1,
       "position": [
-        2512,
-        720
+        3152,
+        784
       ],
       "id": "68e8b360-f208-4d68-883b-b6d255adc182",
       "name": "No Ban"
@@ -363,7 +363,7 @@
       "type": "n8n-nodes-base.executionData",
       "typeVersion": 1.1,
       "position": [
-        2736,
+        3152,
         528
       ],
       "id": "ea1b7fb1-5871-42c1-a37d-8413d077bf69",
@@ -458,7 +458,7 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        2288,
+        2704,
         528
       ],
       "id": "fd4d85ec-4342-4f22-bd43-907db3696bea",
@@ -484,7 +484,7 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        2960,
+        3376,
         800
       ],
       "id": "1a07106a-2682-4fd7-961e-c12546fa78b2",
@@ -536,7 +536,7 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        3408,
+        3824,
         800
       ],
       "id": "7740140b-6537-4591-8862-ecfbbb346592",
@@ -570,7 +570,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        3184,
+        3600,
         800
       ],
       "id": "cddae23c-5ef1-494b-af11-8027b2ef89b0",
@@ -705,7 +705,7 @@
         "operation": "editMessageText",
         "chatId": "113754494",
         "messageId": "={{ $('Send a text message').item.json.result.message_id + 1}}",
-        "text": "=*Ban Request*\n\n{{ $('Telegram Trigger').item.json.message.text.replace(/([_*\\[\\]()~`>#+\\-=|{}.!\\\\])/g, '\\\\$1') ?? $('Telegram Trigger').item.json.message.caption ?? 'empty message'}}\n\nUser: @{{ $('Telegram Trigger').item.json.message.from.username?.replace(/([_*\\[\\]()~`>#+\\-=|{}.!\\\\])/g, '\\\\$1') ?? ''}}  \n[User link](tg://user?id={{ $('Telegram Trigger').item.json.message.from.id }}) \n\nChat: {{ $('Telegram Trigger').item.json.message.chat.title }}\n\nBan approved",
+        "text": "={{ $('Telegramify Markdown').item.json.markdownText }}\n\n✅ Ban approved",
         "additionalFields": {
           "parse_mode": "MarkdownV2"
         }
@@ -713,8 +713,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        2288,
-        336
+        2704,
+        320
       ],
       "id": "91047b44-29e0-4655-8c81-a33a4d012d3b",
       "name": "Edit a text message",
@@ -777,14 +777,16 @@
         "operation": "editMessageText",
         "chatId": "113754494",
         "messageId": "={{ $('Send a text message').item.json.result.message_id + 1}}",
-        "text": "=*Ban Request*\n\n{{ $('Telegram Trigger').item.json.message.text.replace(/([_*\\[\\]()~`>#+\\-=|{}.!\\\\])/g, '\\\\$1') ?? $('Telegram Trigger').item.json.message.caption ?? 'empty message'}}\n\nUser: @{{ $('Telegram Trigger').item.json.message.from.username?.replace(/([_*\\[\\]()~`>#+\\-=|{}.!\\\\])/g, '\\\\$1') ?? ''}}  \n[User link](tg://user?id={{ $('Telegram Trigger').item.json.message.from.id }}) \n\nChat: {{ $('Telegram Trigger').item.json.message.chat.title }}\n\nBan rejected",
-        "additionalFields": {}
+        "text": "={{ $('Telegramify Markdown').item.json.markdownText }}\n\n❌ Ban rejected",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        2288,
-        720
+        2896,
+        736
       ],
       "id": "b32ac426-d48a-4eeb-96c0-c211ea40dd85",
       "name": "Edit a text message1",
@@ -795,6 +797,43 @@
           "name": "Peredast"
         }
       }
+    },
+    {
+      "parameters": {
+        "markdownText": "={{ $('Compose ban message').first().json.ban_text_message }}"
+      },
+      "type": "@aotoki/n8n-nodes-telegramify-markdown.telegramifyMarkdown",
+      "typeVersion": 1,
+      "position": [
+        2288,
+        544
+      ],
+      "id": "3d285afd-959b-4803-aa0c-ec980f769cf6",
+      "name": "Telegramify Markdown"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e3b8423d-1a63-419a-addb-685f2e7deb22",
+              "name": "ban_text_message",
+              "value": "=**Ban Request**\n\n{{ $('Concat all text content').item.json.whole_text }}  \n\nUser: @{{ $('Telegram Trigger').item.json.message.from.username?.replace(/([_*\\[\\]()~`>#+\\-={}.!\\\\])/g, '\\\\$1') ?? ''}}\n[User link](tg://user?id={{ $('Telegram Trigger').item.json.message.from.id }})\nChat: {{ $('Telegram Trigger').item.json.message.chat.title }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1824,
+        544
+      ],
+      "id": "1c0ab7e8-a104-4b25-90ba-8731510c675a",
+      "name": "Compose ban message"
     }
   ],
   "connections": {
@@ -898,7 +937,7 @@
       "main": [
         [
           {
-            "node": "If Ban Approved",
+            "node": "Telegramify Markdown",
             "type": "main",
             "index": 0
           }
@@ -1138,7 +1177,7 @@
       "main": [
         [
           {
-            "node": "Send message and wait for response",
+            "node": "Compose ban message",
             "type": "main",
             "index": 0
           }
@@ -1150,6 +1189,28 @@
         [
           {
             "node": "No Ban",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegramify Markdown": {
+      "main": [
+        [
+          {
+            "node": "If Ban Approved",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compose ban message": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response",
             "type": "main",
             "index": 0
           }
@@ -1267,10 +1328,34 @@
           "item": 0
         }
       }
+    ],
+    "Send message and wait for response": [
+      {
+        "json": {
+          "data": {
+            "approved": true
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Compose ban message": [
+      {
+        "json": {
+          "ok": true,
+          "result": true,
+          "ban_text_message": "**Ban Request**\n\nЯ уже думала норм вариантов не осталось 😭 🛡 NordVPN — бесплатный доступ к сети\nБыстрый. Бесплатный. Неубиваемый.\n\n🌐 Работает в РФ как часы: обходит блокировки и глушилки\n📱 Telegram, YouTube, TikTok и Instagram — летают!  \n\nUser: @\n[User link](tg://user?id=6198581260)\nChat: CATEBI Chat"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
     ]
   },
-  "versionId": "619be2fc-ff04-4dc1-8fb0-bd672772b4e2",
-  "activeVersionId": "619be2fc-ff04-4dc1-8fb0-bd672772b4e2",
+  "versionId": "28973e47-1da0-4b34-a30c-d787669e6e51",
+  "activeVersionId": "28973e47-1da0-4b34-a30c-d787669e6e51",
   "triggerCount": 1,
   "shared": [
     {
@@ -1282,9 +1367,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-05-14T13:44:28.000Z",
-    "createdAt": "2026-05-14T13:44:00.552Z",
-    "versionId": "619be2fc-ff04-4dc1-8fb0-bd672772b4e2",
+    "updatedAt": "2026-05-15T09:46:27.000Z",
+    "createdAt": "2026-05-15T09:46:01.456Z",
+    "versionId": "28973e47-1da0-4b34-a30c-d787669e6e51",
     "workflowId": "BzPT7nQWQllqpcsO",
     "nodes": [
       {
@@ -1492,7 +1577,7 @@
         "parameters": {
           "operation": "sendAndWait",
           "chatId": "113754494",
-          "message": "=*Ban Request*\n\n{{ $('Concat all text content').item.json.whole_text }}\n\nUser: @{{ $('Telegram Trigger').item.json.message.from.username?.replace(/([_*\\[\\]()~`>#+\\-=|{}.!\\\\])/g, '\\\\$1') ?? ''}}  \n[User link](tg://user?id={{ $('Telegram Trigger').item.json.message.from.id }}) \n\nChat: {{ $('Telegram Trigger').item.json.message.chat.title }}",
+          "message": "={{ $json.ban_text_message }}",
           "approvalOptions": {
             "values": {
               "approvalType": "double",
@@ -1507,7 +1592,7 @@
         "type": "n8n-nodes-base.telegram",
         "typeVersion": 1.2,
         "position": [
-          1840,
+          2064,
           544
         ],
         "id": "6c1b1b86-ff01-47bb-a163-6c72ba247f76",
@@ -1547,7 +1632,7 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.2,
         "position": [
-          2064,
+          2480,
           544
         ],
         "id": "2990ff49-ac34-44ee-894a-fa5e2a7f134b",
@@ -1575,7 +1660,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          2512,
+          2928,
           528
         ],
         "id": "1862a28d-0e5e-4126-84cd-2de681ff8a8f",
@@ -1604,8 +1689,8 @@
         "type": "n8n-nodes-base.executionData",
         "typeVersion": 1.1,
         "position": [
-          2512,
-          720
+          3152,
+          784
         ],
         "id": "68e8b360-f208-4d68-883b-b6d255adc182",
         "name": "No Ban"
@@ -1644,7 +1729,7 @@
         "type": "n8n-nodes-base.executionData",
         "typeVersion": 1.1,
         "position": [
-          2736,
+          3152,
           528
         ],
         "id": "ea1b7fb1-5871-42c1-a37d-8413d077bf69",
@@ -1739,7 +1824,7 @@
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1.1,
         "position": [
-          2288,
+          2704,
           528
         ],
         "id": "fd4d85ec-4342-4f22-bd43-907db3696bea",
@@ -1765,7 +1850,7 @@
         "type": "n8n-nodes-base.merge",
         "typeVersion": 3.2,
         "position": [
-          2960,
+          3376,
           800
         ],
         "id": "1a07106a-2682-4fd7-961e-c12546fa78b2",
@@ -1817,7 +1902,7 @@
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1.1,
         "position": [
-          3408,
+          3824,
           800
         ],
         "id": "7740140b-6537-4591-8862-ecfbbb346592",
@@ -1851,7 +1936,7 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          3184,
+          3600,
           800
         ],
         "id": "cddae23c-5ef1-494b-af11-8027b2ef89b0",
@@ -1986,7 +2071,7 @@
           "operation": "editMessageText",
           "chatId": "113754494",
           "messageId": "={{ $('Send a text message').item.json.result.message_id + 1}}",
-          "text": "=*Ban Request*\n\n{{ $('Telegram Trigger').item.json.message.text.replace(/([_*\\[\\]()~`>#+\\-=|{}.!\\\\])/g, '\\\\$1') ?? $('Telegram Trigger').item.json.message.caption ?? 'empty message'}}\n\nUser: @{{ $('Telegram Trigger').item.json.message.from.username?.replace(/([_*\\[\\]()~`>#+\\-=|{}.!\\\\])/g, '\\\\$1') ?? ''}}  \n[User link](tg://user?id={{ $('Telegram Trigger').item.json.message.from.id }}) \n\nChat: {{ $('Telegram Trigger').item.json.message.chat.title }}\n\nBan approved",
+          "text": "={{ $('Telegramify Markdown').item.json.markdownText }}\n\n✅ Ban approved",
           "additionalFields": {
             "parse_mode": "MarkdownV2"
           }
@@ -1994,8 +2079,8 @@
         "type": "n8n-nodes-base.telegram",
         "typeVersion": 1.2,
         "position": [
-          2288,
-          336
+          2704,
+          320
         ],
         "id": "91047b44-29e0-4655-8c81-a33a4d012d3b",
         "name": "Edit a text message",
@@ -2058,14 +2143,16 @@
           "operation": "editMessageText",
           "chatId": "113754494",
           "messageId": "={{ $('Send a text message').item.json.result.message_id + 1}}",
-          "text": "=*Ban Request*\n\n{{ $('Telegram Trigger').item.json.message.text.replace(/([_*\\[\\]()~`>#+\\-=|{}.!\\\\])/g, '\\\\$1') ?? $('Telegram Trigger').item.json.message.caption ?? 'empty message'}}\n\nUser: @{{ $('Telegram Trigger').item.json.message.from.username?.replace(/([_*\\[\\]()~`>#+\\-=|{}.!\\\\])/g, '\\\\$1') ?? ''}}  \n[User link](tg://user?id={{ $('Telegram Trigger').item.json.message.from.id }}) \n\nChat: {{ $('Telegram Trigger').item.json.message.chat.title }}\n\nBan rejected",
-          "additionalFields": {}
+          "text": "={{ $('Telegramify Markdown').item.json.markdownText }}\n\n❌ Ban rejected",
+          "additionalFields": {
+            "parse_mode": "HTML"
+          }
         },
         "type": "n8n-nodes-base.telegram",
         "typeVersion": 1.2,
         "position": [
-          2288,
-          720
+          2896,
+          736
         ],
         "id": "b32ac426-d48a-4eeb-96c0-c211ea40dd85",
         "name": "Edit a text message1",
@@ -2076,6 +2163,43 @@
             "name": "Peredast"
           }
         }
+      },
+      {
+        "parameters": {
+          "markdownText": "={{ $('Compose ban message').first().json.ban_text_message }}"
+        },
+        "type": "@aotoki/n8n-nodes-telegramify-markdown.telegramifyMarkdown",
+        "typeVersion": 1,
+        "position": [
+          2288,
+          544
+        ],
+        "id": "3d285afd-959b-4803-aa0c-ec980f769cf6",
+        "name": "Telegramify Markdown"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "e3b8423d-1a63-419a-addb-685f2e7deb22",
+                "name": "ban_text_message",
+                "value": "=**Ban Request**\n\n{{ $('Concat all text content').item.json.whole_text }}  \n\nUser: @{{ $('Telegram Trigger').item.json.message.from.username?.replace(/([_*\\[\\]()~`>#+\\-={}.!\\\\])/g, '\\\\$1') ?? ''}}\n[User link](tg://user?id={{ $('Telegram Trigger').item.json.message.from.id }})\nChat: {{ $('Telegram Trigger').item.json.message.chat.title }}",
+                "type": "string"
+              }
+            ]
+          },
+          "includeOtherFields": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1824,
+          544
+        ],
+        "id": "1c0ab7e8-a104-4b25-90ba-8731510c675a",
+        "name": "Compose ban message"
       }
     ],
     "connections": {
@@ -2179,7 +2303,7 @@
         "main": [
           [
             {
-              "node": "If Ban Approved",
+              "node": "Telegramify Markdown",
               "type": "main",
               "index": 0
             }
@@ -2419,7 +2543,7 @@
         "main": [
           [
             {
-              "node": "Send message and wait for response",
+              "node": "Compose ban message",
               "type": "main",
               "index": 0
             }
@@ -2436,10 +2560,32 @@
             }
           ]
         ]
+      },
+      "Telegramify Markdown": {
+        "main": [
+          [
+            {
+              "node": "If Ban Approved",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Compose ban message": {
+        "main": [
+          [
+            {
+              "node": "Send message and wait for response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Alexandra Ershova",
-    "name": "Version 619be2fc",
+    "name": "Version 28973e47",
     "description": "",
     "autosaved": true
   },
