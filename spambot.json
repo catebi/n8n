@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-15T09:46:01.450Z",
+  "updatedAt": "2026-05-16T12:27:05.012Z",
   "createdAt": "2025-11-25T07:08:56.490Z",
   "id": "BzPT7nQWQllqpcsO",
   "name": "Spambot",
@@ -52,8 +52,7 @@
           "id": "tcX20TpSwtOgHBGq",
           "name": "Peredast"
         }
-      },
-      "onError": "continueRegularOutput"
+      }
     },
     {
       "parameters": {},
@@ -371,7 +370,9 @@
     },
     {
       "parameters": {
-        "options": {}
+        "options": {
+          "temperature": 0
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
@@ -705,7 +706,7 @@
         "operation": "editMessageText",
         "chatId": "113754494",
         "messageId": "={{ $('Send a text message').item.json.result.message_id + 1}}",
-        "text": "={{ $('Telegramify Markdown').item.json.markdownText }}\n\n✅ Ban approved",
+        "text": "={{ $('Telegramify Markdown').item.json.markdownText }}\n✅ Ban approved",
         "additionalFields": {
           "parse_mode": "MarkdownV2"
         }
@@ -777,7 +778,7 @@
         "operation": "editMessageText",
         "chatId": "113754494",
         "messageId": "={{ $('Send a text message').item.json.result.message_id + 1}}",
-        "text": "={{ $('Telegramify Markdown').item.json.markdownText }}\n\n❌ Ban rejected",
+        "text": "={{ $('Telegramify Markdown').item.json.markdownText }}\n❌ Ban rejected",
         "additionalFields": {
           "parse_mode": "HTML"
         }
@@ -1354,8 +1355,8 @@
       }
     ]
   },
-  "versionId": "28973e47-1da0-4b34-a30c-d787669e6e51",
-  "activeVersionId": "28973e47-1da0-4b34-a30c-d787669e6e51",
+  "versionId": "b908b0d9-4310-49dc-acf7-9ce05182169b",
+  "activeVersionId": "3ba2a186-65fe-4208-9ed1-4395e83cfe6d",
   "triggerCount": 1,
   "shared": [
     {
@@ -1367,9 +1368,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-05-15T09:46:27.000Z",
-    "createdAt": "2026-05-15T09:46:01.456Z",
-    "versionId": "28973e47-1da0-4b34-a30c-d787669e6e51",
+    "updatedAt": "2026-05-16T12:26:14.000Z",
+    "createdAt": "2026-05-16T12:26:08.536Z",
+    "versionId": "3ba2a186-65fe-4208-9ed1-4395e83cfe6d",
     "workflowId": "BzPT7nQWQllqpcsO",
     "nodes": [
       {
@@ -1737,7 +1738,9 @@
       },
       {
         "parameters": {
-          "options": {}
+          "options": {
+            "temperature": 0
+          }
         },
         "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
         "typeVersion": 1,
@@ -2071,7 +2074,7 @@
           "operation": "editMessageText",
           "chatId": "113754494",
           "messageId": "={{ $('Send a text message').item.json.result.message_id + 1}}",
-          "text": "={{ $('Telegramify Markdown').item.json.markdownText }}\n\n✅ Ban approved",
+          "text": "={{ $('Telegramify Markdown').item.json.markdownText }}\n✅ Ban approved",
           "additionalFields": {
             "parse_mode": "MarkdownV2"
           }
@@ -2143,7 +2146,7 @@
           "operation": "editMessageText",
           "chatId": "113754494",
           "messageId": "={{ $('Send a text message').item.json.result.message_id + 1}}",
-          "text": "={{ $('Telegramify Markdown').item.json.markdownText }}\n\n❌ Ban rejected",
+          "text": "={{ $('Telegramify Markdown').item.json.markdownText }}\n❌ Ban rejected",
           "additionalFields": {
             "parse_mode": "HTML"
           }
@@ -2585,7 +2588,7 @@
       }
     },
     "authors": "Alexandra Ershova",
-    "name": "Version 28973e47",
+    "name": "Version 3ba2a186",
     "description": "",
     "autosaved": true
   },
